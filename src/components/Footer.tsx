@@ -1,10 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 export default function Footer() {
   const [hanoiTime, setHanoiTime] = useState('');
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollY } = useScroll();
+
+  const footerY = useTransform(scrollY, [600, 1800], [80, -120]);
+  const footerOpacity = useTransform(scrollY, [600, 1200], [0.5, 1]);
 
   useEffect(() => {
     const updateHanoiTime = () => {
@@ -25,7 +31,11 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="bg-[#F7F4EF] border-t border-[#111111] text-[#111111] font-sans">
+    <motion.footer
+      ref={ref}
+      className="bg-[#F7F4EF] border-t border-[#111111] text-[#111111] font-sans relative"
+      style={{ y: footerY, opacity: footerOpacity }}
+    >
       <div className="max-w-7xl mx-auto">
         {/* Main Grid */}
         <div className="grid grid-cols-1 md:grid-cols-12 border-b border-[#111111]">
@@ -39,7 +49,7 @@ export default function Footer() {
                 <span className="font-serif font-semibold text-xl tracking-tight">think.design</span>
               </div>
               <p className="font-serif text-2xl md:text-3xl leading-tight italic mb-8 text-[#111111]/85">
-                "Thoughtful design, crafted with care and built to last."
+                &ldquo;Thoughtful design, crafted with care and built to last.&rdquo;
               </p>
             </div>
             <div className="font-mono text-xs text-[#111111]/60 mt-8">
@@ -80,6 +90,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   );
 }

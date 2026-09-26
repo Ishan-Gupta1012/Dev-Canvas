@@ -343,6 +343,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           if (parsedUser.personalInfo && parsedUser.themeSettings && parsedUser.skills) {
             // eslint-disable-next-line react-hooks/set-state-in-effect
             setUser(parsedUser);
+            document.cookie = 'student_auth=true; path=/; SameSite=Lax';
           }
         } catch {}
       }
@@ -373,6 +374,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               
               setUser(parsedUser);
               localStorage.setItem('student_user', JSON.stringify(parsedUser)); // Update local storage with real data
+              document.cookie = 'student_auth=true; path=/; SameSite=Lax';
             }
           } catch {}
         } else {
@@ -396,10 +398,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               avatar: avatar 
             } 
           } as StudentProfile);
+          document.cookie = 'student_auth=true; path=/; SameSite=Lax';
         }
       } else {
         setUser(null);
         localStorage.removeItem('student_user');
+        document.cookie = 'student_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
       }
       setIsLoading(false);
     });
@@ -411,6 +415,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!session) {
         setUser(null);
         localStorage.removeItem('student_user');
+        document.cookie = 'student_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      } else {
+        document.cookie = 'student_auth=true; path=/; SameSite=Lax';
       }
     });
 
@@ -497,6 +504,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     setUser(finalProfile);
     localStorage.setItem('student_user', JSON.stringify(finalProfile));
+    document.cookie = 'student_auth=true; path=/; SameSite=Lax';
     
     // Clear temporary resume data from sessionStorage on login to isolate users
     if (typeof window !== 'undefined') {
@@ -524,6 +532,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     setUser(null);
     localStorage.removeItem('student_user');
+    document.cookie = 'student_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
     
     // Clear temporary resume data from sessionStorage on logout to prevent exposure to other users
     if (typeof window !== 'undefined') {

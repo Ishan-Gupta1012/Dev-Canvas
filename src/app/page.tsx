@@ -6,10 +6,14 @@ import HowItWorksSection from "@/components/HowItWorksSection";
 import TemplatesSection from "@/components/TemplatesSection";
 import CtaSection from "@/components/CtaSection";
 import Footer from "@/components/Footer";
+import LandingRedirect from "@/components/LandingRedirect";
+import { ScrollProgress } from "@/components/ScrollProgress";
 
 export default function Home() {
   return (
     <div className="bg-[#F7F4EF] text-[#111111] min-h-screen flex flex-col custom-cursor font-sans">
+      <ScrollProgress />
+      <LandingRedirect />
       <Navbar />
       <main className="flex-1 flex flex-col w-full">
         <Hero />

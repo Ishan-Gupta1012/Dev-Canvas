@@ -7,9 +7,8 @@ import { useAuth } from '@/context/AuthContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { 
   LayoutDashboard, Settings, LayoutTemplate, 
-  BarChart3, Download, 
   Search, Bell, ChevronDown, UserCircle, LogOut,
-  FileText, Sparkles
+  FileText, Sparkles, FileSearch, FilePlus
 } from 'lucide-react';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -20,13 +19,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const navItems = [
     { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Templates', href: '/dashboard/templates', icon: LayoutTemplate },
-
-
-    { name: 'Resume', href: '/dashboard/resume', icon: FileText },
     { name: 'AI Builder', href: '/dashboard/ai-builder', icon: Sparkles },
-
-    { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
-    { name: 'Export', href: '/dashboard/export', icon: Download },
+    { name: 'Build', href: '/dashboard/resume-builder', icon: FilePlus },
+    { name: 'Analyze', href: '/dashboard/resume-analyzer', icon: FileSearch },
+    { name: 'Resume', href: '/dashboard/resume', icon: FileText },
     { name: 'Settings', href: '/dashboard/settings', icon: Settings },
   ];
 
