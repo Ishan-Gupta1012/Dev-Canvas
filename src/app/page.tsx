@@ -1,4 +1,3 @@
-import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import TechMarquee from "@/components/TechMarquee";
 import ParadoxSection from "@/components/ParadoxSection";
@@ -14,15 +13,12 @@ export default function Home() {
     <div className="bg-[#F7F4EF] text-[#111111] min-h-screen flex flex-col custom-cursor font-sans">
       <ScrollProgress />
       <LandingRedirect />
-      <Navbar />
-      <main className="flex-1 flex flex-col w-full">
-        <Hero />
-        <TechMarquee />
-        <ParadoxSection />
-        <HowItWorksSection />
-        <TemplatesSection />
-        <CtaSection />
-      </main>
+      <Hero />
+      <TechMarquee />
+      <ParadoxSection />
+      <HowItWorksSection />
+      <TemplatesSection />
+      <CtaSection />
       <Footer />
     </div>
   );

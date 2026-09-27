@@ -7,14 +7,12 @@ const templates = [
   {
     id: "01",
     name: "Modern Developer",
-    desc: "Clean, minimalist layout featuring a side navbar, developer highlights grid, and custom email inquiry widgets.",
     stack: ["TypeScript", "Next.js", "TailwindCSS"],
     link: "/templates/modern-developer"
   },
   {
     id: "02",
     name: "Developer Pro",
-    desc: "Curated dark bento-grid layout for software engineers. Integrated work timelines, code repositories sync, and stats.",
     stack: ["React", "TypeScript", "Framer Motion"],
     link: "/templates/software-engineer"
   }
@@ -95,11 +93,6 @@ export default function TemplatesSection() {
                 <h3 className="font-serif text-2xl sm:text-3xl font-semibold mb-4 text-[#111111]">
                   {template.name}
                 </h3>
-                
-                {/* Description */}
-                <p className="text-xs text-[#111111]/75 leading-relaxed mb-8">
-                  {template.desc}
-                </p>
               </div>
 
               {/* Stack & Link */}

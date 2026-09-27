@@ -346,11 +346,18 @@ body {
 
 /* Studio Think Custom Utilities */
 .bg-grid-paper {
-  background-color: #F7F4EF;
+  background-color: var(--th-background);
   background-size: 36px 36px;
   background-image: 
     linear-gradient(to right, rgba(17, 17, 17, 0.04) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(17, 17, 17, 0.04) 1px, transparent 1px);
+}
+
+.dark .bg-grid-paper {
+  background-color: var(--th-background);
+  background-image: 
+    linear-gradient(to right, rgba(247, 244, 239, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(247, 244, 239, 0.04) 1px, transparent 1px);
 }
 
 .custom-cursor {
@@ -358,7 +365,7 @@ body {
 }
 
 .text-stroke {
-  -webkit-text-stroke: 1px #111111;
+  -webkit-text-stroke: 1px var(--th-outline);
   color: transparent;
 }
 

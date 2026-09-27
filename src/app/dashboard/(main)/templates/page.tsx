@@ -10,7 +10,6 @@ const templates = [
     name: 'Modern Developer',
     index: '01',
     img: 'https://i.postimg.cc/HkdNLqsM/Screenshot-2026-07-03-at-12-44-13-AM-1.png',
-    desc: 'High-contrast dark layout with animated borders, neon accents, and a side navbar.',
     tags: ['Vibrant', 'Interactive', 'Dark'],
     palette: ['#09090b', '#10b981', '#27272a'],
     previewHref: '/dashboard/preview?template=modern-developer',
@@ -21,7 +20,6 @@ const templates = [
     name: 'Developer Pro',
     index: '02',
     img: 'https://i.postimg.cc/cLBz4Hd5/Screenshot-2026-07-26-at-5-35-09-PM.png',
-    desc: 'Minimal bento-grid layout for engineers. Clean typography, timeline, and stats.',
     tags: ['Minimal', 'Typographic', 'Light'],
     palette: ['#ffffff', '#111111', '#71717a'],
     previewHref: '/dashboard/preview?template=software-engineer',
@@ -106,7 +104,6 @@ export default function TemplatesPage() {
                   <span className="font-mono text-[9px] text-[#111111]/40 uppercase tracking-widest">{tpl.index}</span>
                   <h3 className="font-serif text-lg font-semibold text-[#111111]">{tpl.name}</h3>
                 </div>
-                <p className="text-xs text-[#111111]/60 leading-relaxed max-w-[280px]">{tpl.desc}</p>
                 <div className="flex gap-1.5 mt-3 flex-wrap">
                   {tpl.tags.map((t) => (
                     <span key={t} className="font-mono text-[9px] uppercase tracking-widest border border-[#111111]/15 px-2 py-0.5 text-[#111111]/60">{t}</span>
