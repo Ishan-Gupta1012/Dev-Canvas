@@ -17,7 +17,7 @@ export default function BackBar({ templateName }: { templateName: string }) {
         alignItems: "center",
         justifyContent: "space-between",
         padding: "0 24px",
-        backgroundColor: "rgba(9,9,11,0.94)",
+        backgroundColor: "var(--th-surface-container-highest)",
         backdropFilter: "blur(16px)",
         WebkitBackdropFilter: "blur(16px)",
         borderBottom: "1px solid rgba(45,212,191,0.15)",
@@ -35,15 +35,15 @@ export default function BackBar({ templateName }: { templateName: string }) {
           background: "none",
           border: "none",
           cursor: "pointer",
-          color: "#A1A1AA",
+          color: "var(--th-on-surface-variant)",
           fontSize: "13px",
           fontWeight: 500,
           fontFamily: "inherit",
           padding: "4px 0",
           transition: "color 0.2s",
         }}
-        onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
-        onMouseLeave={(e) => (e.currentTarget.style.color = "#A1A1AA")}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "var(--th-on-primary)")}
+        onMouseLeave={(e) => (e.currentTarget.style.color = "var(--th-on-surface-variant)")}
         aria-label="Back to Template Marketplace"
       >
         <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -53,14 +53,14 @@ export default function BackBar({ templateName }: { templateName: string }) {
       </button>
 
       {/* Center — breadcrumb */}
-      <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "#52525B", position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
-        <Link href="/dashboard/templates" style={{ color: "#52525B", textDecoration: "none", transition: "color 0.2s" }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = "#A1A1AA")}
-          onMouseLeave={(e) => (e.currentTarget.style.color = "#52525B")}>
+      <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "var(--th-on-surface-variant)", position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
+        <Link href="/dashboard/templates" style={{ color: "var(--th-on-surface-variant)", textDecoration: "none", transition: "color 0.2s" }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "var(--th-on-primary)")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "var(--th-on-surface-variant)")}>
           Templates
         </Link>
-        <span style={{ color: "#3F3F46" }}>/</span>
-        <span style={{ color: "#A1A1AA", fontWeight: 500 }}>{templateName}</span>
+        <span style={{ color: "var(--th-outline)" }}>/</span>
+        <span style={{ color: "var(--th-on-surface-variant)", fontWeight: 500 }}>{templateName}</span>
       </div>
 
       {/* Right — use template CTA */}
@@ -75,7 +75,7 @@ export default function BackBar({ templateName }: { templateName: string }) {
           fontSize: "12px",
           fontWeight: 600,
           backgroundColor: "#2DD4BF",
-          color: "#09090B",
+          color: "var(--th-background)",
           textDecoration: "none",
           transition: "transform 0.15s, box-shadow 0.15s",
           fontFamily: "inherit",

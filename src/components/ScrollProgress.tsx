@@ -20,9 +20,9 @@ export function ScrollProgress() {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 h-[2px] z-[100] bg-[#111111]/5">
+    <div className="fixed top-0 left-0 right-0 h-[2px] z-[100] bg-primary/5">
       <motion.div
-        className="h-full bg-[#111111]"
+        className="h-full bg-primary"
         style={{ scaleX: progress / 100 }}
         transition={{ type: 'tween', ease: 'linear', duration: 0.1 }}
       />

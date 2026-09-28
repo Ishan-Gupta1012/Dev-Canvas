@@ -55,7 +55,7 @@ export default function CtaSection() {
   return (
     <motion.section
       ref={ref}
-      className="py-20 md:py-32 bg-[#F7F4EF] border-b border-[#111111] text-[#111111] font-sans bg-grid-paper select-none relative"
+      className="py-20 md:py-32 bg-background border-b border-primary text-on-background font-sans bg-grid-paper select-none relative"
       style={{ opacity: sectionOpacity }}
     >
       <motion.div 
@@ -64,7 +64,7 @@ export default function CtaSection() {
       >
         
         {/* Tag */}
-        <motion.div custom={0} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }} variants={contentReveal} className="font-mono text-xs uppercase tracking-widest text-[#111111]/60 mb-6">
+        <motion.div custom={0} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }} variants={contentReveal} className="font-mono text-xs uppercase tracking-widest text-on-background/60 mb-6">
           ✦ Get in Touch
         </motion.div>
 
@@ -75,7 +75,7 @@ export default function CtaSection() {
           </h2>
           
           {/* Description */}
-          <p className="text-sm md:text-base text-[#111111]/70 leading-relaxed mb-12 max-w-[600px] mx-auto">
+          <p className="text-sm md:text-base text-on-background/70 leading-relaxed mb-12 max-w-[600px] mx-auto">
             We&apos;re launching soon. Join our early queue to preview templates, influence the design roadmap, and deploy your custom layout.
           </p>
         </motion.div>
@@ -83,24 +83,24 @@ export default function CtaSection() {
         {/* Clean Input Form */}
         <motion.div custom={2} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }} variants={contentReveal} className="max-w-[450px] mx-auto mb-16">
           {status === 'success' ? (
-            <div className="border border-[#111111] p-4 bg-[#F7F4EF] font-mono text-xs text-green-600">
+            <div className="border border-primary p-4 bg-background font-mono text-xs text-green-600">
               [SUCCESSFULLY JOINED THE QUEUE]
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 border border-[#111111] p-1.5 bg-[#F7F4EF] rounded-sm">
+            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 border border-primary p-1.5 bg-background rounded-sm">
               <input 
                 type="email" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="enter your email address..." 
-                className="flex-1 bg-transparent text-sm text-[#111111] px-4 py-3 outline-hidden font-mono"
+                className="flex-1 bg-transparent text-sm text-on-background px-4 py-3 outline-hidden font-mono"
                 required
                 disabled={status === 'loading'}
               />
               <button 
                 type="submit" 
                 disabled={status === 'loading'}
-                className="bg-[#111111] text-[#F7F4EF] hover:bg-[#111111]/85 transition-colors px-6 py-3 font-mono text-xs uppercase tracking-widest rounded-sm disabled:opacity-50"
+                className="bg-primary text-on-primary hover:bg-primary/85 transition-colors px-6 py-3 font-mono text-xs uppercase tracking-widest rounded-sm disabled:opacity-50"
               >
                 {status === 'loading' ? 'Joining...' : 'Join Queue'}
               </button>
@@ -114,18 +114,18 @@ export default function CtaSection() {
         </motion.div>
 
         {/* Grid Questions */}
-        <motion.div custom={3} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }} variants={contentReveal} className="grid grid-cols-1 md:grid-cols-3 border-t border-l border-[#111111]">
-          <div className="p-6 border-r border-b border-[#111111] bg-[#F7F4EF]/50">
-            <div className="font-mono text-[9px] text-[#111111]/40 mb-3">[QA.01]</div>
-            <p className="text-xs text-[#111111]/80 leading-relaxed">Do you want a portfolio that evolves with your craft?</p>
+        <motion.div custom={3} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }} variants={contentReveal} className="grid grid-cols-1 md:grid-cols-3 border-t border-l border-primary">
+          <div className="p-6 border-r border-b border-primary bg-background/50">
+            <div className="font-mono text-[9px] text-on-background/40 mb-3">[QA.01]</div>
+            <p className="text-xs text-on-background/80 leading-relaxed">Do you want a portfolio that evolves with your craft?</p>
           </div>
-          <div className="p-6 border-r border-b border-[#111111] bg-[#F7F4EF]/50">
-            <div className="font-mono text-[9px] text-[#111111]/40 mb-3">[QA.02]</div>
-            <p className="text-xs text-[#111111]/80 leading-relaxed">Would a premium UI help highlight your best work?</p>
+          <div className="p-6 border-r border-b border-primary bg-background/50">
+            <div className="font-mono text-[9px] text-on-background/40 mb-3">[QA.02]</div>
+            <p className="text-xs text-on-background/80 leading-relaxed">Would a premium UI help highlight your best work?</p>
           </div>
-          <div className="p-6 border-r border-b border-[#111111] bg-[#F7F4EF]/50">
-            <div className="font-mono text-[9px] text-[#111111]/40 mb-3">[QA.03]</div>
-            <p className="text-xs text-[#111111]/80 leading-relaxed">Do you want full control over your exported static bundle?</p>
+          <div className="p-6 border-r border-b border-primary bg-background/50">
+            <div className="font-mono text-[9px] text-on-background/40 mb-3">[QA.03]</div>
+            <p className="text-xs text-on-background/80 leading-relaxed">Do you want full control over your exported static bundle?</p>
           </div>
         </motion.div>
 

@@ -38,7 +38,7 @@ export default function Hero() {
   return (
     <motion.section
       ref={containerRef}
-      className="relative pt-32 pb-16 md:pt-40 md:pb-24 overflow-hidden border-b border-[#111111] bg-grid-paper select-none text-[#111111]"
+      className="relative pt-32 pb-16 md:pt-40 md:pb-24 overflow-hidden border-b border-primary bg-grid-paper select-none text-on-background"
       style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
@@ -46,11 +46,11 @@ export default function Hero() {
         {/* Local time and metadata */}
         <motion.div
           style={{ y: metaY, opacity: metaOpacity }}
-          className="flex justify-between items-center border-b border-[#111111] pb-6 mb-8 md:mb-12 font-mono text-xs uppercase tracking-widest text-[#111111]/70"
+          className="flex justify-between items-center border-b border-primary pb-6 mb-8 md:mb-12 font-mono text-xs uppercase tracking-widest text-on-background/70"
         >
           <div>Creative Practice / Hanoi, VN</div>
           <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#111111] animate-pulse-soft"></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse-soft"></span>
             Hanoi: {localTime || '12:00 PM'}
           </div>
         </motion.div>
@@ -69,19 +69,19 @@ export default function Hero() {
             style={{ y: headlineY, opacity: headlineOpacity }}
             className="md:col-span-4 md:pl-6 flex flex-col justify-between h-full pt-2"
           >
-            <p className="font-sans text-sm md:text-base leading-relaxed text-[#111111]/85 mb-8">
+            <p className="font-sans text-sm md:text-base leading-relaxed text-on-background/85 mb-8">
               Portfol.io is a curated platform for creators. We believe every portfolio begins with intention—sketched on craft paper, refined with care, and built to last. We shape your work into a premium, editorial presence.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link 
                 href="/signin" 
-                className="bg-[#111111] text-[#F7F4EF] hover:bg-[#111111]/85 transition-colors px-6 py-3 text-center font-mono text-xs uppercase tracking-widest rounded-sm border border-[#111111]"
+                className="bg-primary text-on-primary hover:bg-primary/85 transition-colors px-6 py-3 text-center font-mono text-xs uppercase tracking-widest rounded-sm border border-primary"
               >
                 Get Started
               </Link>
               <Link 
                 href="/works" 
-                className="bg-transparent text-[#111111] hover:bg-[#111111]/5 transition-colors px-6 py-3 text-center font-mono text-xs uppercase tracking-widest rounded-sm border border-[#111111]"
+                className="bg-transparent text-on-background hover:bg-primary/5 transition-colors px-6 py-3 text-center font-mono text-xs uppercase tracking-widest rounded-sm border border-primary"
               >
                 Browse Works
               </Link>
@@ -90,14 +90,14 @@ export default function Hero() {
         </div>
 
         {/* Draggable ruler micro-interaction */}
-        <div className="border border-[#111111] bg-[#F7F4EF] rounded-sm p-6 relative overflow-hidden flex flex-col gap-4">
-          <div className="flex justify-between items-center font-mono text-xs uppercase tracking-widest text-[#111111]/70">
+        <div className="border border-primary bg-background rounded-sm p-6 relative overflow-hidden flex flex-col gap-4">
+          <div className="flex justify-between items-center font-mono text-xs uppercase tracking-widest text-on-background/70">
             <div>Interactive Tool / Curiosity Index</div>
-            <div className="text-right">Scale: <span className="text-[#111111] font-bold">50%</span></div>
+            <div className="text-right">Scale: <span className="text-on-background font-bold">50%</span></div>
           </div>
 
           {/* Draggable Container */}
-          <div className="h-24 border-y border-[#111111]/25 relative cursor-grab active:cursor-grabbing overflow-hidden flex items-center bg-[#F7F4EF] transition-shadow">
+          <div className="h-24 border-y border-outline/25 relative cursor-grab active:cursor-grabbing overflow-hidden flex items-center bg-background transition-shadow">
             {/* The ruler track */}
             <div className="absolute left-1/2 flex items-end gap-1.5 h-16 w-max transition-transform duration-75 ease-out" style={{ transform: `translateX(-150px)` }}>
               {Array.from({ length: 120 }).map((_, i) => {
@@ -107,12 +107,12 @@ export default function Hero() {
                 return (
                   <div key={i} className="flex flex-col items-center justify-end h-full w-2">
                     {isMajor && (
-                      <span className="font-mono text-[9px] text-[#111111]/50 mb-1 select-none">
+                      <span className="font-mono text-[9px] text-on-background/50 mb-1 select-none">
                         {i * 10}
                       </span>
                     )}
                     <div 
-                      className="w-0.5 bg-[#111111] transition-all"
+                      className="w-0.5 bg-primary transition-all"
                       style={{ 
                         height: isMajor ? '28px' : isMedium ? '18px' : '10px',
                         opacity: isMajor ? 0.6 : isMedium ? 0.4 : 0.2
@@ -127,7 +127,7 @@ export default function Hero() {
             <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-red-500 z-10 shadow-sm" />
           </div>
 
-          <div className="font-mono text-[10px] text-[#111111]/50 uppercase tracking-wider text-center">
+          <div className="font-mono text-[10px] text-on-background/50 uppercase tracking-wider text-center">
             ← Drag the ruler to measure your curiosity limit →
           </div>
         </div>

@@ -43,7 +43,7 @@ export default function TemplatesSection() {
   return (
     <motion.section
       ref={ref}
-      className="py-20 md:py-32 bg-[#F7F4EF] border-b border-[#111111] text-[#111111] font-sans bg-grid-paper relative"
+      className="py-20 md:py-32 bg-background border-b border-primary text-on-background font-sans bg-grid-paper relative"
       style={{ opacity: sectionOpacity }}
     >
       <motion.div 
@@ -52,8 +52,8 @@ export default function TemplatesSection() {
       >
         
         {/* Header */}
-        <motion.div custom={0} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }} variants={cardReveal} className="mb-16 border-b border-[#111111] pb-10">
-          <div className="font-mono text-xs uppercase tracking-widest text-[#111111]/60 mb-6">
+        <motion.div custom={0} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }} variants={cardReveal} className="mb-16 border-b border-primary/30 pb-10">
+          <div className="font-mono text-xs uppercase tracking-widest text-on-background/60 mb-6">
             ✦ Selected Layouts
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
@@ -63,7 +63,7 @@ export default function TemplatesSection() {
               </h2>
             </div>
             <div className="lg:col-span-5">
-              <p className="text-sm text-[#111111]/70 leading-relaxed">
+              <p className="text-sm text-on-background/70 leading-relaxed">
                 We custom-crafted each template with performance and clean code at the center. Clean motion, structural grids, and fully customizable source layouts.
               </p>
             </div>
@@ -80,17 +80,17 @@ export default function TemplatesSection() {
               whileInView="visible"
               viewport={{ once: true, margin: '-50px' }}
               variants={cardReveal}
-              className="border border-[#111111] rounded-sm p-8 bg-[#F7F4EF] flex flex-col justify-between group relative overflow-hidden transition-all duration-300 hover:bg-[#111111]/5 hover:scale-[1.01]"
+              className="border border-primary/30 rounded-sm p-8 bg-background flex flex-col justify-between group relative overflow-hidden transition-all duration-300 hover:bg-primary/5 hover:scale-[1.01]"
             >
               <div>
                 {/* Index tag */}
-                <div className="flex justify-between items-center mb-6 font-mono text-xs text-[#111111]/40 border-b border-[#111111]/10 pb-4">
+                <div className="flex justify-between items-center mb-6 font-mono text-xs text-on-background/40 border-b border-primary/10 pb-4">
                   <span>LAYOUT CODE</span>
                   <span>[{template.id} / SLT]</span>
                 </div>
                 
                 {/* Heading */}
-                <h3 className="font-serif text-2xl sm:text-3xl font-semibold mb-4 text-[#111111]">
+                <h3 className="font-serif text-2xl sm:text-3xl font-semibold mb-4">
                   {template.name}
                 </h3>
               </div>
@@ -99,7 +99,7 @@ export default function TemplatesSection() {
               <div>
                 <div className="flex flex-wrap gap-2 mb-8">
                   {template.stack.map((s, index) => (
-                    <span key={index} className="font-mono text-[9px] uppercase tracking-wider bg-[#111111]/5 text-[#111111] px-2 py-0.5 rounded-xs border border-[#111111]/10">
+                    <span key={index} className="font-mono text-[9px] uppercase tracking-wider bg-primary/10 text-on-background px-2 py-0.5 rounded-xs border border-primary/10">
                       {s}
                     </span>
                   ))}
@@ -109,7 +109,7 @@ export default function TemplatesSection() {
                   href={template.link}
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest border border-[#111111] px-4 py-2 hover:bg-[#111111] hover:text-[#F7F4EF] transition-all w-full justify-center"
+                  className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest border border-primary px-4 py-2 hover:bg-primary hover:text-on-primary transition-all w-full justify-center"
                 >
                   Live Preview 
                   <span className="text-[10px]">↗</span>

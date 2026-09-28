@@ -54,6 +54,8 @@ export function ThemeProvider({
     function updateSystem() {
       if (theme === "system" && enableSystem) {
         setResolvedTheme(getSystemTheme());
+      } else {
+        setResolvedTheme(theme as ResolvedTheme);
       }
     }
     updateSystem();

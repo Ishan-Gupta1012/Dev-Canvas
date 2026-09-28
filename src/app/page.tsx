@@ -10,7 +10,7 @@ import { ScrollProgress } from "@/components/ScrollProgress";
 
 export default function Home() {
   return (
-    <div className="bg-[#F7F4EF] text-[#111111] min-h-screen flex flex-col custom-cursor font-sans">
+    <div className="bg-background text-on-background min-h-screen flex flex-col custom-cursor font-sans">
       <ScrollProgress />
       <LandingRedirect />
       <Hero />

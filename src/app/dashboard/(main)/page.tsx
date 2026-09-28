@@ -48,7 +48,7 @@ function ScoreRing({ score }: { score: number }) {
   const color = score >= 60 ? '#10b981' : score >= 30 ? '#f59e0b' : '#ef4444';
   return (
     <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-      <circle cx="50" cy="50" r={r} fill="none" stroke="currentColor" strokeWidth="8" className="text-[#111111]/10" />
+      <circle cx="50" cy="50" r={r} fill="none" stroke="currentColor" strokeWidth="8" className="text-on-background/10" />
       <circle cx="50" cy="50" r={r} fill="none" stroke={color} strokeWidth="8" strokeLinecap="round"
         strokeDasharray={`${dash} ${circ}`} style={{ transition: 'stroke-dasharray 1s cubic-bezier(.4,0,.2,1)' }} />
     </svg>
@@ -66,11 +66,11 @@ const quickActions: QA[] = [
 
 function StatChip({ icon: Icon, value, label }: { icon: ComponentType<{ size?: number }>; value: string | number; label: string }) {
   return (
-    <div className="flex items-center gap-4 p-5 bg-[#F7F4EF] border border-[#111111]/10 rounded-xl">
-      <div className="p-3 bg-[#111111]/5 rounded-lg"><Icon size={20} /></div>
+    <div className="flex items-center gap-4 p-5 bg-background border border-outline/10 rounded-xl">
+      <div className="p-3 bg-primary/5 rounded-lg"><Icon size={20} /></div>
       <div>
-        <p className="font-serif text-2xl font-bold text-[#111111] leading-none">{value}</p>
-        <p className="font-mono text-xs uppercase tracking-widest text-[#111111]/50 mt-1">{label}</p>
+        <p className="font-serif text-2xl font-bold text-on-background leading-none">{value}</p>
+        <p className="font-mono text-xs uppercase tracking-widest text-on-background/50 mt-1">{label}</p>
       </div>
     </div>
   );
@@ -86,18 +86,18 @@ export default function Dashboard() {
   const greeting = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
 
   return (
-    <div className="flex-1 p-6 md:p-10 max-w-7xl mx-auto w-full space-y-10 text-[#111111]">
+    <div className="flex-1 p-6 md:p-10 max-w-7xl mx-auto w-full space-y-10 text-on-background">
 
       {/* Greeting */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <p className="font-mono text-xs uppercase tracking-widest text-[#111111]/50 mb-2">
+          <p className="font-mono text-xs uppercase tracking-widest text-on-background/50 mb-2">
             {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
           </p>
           <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tight">
             Good {greeting}, {firstName}.
           </h1>
-          <p className="text-lg text-[#111111]/60 mt-2">
+          <p className="text-lg text-on-background/60 mt-2">
             {score === 100 ? 'Your portfolio is complete. Keep it fresh!' : nextAction ? `Next up: ${nextAction.label.toLowerCase()}.` : 'Looking good — keep going!'}
           </p>
         </div>
@@ -123,21 +123,21 @@ export default function Dashboard() {
       {/* Score + Stats + Checklist */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Score card */}
-        <div className="bg-[#F7F4EF] border border-[#111111]/10 rounded-2xl p-8 flex flex-col items-center justify-center gap-6">
+        <div className="bg-background border border-outline/10 rounded-2xl p-8 flex flex-col items-center justify-center gap-6">
           <div className="relative w-48 h-48">
             <ScoreRing score={score} />
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="font-serif text-6xl font-bold text-[#111111]">{score}</span>
-              <span className="font-mono text-xs uppercase tracking-widest text-[#111111]/50 mt-1">% done</span>
+              <span className="font-serif text-6xl font-bold text-on-background">{score}</span>
+              <span className="font-mono text-xs uppercase tracking-widest text-on-background/50 mt-1">% done</span>
             </div>
           </div>
           <div className="text-center">
-            <p className="font-serif text-xl font-semibold text-[#111111]">Portfolio Score</p>
-            <p className="font-mono text-xs uppercase tracking-widest text-[#111111]/50 mt-1">{completedCount} of {checks.length} sections done</p>
+            <p className="font-serif text-xl font-semibold text-on-background">Portfolio Score</p>
+            <p className="font-mono text-xs uppercase tracking-widest text-on-background/50 mt-1">{completedCount} of {checks.length} sections done</p>
           </div>
           {nextAction && (
             <Link href={nextAction.href}
-              className="w-full text-center font-mono text-sm uppercase tracking-widest bg-[#111111] text-[#F7F4EF] py-3 px-4 rounded-lg hover:bg-[#111111]/80 transition-colors flex items-center justify-center gap-2">
+              className="w-full text-center font-mono text-sm uppercase tracking-widest bg-primary text-on-primary py-3 px-4 rounded-lg hover:bg-primary/80 transition-colors flex items-center justify-center gap-2">
               Fix next: {nextAction.label} <ArrowRight size={14} />
             </Link>
           )}
@@ -153,32 +153,32 @@ export default function Dashboard() {
           </div>
 
           {/* AI credits */}
-          <div className="bg-[#F7F4EF] border border-[#111111]/10 rounded-2xl p-6">
+          <div className="bg-background border border-outline/10 rounded-2xl p-6">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
                 <Cpu size={18} className="text-[#8b5cf6]" />
-                <p className="font-mono text-sm uppercase tracking-widest text-[#111111]/60">AI Credits Used</p>
+                <p className="font-mono text-sm uppercase tracking-widest text-on-background/60">AI Credits Used</p>
               </div>
               <span className="font-serif text-xl font-bold">{user?.aiCreditsUsed ?? 0} / 50</span>
             </div>
-            <div className="w-full h-2 bg-[#111111]/10 rounded-full overflow-hidden">
+            <div className="w-full h-2 bg-primary/10 rounded-full overflow-hidden">
               <div className="h-full rounded-full transition-all duration-700"
                 style={{ width: `${Math.min(((user?.aiCreditsUsed ?? 0) / 50) * 100, 100)}%`, backgroundColor: (user?.aiCreditsUsed ?? 0) >= 40 ? '#ef4444' : '#8b5cf6' }} />
             </div>
-            <p className="font-mono text-xs text-[#111111]/50 mt-2">{50 - (user?.aiCreditsUsed ?? 0)} credits remaining this month</p>
+            <p className="font-mono text-xs text-on-background/50 mt-2">{50 - (user?.aiCreditsUsed ?? 0)} credits remaining this month</p>
           </div>
 
           {/* Checklist */}
-          <div className="bg-[#F7F4EF] border border-[#111111]/10 rounded-2xl p-6 flex-1">
-            <p className="font-mono text-sm uppercase tracking-widest text-[#111111]/50 mb-4">Completion Checklist</p>
+          <div className="bg-background border border-outline/10 rounded-2xl p-6 flex-1">
+            <p className="font-mono text-sm uppercase tracking-widest text-on-background/50 mb-4">Completion Checklist</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {checks.map((c) => (
                 <Link key={c.label} href={c.href}
-                  className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#111111]/5 transition-colors group">
+                  className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/5 transition-colors group">
                   {c.done
                     ? <CheckCircle2 size={18} className="text-emerald-500 shrink-0" />
-                    : <Circle size={18} className="text-[#111111]/25 shrink-0 group-hover:text-[#111111]/50 transition-colors" />}
-                  <span className={`text-sm ${c.done ? 'text-[#111111]/40 line-through' : 'text-[#111111]/80 font-medium'}`}>{c.label}</span>
+                    : <Circle size={18} className="text-on-background/25 shrink-0 group-hover:text-on-background/50 transition-colors" />}
+                  <span className={`text-sm ${c.done ? 'text-on-background/40 line-through' : 'text-on-background/80 font-medium'}`}>{c.label}</span>
                 </Link>
               ))}
             </div>
@@ -190,18 +190,18 @@ export default function Dashboard() {
       <div>
         <div className="text-center mb-10">
           <p className="font-serif text-2xl font-semibold">Quick Actions</p>
-          <p className="font-mono text-xs uppercase tracking-widest text-[#111111]/50 mt-2">Jump straight in</p>
+          <p className="font-mono text-xs uppercase tracking-widest text-on-background/50 mt-2">Jump straight in</p>
         </div>
         <div className="flex justify-center flex-wrap gap-4 max-w-5xl mx-auto">
           {quickActions.map((action) => (
             <Link key={action.href} href={action.href}
-              className="group flex flex-col gap-4 p-5 bg-[#F7F4EF] border border-[#111111]/10 rounded-2xl hover:shadow-md hover:border-[#111111]/20 transition-all duration-200 text-center">
+              className="group flex flex-col gap-4 p-5 bg-background border border-outline/10 rounded-2xl hover:shadow-md hover:border-outline/20 transition-all duration-200 text-center">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center mx-auto" style={{ backgroundColor: `${action.accent}18` }}>
                 <span style={{ color: action.accent }}><action.icon size={20} /></span>
               </div>
               <div>
-                <p className="font-mono text-sm font-bold uppercase tracking-widest text-[#111111] leading-tight">{action.label}</p>
-                <p className="text-sm text-[#111111]/60 mt-1 leading-snug">{action.desc}</p>
+                <p className="font-mono text-sm font-bold uppercase tracking-widest text-on-background leading-tight">{action.label}</p>
+                <p className="text-sm text-on-background/60 mt-1 leading-snug">{action.desc}</p>
               </div>
             </Link>
           ))}
@@ -209,7 +209,7 @@ export default function Dashboard() {
       </div>
 
       {/* Your Live Portfolio */}
-      <div className="relative overflow-hidden rounded-3xl border border-[#111111]/10 bg-[#111111] text-[#F7F4EF] p-8 md:p-10">
+      <div className="relative overflow-hidden rounded-3xl border border-outline/10 bg-[#111111] text-[#F7F4EF] p-8 md:p-10">
         <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(16,185,129,0.15)_0%,transparent_60%)] pointer-events-none" />
         <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
@@ -227,11 +227,11 @@ export default function Dashboard() {
           </div>
           <div className="flex gap-4 shrink-0">
             <Link href="/dashboard/templates"
-              className="flex items-center gap-2 px-6 py-3 border border-[#F7F4EF]/20 text-[#F7F4EF] font-mono text-sm uppercase tracking-widest rounded-xl hover:bg-[#F7F4EF]/10 transition-colors">
+              className="flex items-center gap-2 px-6 py-3 border border-[#F7F4EF]/20 text-[#F7F4EF] dark:border-[#F7F4EF]/30 dark:text-[#F7F4EF] font-mono text-sm uppercase tracking-widest rounded-xl hover:bg-[#F7F4EF]/10 transition-colors">
               <LayoutTemplate size={18} /> Preview
             </Link>
             <Link href="/dashboard/settings"
-              className="flex items-center gap-2 px-6 py-3 bg-[#10b981] text-white font-mono text-sm font-bold uppercase tracking-widest rounded-xl hover:bg-[#059669] transition-colors">
+              className="flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white font-mono text-sm font-bold uppercase tracking-widest rounded-xl hover:bg-emerald-700 transition-colors">
               <TrendingUp size={18} /> {user?.status === 'Published' ? 'Manage' : 'Publish'}
             </Link>
           </div>
@@ -244,15 +244,15 @@ export default function Dashboard() {
           <p className="font-serif text-2xl font-semibold mb-6">Recent Activity</p>
           <div className="space-y-3">
             {user!.notifications.slice(0, 4).map((n) => (
-              <div key={n.id} className="flex items-start gap-4 p-5 bg-[#F7F4EF] border border-[#111111]/10 rounded-2xl">
+              <div key={n.id} className="flex items-start gap-4 p-5 bg-background border border-outline/10 rounded-2xl">
                 {n.unread
                   ? <AlertCircle size={20} className="text-amber-500 shrink-0 mt-0.5" />
                   : <CheckCircle2 size={20} className="text-emerald-400 shrink-0 mt-0.5" />}
                 <div className="flex-1 min-w-0">
                   <p className="text-base font-semibold">{n.title}</p>
-                  <p className="text-sm text-[#111111]/70 mt-1">{n.description}</p>
+                  <p className="text-sm text-on-background/70 mt-1">{n.description}</p>
                 </div>
-                <span className="font-mono text-xs uppercase tracking-widest text-[#111111]/40 shrink-0">{n.time}</span>
+                <span className="font-mono text-xs uppercase tracking-widest text-on-background/40 shrink-0">{n.time}</span>
               </div>
             ))}
           </div>

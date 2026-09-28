@@ -44,40 +44,40 @@ export default function ContactPage() {
 
 
   return (
-    <div className="bg-[#F7F4EF] text-[#111111] min-h-screen flex flex-col custom-cursor font-sans">
+    <div className="bg-background text-on-background min-h-screen flex flex-col custom-cursor font-sans">
       <Navbar />
 
       <main className="flex-1 pt-24 md:pt-32">
         {/* Header */}
-        <section className="py-12 md:py-20 border-b border-[#111111] bg-grid-paper">
+        <section className="py-12 md:py-20 border-b border-primary bg-grid-paper">
           <div className="max-w-4xl mx-auto px-4 sm:px-8">
-            <div className="font-mono text-xs uppercase tracking-widest text-[#111111]/60 mb-6">
+            <div className="font-mono text-xs uppercase tracking-widest text-on-background/60 mb-6">
               ✦ Project Inquiry / Contact Form
             </div>
             
             <h1 className="font-serif text-5xl sm:text-7xl leading-[0.9] tracking-tight mb-6">
               Start a project, <span className="italic font-normal text-stroke">shape the vision.</span>
             </h1>
-            <p className="text-sm md:text-base text-[#111111]/80 max-w-[600px] leading-relaxed">
+            <p className="text-sm md:text-base text-on-background/80 max-w-[600px] leading-relaxed">
               Have an idea? Fill out the questionnaire below. We read every inquiry and respond with a structured outline within 24 hours.
             </p>
           </div>
         </section>
 
         {/* Contact Form Section */}
-        <section className="py-16 md:py-24 bg-[#F7F4EF] bg-grid-paper flex-1">
+        <section className="py-16 md:py-24 bg-background bg-grid-paper flex-1">
           <div className="max-w-2xl mx-auto px-4 sm:px-8">
             
             {formSubmitted ? (
-              <div className="border border-[#111111] p-8 md:p-12 text-center bg-[#F7F4EF]">
+              <div className="border border-primary p-8 md:p-12 text-center bg-background">
                 <div className="font-mono text-xs text-green-600 mb-4">[SUBMITTED SUCCESSFULLY]</div>
                 <h2 className="font-serif text-3xl font-semibold mb-4">Thank you, {formData.name}.</h2>
-                <p className="text-sm text-[#111111]/80 leading-relaxed mb-6">
-                  Your inquiry regarding a custom <span className="font-mono font-semibold text-xs uppercase bg-[#111111]/5 px-1.5 py-0.5 rounded-xs border border-[#111111]/10">{formData.projectType}</span> layout has been received. Our team will review it and reply at <span className="underline">{formData.email}</span> shortly.
+                <p className="text-sm text-on-background/80 leading-relaxed mb-6">
+                  Your inquiry regarding a custom <span className="font-mono font-semibold text-xs uppercase bg-primary/5 px-1.5 py-0.5 rounded-xs border border-outline/10">{formData.projectType}</span> layout has been received. Our team will review it and reply at <span className="underline">{formData.email}</span> shortly.
                 </p>
                 <button 
                   onClick={() => setFormSubmitted(false)}
-                  className="font-mono text-xs uppercase tracking-widest border border-[#111111] px-6 py-3 hover:bg-[#111111] hover:text-[#F7F4EF] transition-all"
+                  className="font-mono text-xs uppercase tracking-widest border border-primary px-6 py-3 hover:bg-primary hover:text-on-primary transition-all"
                 >
                   Send another message
                 </button>
@@ -87,7 +87,7 @@ export default function ContactPage() {
                 
                 {/* Name */}
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="name" className="font-mono text-[10px] uppercase tracking-widest text-[#111111]/65">
+                  <label htmlFor="name" className="font-mono text-[10px] uppercase tracking-widest text-on-background/65">
                     [01] What is your name? *
                   </label>
                   <input 
@@ -96,14 +96,14 @@ export default function ContactPage() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="Enter your full name..."
-                    className="w-full bg-transparent border-b border-[#111111]/30 py-3 text-sm md:text-base outline-hidden focus:border-[#111111] transition-colors"
+                    className="w-full bg-transparent border-b border-outline/30 py-3 text-sm md:text-base outline-hidden focus:border-primary transition-colors"
                     required
                   />
                 </div>
 
                 {/* Email */}
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="email" className="font-mono text-[10px] uppercase tracking-widest text-[#111111]/65">
+                  <label htmlFor="email" className="font-mono text-[10px] uppercase tracking-widest text-on-background/65">
                     [02] What is your email address? *
                   </label>
                   <input 
@@ -112,17 +112,17 @@ export default function ContactPage() {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="Enter your email address..."
-                    className="w-full bg-transparent border-b border-[#111111]/30 py-3 text-sm md:text-base outline-hidden focus:border-[#111111] transition-colors"
+                    className="w-full bg-transparent border-b border-outline/30 py-3 text-sm md:text-base outline-hidden focus:border-primary transition-colors"
                     required
                   />
                 </div>
 
                 {/* Project Type */}
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="projectType" className="font-mono text-[10px] uppercase tracking-widest text-[#111111]/65">
+                  <label htmlFor="projectType" className="font-mono text-[10px] uppercase tracking-widest text-on-background/65">
                     [03] What are we building? *
                   </label>
-                  <div className="relative border-b border-[#111111]/30 py-1">
+                  <div className="relative border-b border-outline/30 py-1">
                     <select 
                       id="projectType"
                       value={formData.projectType}
@@ -130,10 +130,10 @@ export default function ContactPage() {
                       className="w-full bg-transparent py-2 text-sm md:text-base outline-hidden appearance-none pr-8 cursor-pointer font-mono uppercase tracking-wide"
                       required
                     >
-                      <option value="portfolio" className="bg-[#F7F4EF]">Developer Portfolio</option>
-                      <option value="brand" className="bg-[#F7F4EF]">Brand Identity & Packaging</option>
-                      <option value="webApp" className="bg-[#F7F4EF]">Complex Next.js Web App</option>
-                      <option value="other" className="bg-[#F7F4EF]">Other Creative Project</option>
+                      <option value="portfolio" className="bg-background">Developer Portfolio</option>
+                      <option value="brand" className="bg-background">Brand Identity & Packaging</option>
+                      <option value="webApp" className="bg-background">Complex Next.js Web App</option>
+                      <option value="other" className="bg-background">Other Creative Project</option>
                     </select>
                     <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-xs">
                       ▼
@@ -143,7 +143,7 @@ export default function ContactPage() {
 
                 {/* Project Details */}
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="details" className="font-mono text-[10px] uppercase tracking-widest text-[#111111]/65">
+                  <label htmlFor="details" className="font-mono text-[10px] uppercase tracking-widest text-on-background/65">
                     [04] Project details & context
                   </label>
                   <textarea 
@@ -152,7 +152,7 @@ export default function ContactPage() {
                     value={formData.details}
                     onChange={(e) => setFormData({ ...formData, details: e.target.value })}
                     placeholder="Describe your goals, tech stack, and timeline..."
-                    className="w-full bg-transparent border-b border-[#111111]/30 py-3 text-sm md:text-base outline-hidden resize-none focus:border-[#111111] transition-colors"
+                    className="w-full bg-transparent border-b border-outline/30 py-3 text-sm md:text-base outline-hidden resize-none focus:border-primary transition-colors"
                   />
                 </div>
 
@@ -167,7 +167,7 @@ export default function ContactPage() {
                   <button 
                     type="submit" 
                     disabled={loading}
-                    className="w-full bg-[#111111] text-[#F7F4EF] hover:bg-[#111111]/85 border border-[#111111] py-4 font-mono text-xs uppercase tracking-widest transition-all rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-primary text-on-primary hover:bg-primary/85 border border-primary py-4 font-mono text-xs uppercase tracking-widest transition-all rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading ? 'Submitting...' : 'Submit Questionnaire'}
                   </button>

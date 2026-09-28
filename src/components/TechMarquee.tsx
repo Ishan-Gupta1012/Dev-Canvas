@@ -13,14 +13,14 @@ export default function TechMarquee() {
   return (
     <motion.section
       ref={ref}
-      className="py-6 border-b border-[#111111] bg-[#F7F4EF] overflow-hidden relative z-20"
+      className="py-6 border-b border-primary bg-background overflow-hidden relative z-20"
       style={{ opacity: marqueeOpacity }}
     >
       <motion.div
         className="relative flex max-w-[100vw] overflow-hidden"
         style={{ y: marqueeY }}
       >
-        <div className="flex w-max animate-marquee gap-8 pr-8 items-center font-mono text-xs uppercase tracking-widest text-[#111111]/70">
+        <div className="flex w-max animate-marquee gap-8 pr-8 items-center font-mono text-xs uppercase tracking-widest text-on-background/70">
           {[...Array(3)].map((_, repeat) => (
             <div key={repeat} className="flex items-center gap-8 whitespace-nowrap">
               {["TypeScript", "TailwindCSS", "Framer Motion", "GSAP Animations", "PostgreSQL", "Next.js Framework",
@@ -28,7 +28,7 @@ export default function TechMarquee() {
               ].map((item, i) => (
                 <span key={`${repeat}-${i}`} className="flex items-center gap-8 whitespace-nowrap">
                   <span>{item}</span>
-                  <span className="text-[#111111]/30">✦</span>
+                  <span className="text-on-background/30">✦</span>
                 </span>
               ))}
             </div>
