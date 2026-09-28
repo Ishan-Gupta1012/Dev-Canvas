@@ -7,10 +7,12 @@ import CtaSection from "@/components/CtaSection";
 import Footer from "@/components/Footer";
 import LandingRedirect from "@/components/LandingRedirect";
 import { ScrollProgress } from "@/components/ScrollProgress";
+import RechromaPreloader from "@/components/RechromaPreloader";
 
 export default function Home() {
   return (
     <div className="bg-background text-on-background min-h-screen flex flex-col custom-cursor font-sans">
+      <RechromaPreloader />
       <ScrollProgress />
       <LandingRedirect />
       <Hero />
