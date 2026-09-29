@@ -132,15 +132,15 @@ const WORDMARK_BLOCKS: PixelBlock[] = [
 ];
 
 const CHROMATIC_PALETTE = [
-  '#CE5623', // D - Warm Vermillion
-  '#6391F6', // e - Electric Blue
-  '#767CBF', // v - Iris
-  '#44CACC', // C - Turquoise
-  '#C9E0FF', // a - Ice Blue
-  '#10B981', // n - Emerald
-  '#CF4E5C', // v - Coral Rose
-  '#8D8500', // a - Golden Ochre
-  '#F3CA02', // s - Bright Amber
+  '#56241A', // Earthy Burgundy
+  '#7C3F2F', // Terracotta
+  '#A0674F', // Warm Copper
+  '#3E1510', // Deep Earth Brown
+  '#34281D', // Dark Chocolate
+  '#7C3F2F', // Terracotta
+  '#56241A', // Earthy Burgundy
+  '#A0674F', // Warm Copper
+  '#CCC0B5', // Warm Beige
 ];
 
 interface AnimatedBlock {
@@ -362,7 +362,7 @@ export default function RechromaPreloader() {
   return (
     <div
       onClick={finishPreloader}
-      className="fixed inset-0 z-[9999] bg-[#070707] flex flex-col items-center justify-center select-none cursor-pointer"
+      className="fixed inset-0 z-[9999] bg-[#0A0402] flex flex-col items-center justify-center select-none cursor-pointer"
       style={{
         opacity,
         transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
@@ -374,7 +374,7 @@ export default function RechromaPreloader() {
       <div
         className="absolute inset-0 opacity-25 pointer-events-none"
         style={{
-          background: 'radial-gradient(circle at 50% 50%, #1c1c1c 0%, #070707 70%)',
+          background: 'radial-gradient(circle at 50% 50%, #270F05 0%, #0A0402 75%)',
         }}
       />
 
@@ -394,7 +394,7 @@ export default function RechromaPreloader() {
 
       {/* Minimal Status Indicator at Bottom */}
       <div className="absolute bottom-12 flex items-center gap-2.5 text-neutral-400 font-mono text-[11px] tracking-[0.2em] uppercase">
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+        <span className="w-1.5 h-1.5 rounded-full bg-[#7C3F2F] animate-pulse" />
         <span>{statusText}</span>
       </div>
     </div>

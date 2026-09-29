@@ -70,53 +70,56 @@ export default function TemplatesSection() {
           </div>
         </motion.div>
 
-        {/* Templates Grid */}
+        {/* Templates Grid showcasing Dark Chocolate (#34281D) & Deep Brown (#3E1510) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {templates.map((template, index) => (
-            <motion.div 
-              key={template.id} 
-              custom={index + 1}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-50px' }}
-              variants={cardReveal}
-              className="border border-primary/30 rounded-sm p-8 bg-background flex flex-col justify-between group relative overflow-hidden transition-all duration-300 hover:bg-primary/5 hover:scale-[1.01]"
-            >
-              <div>
-                {/* Index tag */}
-                <div className="flex justify-between items-center mb-6 font-mono text-xs text-on-background/40 border-b border-primary/10 pb-4">
-                  <span>LAYOUT CODE</span>
-                  <span>[{template.id} / SLT]</span>
+          {templates.map((template, index) => {
+            const isDarkChocolate = index === 0;
+            return (
+              <motion.div 
+                key={template.id} 
+                custom={index + 1}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '-50px' }}
+                variants={cardReveal}
+                className={`border ${isDarkChocolate ? 'border-[#3E1510] bg-[#34281D]' : 'border-[#270F05] bg-[#3E1510]'} rounded-sm p-8 text-[#FFFFFF] flex flex-col justify-between group relative overflow-hidden transition-all duration-300 hover:scale-[1.01] shadow-xl`}
+              >
+                <div>
+                  {/* Index tag */}
+                  <div className={`flex justify-between items-center mb-6 font-mono text-xs ${isDarkChocolate ? 'text-[#A0674F] border-[#3E1510]' : 'text-[#7C3F2F] border-[#270F05]'} border-b pb-4`}>
+                    <span className="font-semibold">LAYOUT CODE</span>
+                    <span>[{template.id} / SLT]</span>
+                  </div>
+                  
+                  {/* Heading */}
+                  <h3 className="font-serif text-2xl sm:text-3xl font-semibold mb-4 text-[#FFFFFF]">
+                    {template.name}
+                  </h3>
                 </div>
-                
-                {/* Heading */}
-                <h3 className="font-serif text-2xl sm:text-3xl font-semibold mb-4">
-                  {template.name}
-                </h3>
-              </div>
 
-              {/* Stack & Link */}
-              <div>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {template.stack.map((s, index) => (
-                    <span key={index} className="font-mono text-[9px] uppercase tracking-wider bg-primary/10 text-on-background px-2 py-0.5 rounded-xs border border-primary/10">
-                      {s}
-                    </span>
-                  ))}
+                {/* Stack & Link */}
+                <div>
+                  <div className="flex flex-wrap gap-2 mb-8">
+                    {template.stack.map((s, idx) => (
+                      <span key={idx} className="font-mono text-[9px] uppercase tracking-wider bg-[#270F05] text-[#CCC0B5] px-2 py-0.5 rounded-xs border border-[#3E1510]">
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                  
+                  <a 
+                    href={template.link}
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest border border-[#56241A] text-[#FFFFFF] bg-[#56241A] hover:bg-[#7C3F2F] hover:border-[#7C3F2F] px-4 py-2.5 transition-all w-full justify-center shadow-md rounded-xs"
+                  >
+                    Live Preview 
+                    <span className="text-[10px]">↗</span>
+                  </a>
                 </div>
-                
-                <a 
-                  href={template.link}
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest border border-primary px-4 py-2 hover:bg-primary hover:text-on-primary transition-all w-full justify-center"
-                >
-                  Live Preview 
-                  <span className="text-[10px]">↗</span>
-                </a>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
 
       </motion.div>

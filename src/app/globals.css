@@ -4,69 +4,67 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --th-primary: #111111;
-  --th-primary-hover: #222222;
-  --th-background: #F7F4EF;
-  --th-foreground: #111111;
-  --th-brand-600: #111111;
-  --th-brand-100: #E8E5DF;
-  --th-neutral-900: #111111;
-  --th-neutral-700: #222222;
-  --th-neutral-500: #444444;
-  --th-neutral-200: #E8E5DF;
-  --th-neutral-50: #F7F4EF;
-  --th-success-500: #1A3323;
-  --th-warning-400: #C4A47C;
-  --th-danger-500: #9E2A2B;
-  --th-muted: #E8E5DF;
-  --th-muted-foreground: #444444;
-  --th-error: #ba1a1a;
-  --th-on-primary: #F7F4EF;
-  --th-surface-container-low: #E8E5DF;
-  --th-secondary-fixed: #E8E5DF;
-  --th-outline: #111111;
-  --th-inverse-primary: #F7F4EF;
-  --th-primary-container: #111111;
-  --th-surface-bright: #F7F4EF;
-  --th-background: #F7F4EF;
-  --th-on-primary-fixed-variant: #111111;
-  --th-error-container: #ffdad6;
-  --th-tertiary-fixed-dim: #C4A47C;
-  --th-primary-fixed: #E8E5DF;
-  --th-surface-dim: #E8E5DF;
-  --th-on-surface-variant: #111111;
-  --th-outline-variant: #111111;
-  --th-tertiary-fixed: #C4A47C;
-  --th-surface: #F7F4EF;
-  --th-surface-container-lowest: #F7F4EF;
-  --th-on-error: #ffffff;
-  --th-on-secondary-fixed-variant: #111111;
-  --th-on-secondary-fixed: #111111;
-  --th-tertiary: #C4A47C;
-  --th-on-tertiary-container: #111111;
-  --th-surface-container-high: #E8E5DF;
-  --th-secondary-container: #E8E5DF;
-  --th-primary: #111111;
-  --th-primary-fixed-dim: #111111;
-  --th-inverse-surface: #111111;
-  --th-on-background: #111111;
-  --th-on-secondary-container: #111111;
-  --th-on-surface: #111111;
-  --th-surface-container-highest: #DCD8D0;
-  --th-on-tertiary-fixed: #111111;
-  --th-on-tertiary: #111111;
-  --th-on-error-container: #93000a;
-  --th-secondary-fixed-dim: #DCD8D0;
-  --th-surface-variant: #E8E5DF;
-  --th-on-primary-fixed: #111111;
-  --th-inverse-on-surface: #F7F4EF;
-  --th-surface-container: #E8E5DF;
-  --th-on-secondary: #F7F4EF;
-  --th-tertiary-container: #E8E5DF;
-  --th-surface-tint: #111111;
-  --th-on-tertiary-fixed-variant: #111111;
-  --th-on-primary-container: #F7F4EF;
-  --th-secondary: #111111;
+  --th-primary: #56241A;             /* Earthy Burgundy - Primary Accent */
+  --th-primary-hover: #7C3F2F;       /* Terracotta - Secondary Accent / Hover */
+  --th-background: #EEEBE7;          /* Warm Off-White - Light Background */
+  --th-foreground: #0A0402;          /* Near Black - Text on Light */
+  --th-on-background: #0A0402;       /* Near Black */
+  --th-on-primary: #FFFFFF;          /* Pure White */
+  --th-brand-600: #56241A;
+  --th-brand-100: #CCC0B5;           /* Warm Beige */
+  --th-neutral-900: #0A0402;         /* Near Black */
+  --th-neutral-700: #3E1510;         /* Deep Earth Brown */
+  --th-neutral-500: #7C3F2F;         /* Terracotta */
+  --th-neutral-200: #CCC0B5;         /* Warm Beige */
+  --th-neutral-50: #EEEBE7;          /* Warm Off-White */
+  --th-success-500: #3E1510;
+  --th-warning-400: #A0674F;         /* Warm Copper */
+  --th-danger-500: #7C3F2F;          /* Terracotta */
+  --th-muted: #CCC0B5;
+  --th-muted-foreground: #3E1510;
+  --th-error: #56241A;
+  --th-surface-container-low: #EEEBE7;
+  --th-secondary-fixed: #CCC0B5;
+  --th-outline: #3E1510;             /* Deep Earth Brown */
+  --th-inverse-primary: #EEEBE7;
+  --th-primary-container: #56241A;
+  --th-surface-bright: #FFFFFF;      /* Pure White */
+  --th-on-primary-fixed-variant: #0A0402;
+  --th-error-container: #CCC0B5;
+  --th-tertiary-fixed-dim: #A0674F;
+  --th-primary-fixed: #CCC0B5;
+  --th-surface-dim: #CCC0B5;
+  --th-on-surface-variant: #0A0402;
+  --th-outline-variant: #CCC0B5;
+  --th-tertiary-fixed: #A0674F;
+  --th-surface: #FFFFFF;             /* Pure White - Cards */
+  --th-surface-container-lowest: #FFFFFF;
+  --th-on-error: #FFFFFF;
+  --th-on-secondary-fixed-variant: #0A0402;
+  --th-on-secondary-fixed: #0A0402;
+  --th-tertiary: #A0674F;            /* Warm Copper */
+  --th-on-tertiary-container: #FFFFFF;
+  --th-surface-container-high: #CCC0B5;
+  --th-secondary-container: #CCC0B5;
+  --th-primary-fixed-dim: #56241A;
+  --th-inverse-surface: #0A0402;
+  --th-on-secondary-container: #0A0402;
+  --th-on-surface: #0A0402;
+  --th-surface-container-highest: #CCC0B5;
+  --th-on-tertiary-fixed: #0A0402;
+  --th-on-tertiary: #FFFFFF;
+  --th-on-error-container: #56241A;
+  --th-secondary-fixed-dim: #CCC0B5;
+  --th-surface-variant: #CCC0B5;
+  --th-on-primary-fixed: #0A0402;
+  --th-inverse-on-surface: #EEEBE7;
+  --th-surface-container: #EEEBE7;
+  --th-on-secondary: #0A0402;
+  --th-tertiary-container: #CCC0B5;
+  --th-surface-tint: #56241A;
+  --th-on-tertiary-fixed-variant: #0A0402;
+  --th-on-primary-container: #FFFFFF;
+  --th-secondary: #7C3F2F;           /* Terracotta */
 }
 
 @keyframes marquee {
@@ -99,69 +97,68 @@
 
 
 .dark {
-  --th-primary: #F7F4EF;
-  --th-primary-hover: #E8E5DF;
-  --th-background: #111111;
-  --th-foreground: #F7F4EF;
-  --th-brand-600: #F7F4EF;
-  --th-brand-100: #222222;
-  --th-neutral-900: #F7F4EF;
-  --th-neutral-700: #E8E5DF;
-  --th-neutral-500: #DCD8D0;
-  --th-neutral-200: #222222;
-  --th-neutral-50: #111111;
-  --th-success-500: #3C4E3D;
-  --th-warning-400: #C4A47C;
-  --th-danger-500: #EF4444;
-  --th-muted: #222222;
-  --th-muted-foreground: #DCD8D0;
-  --th-error: #ffb4ab;
-  --th-on-primary: #111111;
-  --th-surface-container-low: #222222;
-  --th-secondary-fixed: #222222;
-  --th-outline: #F7F4EF;
-  --th-inverse-primary: #111111;
-  --th-primary-container: #F7F4EF;
-  --th-surface-bright: #111111;
-  --th-background: #111111;
-  --th-on-primary-fixed-variant: #F7F4EF;
-  --th-error-container: #93000a;
-  --th-tertiary-fixed-dim: #C4A47C;
-  --th-primary-fixed: #222222;
-  --th-surface-dim: #222222;
-  --th-on-surface-variant: #F7F4EF;
-  --th-outline-variant: #F7F4EF;
-  --th-tertiary-fixed: #C4A47C;
-  --th-surface: #111111;
-  --th-surface-container-lowest: #111111;
-  --th-on-error: #690005;
-  --th-on-secondary-fixed-variant: #F7F4EF;
-  --th-on-secondary-fixed: #F7F4EF;
-  --th-tertiary: #C4A47C;
-  --th-on-tertiary-container: #F7F4EF;
-  --th-surface-container-high: #222222;
-  --th-secondary-container: #222222;
-  --th-primary: #F7F4EF;
-  --th-primary-fixed-dim: #F7F4EF;
-  --th-inverse-surface: #F7F4EF;
-  --th-on-background: #F7F4EF;
-  --th-on-secondary-container: #F7F4EF;
-  --th-on-surface: #F7F4EF;
-  --th-surface-container-highest: #333333;
-  --th-on-tertiary-fixed: #F7F4EF;
-  --th-on-tertiary: #F7F4EF;
-  --th-on-error-container: #ffdad6;
-  --th-secondary-fixed-dim: #333333;
-  --th-surface-variant: #222222;
-  --th-on-primary-fixed: #F7F4EF;
-  --th-inverse-on-surface: #111111;
-  --th-surface-container: #222222;
-  --th-on-secondary: #111111;
-  --th-tertiary-container: #222222;
-  --th-surface-tint: #F7F4EF;
-  --th-on-tertiary-fixed-variant: #F7F4EF;
-  --th-on-primary-container: #111111;
-  --th-secondary: #F7F4EF;
+  --th-primary: #56241A;
+  --th-primary-hover: #7C3F2F;
+  --th-background: #34281D;          /* Dark Chocolate - Primary Dark Background */
+  --th-foreground: #FFFFFF;          /* Pure White */
+  --th-on-background: #EEEBE7;       /* Warm Off-White */
+  --th-on-primary: #FFFFFF;
+  --th-brand-600: #7C3F2F;
+  --th-brand-100: #3E1510;
+  --th-neutral-900: #FFFFFF;
+  --th-neutral-700: #EEEBE7;
+  --th-neutral-500: #CCC0B5;
+  --th-neutral-200: #3E1510;
+  --th-neutral-50: #34281D;
+  --th-success-500: #7C3F2F;
+  --th-warning-400: #A0674F;
+  --th-danger-500: #7C3F2F;
+  --th-muted: #3E1510;
+  --th-muted-foreground: #CCC0B5;
+  --th-error: #7C3F2F;
+  --th-on-primary: #FFFFFF;
+  --th-surface-container-low: #270F05; /* Deep Espresso */
+  --th-secondary-fixed: #3E1510;
+  --th-outline: #EEEBE7;
+  --th-inverse-primary: #34281D;
+  --th-primary-container: #56241A;
+  --th-surface-bright: #3E1510;
+  --th-on-primary-fixed-variant: #EEEBE7;
+  --th-error-container: #270F05;
+  --th-tertiary-fixed-dim: #A0674F;
+  --th-primary-fixed: #3E1510;
+  --th-surface-dim: #270F05;
+  --th-on-surface-variant: #EEEBE7;
+  --th-outline-variant: #A0674F;
+  --th-tertiary-fixed: #A0674F;
+  --th-surface: #3E1510;             /* Deep Earth Brown - Cards on Dark */
+  --th-surface-container-lowest: #270F05;
+  --th-on-error: #FFFFFF;
+  --th-on-secondary-fixed-variant: #EEEBE7;
+  --th-on-secondary-fixed: #EEEBE7;
+  --th-tertiary: #A0674F;            /* Warm Copper */
+  --th-on-tertiary-container: #EEEBE7;
+  --th-surface-container-high: #3E1510;
+  --th-secondary-container: #3E1510;
+  --th-primary-fixed-dim: #56241A;
+  --th-inverse-surface: #EEEBE7;
+  --th-on-secondary-container: #EEEBE7;
+  --th-on-surface: #EEEBE7;
+  --th-surface-container-highest: #3E1510;
+  --th-on-tertiary-fixed: #EEEBE7;
+  --th-on-tertiary: #EEEBE7;
+  --th-on-error-container: #EEEBE7;
+  --th-secondary-fixed-dim: #3E1510;
+  --th-surface-variant: #3E1510;
+  --th-on-primary-fixed: #EEEBE7;
+  --th-inverse-on-surface: #270F05;
+  --th-surface-container: #34281D;
+  --th-on-secondary: #270F05;
+  --th-tertiary-container: #3E1510;
+  --th-surface-tint: #7C3F2F;
+  --th-on-tertiary-fixed-variant: #EEEBE7;
+  --th-on-primary-container: #FFFFFF;
+  --th-secondary: #7C3F2F;
 }
 
 @theme inline {
@@ -349,19 +346,19 @@ body {
   background-color: var(--th-background);
   background-size: 36px 36px;
   background-image: 
-    linear-gradient(to right, rgba(17, 17, 17, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(17, 17, 17, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, rgba(62, 21, 16, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(62, 21, 16, 0.05) 1px, transparent 1px);
 }
 
 .dark .bg-grid-paper {
   background-color: var(--th-background);
   background-image: 
-    linear-gradient(to right, rgba(247, 244, 239, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(247, 244, 239, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, rgba(238, 235, 231, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(238, 235, 231, 0.04) 1px, transparent 1px);
 }
 
 .custom-cursor {
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Ccircle cx='6' cy='6' r='4' fill='%23111111'/%3E%3C/svg%3E") 6 6, auto;
+  cursor: default;
 }
 
 .text-stroke {

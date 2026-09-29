@@ -75,13 +75,13 @@ export default function Hero() {
             <div className="flex flex-col sm:flex-row gap-4">
               <Link 
                 href="/signin" 
-                className="bg-primary text-on-primary hover:bg-primary/85 transition-colors px-6 py-3 text-center font-mono text-xs uppercase tracking-widest rounded-sm border border-primary"
+                className="bg-[#56241A] text-[#FFFFFF] hover:bg-[#7C3F2F] transition-colors px-6 py-3 text-center font-mono text-xs uppercase tracking-widest rounded-sm border border-[#56241A] shadow-xs"
               >
                 Get Started
               </Link>
               <Link 
                 href="/works" 
-                className="bg-transparent text-on-background hover:bg-primary/5 transition-colors px-6 py-3 text-center font-mono text-xs uppercase tracking-widest rounded-sm border border-primary"
+                className="bg-transparent text-[#56241A] hover:bg-[#56241A] hover:text-[#FFFFFF] transition-colors px-6 py-3 text-center font-mono text-xs uppercase tracking-widest rounded-sm border border-[#56241A]"
               >
                 Browse Works
               </Link>
@@ -90,14 +90,17 @@ export default function Hero() {
         </div>
 
         {/* Draggable ruler micro-interaction */}
-        <div className="border border-primary bg-background rounded-sm p-6 relative overflow-hidden flex flex-col gap-4">
-          <div className="flex justify-between items-center font-mono text-xs uppercase tracking-widest text-on-background/70">
-            <div>Interactive Tool / Curiosity Index</div>
-            <div className="text-right">Scale: <span className="text-on-background font-bold">50%</span></div>
+        <div className="border border-[#3E1510] bg-[#34281D] text-[#EEEBE7] rounded-sm p-6 relative overflow-hidden flex flex-col gap-4 shadow-xl">
+          <div className="flex justify-between items-center font-mono text-xs uppercase tracking-widest text-[#CCC0B5]">
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#56241A]" />
+              <span>Interactive Tool / Curiosity Index</span>
+            </div>
+            <div className="text-right">Scale: <span className="text-[#FFFFFF] font-bold">50%</span></div>
           </div>
 
-          {/* Draggable Container */}
-          <div className="h-24 border-y border-outline/25 relative cursor-grab active:cursor-grabbing overflow-hidden flex items-center bg-background transition-shadow">
+          {/* Draggable Container in Very Dark Brown (#270F05) */}
+          <div className="h-24 border-y border-[#3E1510] relative cursor-grab active:cursor-grabbing overflow-hidden flex items-center bg-[#270F05] transition-shadow">
             {/* The ruler track */}
             <div className="absolute left-1/2 flex items-end gap-1.5 h-16 w-max transition-transform duration-75 ease-out" style={{ transform: `translateX(-150px)` }}>
               {Array.from({ length: 120 }).map((_, i) => {
@@ -107,15 +110,15 @@ export default function Hero() {
                 return (
                   <div key={i} className="flex flex-col items-center justify-end h-full w-2">
                     {isMajor && (
-                      <span className="font-mono text-[9px] text-on-background/50 mb-1 select-none">
+                      <span className="font-mono text-[9px] text-[#CCC0B5]/60 mb-1 select-none">
                         {i * 10}
                       </span>
                     )}
                     <div 
-                      className="w-0.5 bg-primary transition-all"
+                      className="w-0.5 bg-[#A0674F] transition-all"
                       style={{ 
                         height: isMajor ? '28px' : isMedium ? '18px' : '10px',
-                        opacity: isMajor ? 0.6 : isMedium ? 0.4 : 0.2
+                        opacity: isMajor ? 0.9 : isMedium ? 0.5 : 0.25
                       }}
                     />
                   </div>
@@ -123,11 +126,11 @@ export default function Hero() {
               })}
             </div>
 
-            {/* Central indicator line */}
-            <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-red-500 z-10 shadow-sm" />
+            {/* Central indicator line in Earthy Burgundy (#56241A) */}
+            <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-[#56241A] z-10 shadow-sm" />
           </div>
 
-          <div className="font-mono text-[10px] text-on-background/50 uppercase tracking-wider text-center">
+          <div className="font-mono text-[10px] text-[#CCC0B5]/70 uppercase tracking-wider text-center">
             ← Drag the ruler to measure your curiosity limit →
           </div>
         </div>

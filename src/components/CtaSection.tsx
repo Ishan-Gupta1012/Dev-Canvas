@@ -55,7 +55,7 @@ export default function CtaSection() {
   return (
     <motion.section
       ref={ref}
-      className="py-20 md:py-32 bg-background border-b border-primary text-on-background font-sans bg-grid-paper select-none relative"
+      className="py-20 md:py-32 bg-[#270F05] border-b border-[#3E1510] text-[#FFFFFF] font-sans select-none relative"
       style={{ opacity: sectionOpacity }}
     >
       <motion.div 
@@ -64,18 +64,18 @@ export default function CtaSection() {
       >
         
         {/* Tag */}
-        <motion.div custom={0} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }} variants={contentReveal} className="font-mono text-xs uppercase tracking-widest text-on-background/60 mb-6">
+        <motion.div custom={0} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }} variants={contentReveal} className="font-mono text-xs uppercase tracking-widest text-[#A0674F] mb-6">
           ✦ Get in Touch
         </motion.div>
 
         {/* Heading */}
         <motion.div custom={1} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }} variants={contentReveal}>
-          <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.1] tracking-tight mb-8">
-            Let&apos;s build something <span className="italic font-normal">thoughtful together.</span>
+          <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.1] tracking-tight mb-8 text-[#FFFFFF]">
+            Let&apos;s build something <span className="italic font-normal text-[#CCC0B5]">thoughtful together.</span>
           </h2>
           
           {/* Description */}
-          <p className="text-sm md:text-base text-on-background/70 leading-relaxed mb-12 max-w-[600px] mx-auto">
+          <p className="text-sm md:text-base text-[#EEEBE7]/80 leading-relaxed mb-12 max-w-[600px] mx-auto">
             We&apos;re launching soon. Join our early queue to preview templates, influence the design roadmap, and deploy your custom layout.
           </p>
         </motion.div>
@@ -83,49 +83,49 @@ export default function CtaSection() {
         {/* Clean Input Form */}
         <motion.div custom={2} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }} variants={contentReveal} className="max-w-[450px] mx-auto mb-16">
           {status === 'success' ? (
-            <div className="border border-primary p-4 bg-background font-mono text-xs text-green-600">
+            <div className="border border-[#7C3F2F] p-4 bg-[#34281D] font-mono text-xs text-[#EEEBE7]">
               [SUCCESSFULLY JOINED THE QUEUE]
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 border border-primary p-1.5 bg-background rounded-sm">
+            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 border border-[#A0674F]/40 p-1.5 bg-[#34281D] rounded-sm">
               <input 
                 type="email" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="enter your email address..." 
-                className="flex-1 bg-transparent text-sm text-on-background px-4 py-3 outline-hidden font-mono"
+                className="flex-1 bg-transparent text-sm text-[#FFFFFF] placeholder:text-[#CCC0B5]/50 px-4 py-3 outline-hidden font-mono"
                 required
                 disabled={status === 'loading'}
               />
               <button 
                 type="submit" 
                 disabled={status === 'loading'}
-                className="bg-primary text-on-primary hover:bg-primary/85 transition-colors px-6 py-3 font-mono text-xs uppercase tracking-widest rounded-sm disabled:opacity-50"
+                className="bg-[#56241A] hover:bg-[#7C3F2F] text-[#FFFFFF] transition-colors px-6 py-3 font-mono text-xs uppercase tracking-widest rounded-sm disabled:opacity-50 cursor-pointer"
               >
                 {status === 'loading' ? 'Joining...' : 'Join Queue'}
               </button>
             </form>
           )}
           {status === 'error' && (
-            <div className="mt-2 font-mono text-xs text-red-600">
+            <div className="mt-2 font-mono text-xs text-[#7C3F2F]">
               [ERROR: Failed to join queue. Please try again.]
             </div>
           )}
         </motion.div>
 
-        {/* Grid Questions */}
-        <motion.div custom={3} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }} variants={contentReveal} className="grid grid-cols-1 md:grid-cols-3 border-t border-l border-primary">
-          <div className="p-6 border-r border-b border-primary bg-background/50">
-            <div className="font-mono text-[9px] text-on-background/40 mb-3">[QA.01]</div>
-            <p className="text-xs text-on-background/80 leading-relaxed">Do you want a portfolio that evolves with your craft?</p>
+        {/* Grid Questions showcasing Dark Chocolate (#34281D) & Deep Brown (#3E1510) */}
+        <motion.div custom={3} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }} variants={contentReveal} className="grid grid-cols-1 md:grid-cols-3 border-t border-l border-[#3E1510]">
+          <div className="p-6 border-r border-b border-[#3E1510] bg-[#34281D] shadow-sm">
+            <div className="font-mono text-[9px] text-[#A0674F] mb-3">[QA.01]</div>
+            <p className="text-xs text-[#EEEBE7]/90 leading-relaxed">Do you want a portfolio that evolves with your craft?</p>
           </div>
-          <div className="p-6 border-r border-b border-primary bg-background/50">
-            <div className="font-mono text-[9px] text-on-background/40 mb-3">[QA.02]</div>
-            <p className="text-xs text-on-background/80 leading-relaxed">Would a premium UI help highlight your best work?</p>
+          <div className="p-6 border-r border-b border-[#3E1510] bg-[#34281D] shadow-sm">
+            <div className="font-mono text-[9px] text-[#A0674F] mb-3">[QA.02]</div>
+            <p className="text-xs text-[#EEEBE7]/90 leading-relaxed">Would a premium UI help highlight your best work?</p>
           </div>
-          <div className="p-6 border-r border-b border-primary bg-background/50">
-            <div className="font-mono text-[9px] text-on-background/40 mb-3">[QA.03]</div>
-            <p className="text-xs text-on-background/80 leading-relaxed">Do you want full control over your exported static bundle?</p>
+          <div className="p-6 border-r border-b border-[#3E1510] bg-[#34281D] shadow-sm">
+            <div className="font-mono text-[9px] text-[#A0674F] mb-3">[QA.03]</div>
+            <p className="text-xs text-[#EEEBE7]/90 leading-relaxed">Do you want full control over your exported static bundle?</p>
           </div>
         </motion.div>
 
