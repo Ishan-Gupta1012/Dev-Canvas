@@ -9,35 +9,7 @@ interface AxiomIntroPageProps {
 }
 
 export default function AxiomIntroPage({ onEnterMainSite }: AxiomIntroPageProps) {
-  const [localTime, setLocalTime] = useState('');
-  const [systemDrift, setSystemDrift] = useState('+0.038');
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Live time (Hanoi VN timezone, matching website metadata)
-  useEffect(() => {
-    const updateTime = () => {
-      const options: Intl.DateTimeFormatOptions = {
-        timeZone: 'Asia/Ho_Chi_Minh',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false,
-      };
-      setLocalTime(new Intl.DateTimeFormat('en-US', options).format(new Date()));
-    };
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // System drift telemetry fluctuation
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const drift = (Math.random() * 0.06 - 0.03).toFixed(3);
-      setSystemDrift(drift.startsWith('-') ? drift : `+${drift}`);
-    }, 2400);
-    return () => clearInterval(interval);
-  }, []);
 
   const smoothScrollTo = (id: string) => (e: React.MouseEvent) => {
     e.preventDefault();
@@ -76,50 +48,19 @@ export default function AxiomIntroPage({ onEnterMainSite }: AxiomIntroPageProps)
             </a>
           </div>
 
-          {/* Time Display */}
-          <span className="font-mono text-[12px] tracking-[-0.36px] uppercase leading-[1.2] shrink-0 text-[#0A0402]">
-            HANOI {localTime || '12:00:00'} VN
-          </span>
-
-          {/* Telemetry Readouts & Nav */}
-          <div className="flex gap-[120px] max-lg:gap-[50px] max-md:gap-0 max-md:w-auto items-center shrink-0">
-            <div className="font-mono text-[12px] leading-[1.2] uppercase max-md:hidden text-[#0A0402]">
-              <p>
-                <span className="opacity-60 text-[#0A0402]">AX-FIELD / STATE: </span>
-                <span className="text-[#56241A] font-bold">COHERENT</span>
-              </p>
-              <p>
-                <span className="opacity-60 text-[#0A0402]">OBSERVATION MODE: </span>
-                <span className="text-[#0A0402]">REALTIME</span>
-              </p>
-              <p>
-                <span className="opacity-60 text-[#0A0402]">SYSTEM DRIFT: </span>
-                <span className="text-[#7C3F2F] font-semibold">{systemDrift}</span>
-              </p>
-            </div>
-
-            {/* Main Nav & Direct Enter Site CTA */}
-            <nav aria-label="Main navigation" className="flex items-center gap-6 font-mono text-[12px] leading-[1.2] uppercase">
-              <a className="hover:text-[#56241A] opacity-80 hover:opacity-100 transition-colors hidden md:inline text-[#0A0402] cursor-pointer" href="#archive" onClick={smoothScrollTo('archive')}>
-                Dossiers
-              </a>
-              <a className="hover:text-[#56241A] opacity-80 hover:opacity-100 transition-colors hidden md:inline text-[#0A0402] cursor-pointer" href="#models" onClick={smoothScrollTo('models')}>
-                Conditions
-              </a>
-              <button
-                onClick={onEnterMainSite}
-                className="relative overflow-hidden inline-flex items-center gap-[6px] h-[34px] px-4 rounded-xs border border-[#3E1510] bg-[#56241A] hover:bg-[#7C3F2F] text-[#FFFFFF] transition-all duration-200 cursor-pointer group shadow-sm"
-                aria-label="Enter Main Website"
-              >
-                <span className="font-mono font-bold text-[11px] uppercase tracking-wider">
-                  ENTER MAIN WEBSITE
-                </span>
-                <span className="group-hover:translate-x-0.5 transition-transform duration-200 text-sm">
-                  →
-                </span>
-              </button>
-            </nav>
-          </div>
+          {/* Direct Enter Site CTA */}
+          <button
+            onClick={onEnterMainSite}
+            className="relative overflow-hidden inline-flex items-center gap-[6px] h-[34px] px-4 rounded-xs border border-[#3E1510] bg-[#56241A] hover:bg-[#7C3F2F] text-[#FFFFFF] transition-all duration-200 cursor-pointer group shadow-sm"
+            aria-label="Enter Main Website"
+          >
+            <span className="font-mono font-bold text-[11px] uppercase tracking-wider">
+              ENTER MAIN WEBSITE
+            </span>
+            <span className="group-hover:translate-x-0.5 transition-transform duration-200 text-sm">
+              →
+            </span>
+          </button>
         </div>
       </header>
 
