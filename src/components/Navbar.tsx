@@ -20,7 +20,7 @@ export default function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-xs border-b border-outline/15 text-on-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group">
+        <Link href="/" className="flex items-center gap-2 min-h-[44px] group">
           <div className="border border-primary w-7 h-7 rounded-sm flex items-center justify-center font-serif text-sm font-semibold transition-all group-hover:bg-primary group-hover:text-on-primary">
             P
           </div>
@@ -31,19 +31,19 @@ export default function Navbar() {
         <nav className="hidden md:flex items-center gap-10 font-mono text-[11px] uppercase tracking-widest">
           <Link
             href="/"
-            className={`transition-colors hover:text-primary ${isActive('/') ? 'text-primary font-semibold underline underline-offset-4' : 'text-on-background/60'}`}
+            className={`inline-flex items-center min-h-[44px] transition-colors hover:text-primary ${isActive('/') ? 'text-primary font-semibold underline underline-offset-4' : 'text-on-background/60'}`}
           >
             Home
           </Link>
           <Link
             href="/works"
-            className={`transition-colors hover:text-primary ${isActive('/works') ? 'text-primary font-semibold underline underline-offset-4' : 'text-on-background/60'}`}
+            className={`inline-flex items-center min-h-[44px] transition-colors hover:text-primary ${isActive('/works') ? 'text-primary font-semibold underline underline-offset-4' : 'text-on-background/60'}`}
           >
             Works
           </Link>
           <Link
             href="/contact"
-            className={`transition-colors hover:text-primary ${isActive('/contact') ? 'text-primary font-semibold underline underline-offset-4' : 'text-on-background/60'}`}
+            className={`inline-flex items-center min-h-[44px] transition-colors hover:text-primary ${isActive('/contact') ? 'text-primary font-semibold underline underline-offset-4' : 'text-on-background/60'}`}
           >
             Contact
           </Link>
@@ -71,7 +71,7 @@ export default function Navbar() {
               </Link>
               <button
                 onClick={logout}
-                className="text-on-background/60 hover:text-primary transition-colors"
+                className="inline-flex items-center min-h-[44px] text-on-background/60 hover:text-primary transition-colors"
               >
                 Logout
               </button>
@@ -80,13 +80,13 @@ export default function Navbar() {
             <div className="flex items-center gap-4 font-mono text-[11px] uppercase">
               <Link
                 href="/signin"
-                className="hidden sm:block text-on-background/60 hover:text-primary transition-colors"
+                className="hidden sm:inline-flex sm:items-center min-h-[44px] text-on-background/60 hover:text-primary transition-colors"
               >
                 Sign in
               </Link>
               <Link
                 href="/signin"
-                className="bg-primary text-on-primary hover:bg-primary/80 transition-colors px-4 py-2 rounded-sm"
+                className="inline-flex items-center min-h-[44px] bg-primary text-on-primary hover:bg-primary/80 transition-colors px-4 rounded-sm"
               >
                 Get Started
               </Link>
@@ -98,7 +98,7 @@ export default function Navbar() {
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-1 text-on-background flex items-center"
+            className="md:hidden inline-flex items-center justify-center w-11 h-11 -mr-2 text-on-background"
           >
             <span className="material-symbols-outlined text-2xl">
               {mobileMenuOpen ? 'close' : 'menu'}

@@ -38,7 +38,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${cormorant.variable} ${jetbrains.variable} antialiased scroll-smooth`}
     >
-      <body className="min-h-screen bg-background text-on-background font-sans flex flex-col overflow-x-hidden">
+      <body className="min-h-screen bg-background text-on-background font-sans font-medium flex flex-col overflow-x-clip">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

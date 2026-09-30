@@ -16,10 +16,10 @@ export default function Footer() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-4 font-mono text-[11px] uppercase tracking-widest text-[#CCC0B5]/75">
         <div className="flex gap-8 md:gap-12">
-          <Link href="/" className="hover:text-[#FFFFFF] transition-colors">
+          <Link href="/" className="inline-flex items-center min-h-[44px] hover:text-[#FFFFFF] transition-colors">
             Home
           </Link>
-          <Link href="/about" className="hover:text-[#FFFFFF] transition-colors">
+          <Link href="/about" className="inline-flex items-center min-h-[44px] hover:text-[#FFFFFF] transition-colors">
             About
           </Link>
         </div>

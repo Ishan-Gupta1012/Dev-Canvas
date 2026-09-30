@@ -132,15 +132,15 @@ const WORDMARK_BLOCKS: PixelBlock[] = [
 ];
 
 const CHROMATIC_PALETTE = [
-  '#56241A', // Earthy Burgundy
-  '#7C3F2F', // Terracotta
+  '#F3E7D8', // Warm Cream
+  '#E8C39E', // Sand
+  '#D9A066', // Amber
+  '#C97B4A', // Terracotta
   '#A0674F', // Warm Copper
-  '#3E1510', // Deep Earth Brown
-  '#34281D', // Dark Chocolate
-  '#7C3F2F', // Terracotta
+  '#7C3F2F', // Burnt Sienna
   '#56241A', // Earthy Burgundy
-  '#A0674F', // Warm Copper
-  '#CCC0B5', // Warm Beige
+  '#E8C39E', // Sand
+  '#F3E7D8', // Warm Cream
 ];
 
 interface AnimatedBlock {
@@ -161,6 +161,8 @@ interface SparkleParticle {
   lifetime: number;
 }
 
+const EXIT_MS = 900;
+
 export default function RechromaPreloader() {
   const [isVisible, setIsVisible] = useState(true);
   const [opacity, setOpacity] = useState(1);
@@ -171,13 +173,15 @@ export default function RechromaPreloader() {
   const isFinishedRef = useRef(false);
   const sparklesRef = useRef<SparkleParticle[]>([]);
 
+  // The panel dissolves slowly so the page underneath is already readable by the
+  // time it lifts away
   const finishPreloader = useCallback(() => {
     if (isFinishedRef.current) return;
     isFinishedRef.current = true;
     setOpacity(0);
     setTimeout(() => {
       setIsVisible(false);
-    }, 600);
+    }, EXIT_MS);
   }, []);
 
   useEffect(() => {
@@ -278,7 +282,7 @@ export default function RechromaPreloader() {
         const age = elapsed - sp.birthTime;
         if (age > sp.lifetime) return false;
         const curAlpha = sp.alpha * (1 - age / sp.lifetime);
-        ctx.fillStyle = `rgba(255, 255, 255, ${curAlpha})`;
+        ctx.fillStyle = `rgba(243, 231, 216, ${curAlpha})`;
         ctx.fillRect(sp.x, sp.y, sp.size, sp.size);
         return true;
       });
@@ -318,15 +322,15 @@ export default function RechromaPreloader() {
           ctx.save();
           ctx.globalAlpha = Math.min(1, Math.max(0, alpha));
 
-          // Color: Starts pure white and transitions into chromatic colors once locked
+          // Color: Starts pale cream and warms into the landing palette once locked
           if (isLocked && elapsed > 1.1) {
             ctx.fillStyle = CHROMATIC_PALETTE[block.base.charIndex % CHROMATIC_PALETTE.length];
             // Subtle glow
             ctx.shadowColor = CHROMATIC_PALETTE[block.base.charIndex % CHROMATIC_PALETTE.length];
             ctx.shadowBlur = 6;
           } else {
-            ctx.fillStyle = '#FFFFFF';
-            ctx.shadowColor = 'rgba(255, 255, 255, 0.4)';
+            ctx.fillStyle = '#F3E7D8';
+            ctx.shadowColor = 'rgba(232, 195, 158, 0.5)';
             ctx.shadowBlur = 4;
           }
 
@@ -334,7 +338,7 @@ export default function RechromaPreloader() {
 
           // Crisp inner pixel border
           if (bSize >= 10) {
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.strokeStyle = 'rgba(62, 21, 16, 0.28)';
             ctx.lineWidth = 1;
             ctx.strokeRect(bx + 0.5, by + 0.5, bSize - 1, bSize - 1);
           }
@@ -362,39 +366,28 @@ export default function RechromaPreloader() {
   return (
     <div
       onClick={finishPreloader}
-      className="fixed inset-0 z-[9999] bg-[#0A0402] flex flex-col items-center justify-center select-none cursor-pointer"
+      className="fixed inset-0 z-[9999] bg-[#3E1510] flex flex-col items-center justify-center select-none cursor-pointer"
       style={{
         opacity,
-        transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+        transition: `opacity ${EXIT_MS}ms cubic-bezier(0.4, 0, 0.2, 1)`,
         pointerEvents: opacity <= 0 ? 'none' : 'auto',
       }}
       title="Click anywhere or press [ESC] to skip"
     >
       {/* Background Subtle Radial Glow */}
       <div
-        className="absolute inset-0 opacity-25 pointer-events-none"
+        className="absolute inset-0 opacity-70 pointer-events-none"
         style={{
-          background: 'radial-gradient(circle at 50% 50%, #270F05 0%, #0A0402 75%)',
+          background: 'radial-gradient(circle at 50% 50%, #56241A 0%, #2A0E08 78%)',
         }}
       />
-
-      {/* Top Right Skip Button */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          finishPreloader();
-        }}
-        className="absolute top-8 right-8 z-50 px-3.5 py-1.5 text-[11px] font-mono tracking-widest uppercase rounded text-neutral-400 hover:text-white hover:bg-white/10 border border-neutral-800 transition-all duration-200"
-      >
-        SKIP [ESC]
-      </button>
 
       {/* High-Performance Canvas where the sparkling pixels assemble DevCanvas */}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" />
 
       {/* Minimal Status Indicator at Bottom */}
-      <div className="absolute bottom-12 flex items-center gap-2.5 text-neutral-400 font-mono text-[11px] tracking-[0.2em] uppercase">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#7C3F2F] animate-pulse" />
+      <div className="absolute bottom-12 flex items-center gap-2.5 text-[#E8C39E] font-mono text-[11px] tracking-[0.2em] uppercase">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#D9A066] animate-pulse" />
         <span>{statusText}</span>
       </div>
     </div>

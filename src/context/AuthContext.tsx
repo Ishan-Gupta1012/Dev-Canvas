@@ -1,8 +1,9 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useCallback, useContext, useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { isSupabaseConfigured } from '@/utils/supabase/env';
+import { skipIntroOnNextLanding } from '@/lib/intro-entry';
 
 export interface PersonalInfo {
   name: string;
@@ -84,6 +85,8 @@ interface AuthContextType {
   user: StudentProfile | null;
   isLoading: boolean;
   login: (provider: 'google' | 'github' | 'linkedin' | 'email', email?: string, name?: string) => Promise<void>;
+  signInWithPassword: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, name?: string) => Promise<void>;
   logout: () => void;
   updateProfile: (newProfile: StudentProfile) => void;
   markNotificationRead: (id: string) => void;
@@ -131,6 +134,16 @@ const generateEmptyProfile = (provider: StudentProfile['provider'], email?: stri
       avatar: avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=fallback'
     }
   };
+};
+
+const safeParseProfile = (raw: string): StudentProfile | null => {
+  try {
+    const parsed = JSON.parse(raw) as StudentProfile;
+    if (parsed.personalInfo && parsed.themeSettings && parsed.skills) {
+      return parsed;
+    }
+  } catch {}
+  return null;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -228,6 +241,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (provider !== 'email' && isSupabaseConfigured()) {
       const supabase = createClient();
 
+      // The provider navigates away from this page, so park the intro skip now.
+      // Without it the post-login landing visit would replay the preloader.
+      skipIntroOnNextLanding();
+
       // Trigger OAuth Login
       const { error } = await supabase.auth.signInWithOAuth({
         provider: provider,
@@ -240,6 +257,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsLoading(false);
         return;
       }
+
+      // A successful OAuth call hands the browser to the provider. Returning a
+      // local profile here would flash a mock user before that navigation, so
+      // stop and let /auth/callback establish the real session.
+      return;
     } else if (provider !== 'email') {
       console.warn('Supabase is not configured. Using local profile instead of OAuth.');
     }
@@ -269,12 +291,123 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(false);
   };
 
+  // Reads the authenticated account back into the student profile the app renders
+  const applySupabaseSession = useCallback(
+    (sessionUser: {
+      email?: string | null;
+      user_metadata?: Record<string, unknown>;
+      app_metadata?: Record<string, unknown>;
+    }): StudentProfile => {
+      const metadata = sessionUser.user_metadata;
+      const name =
+        (metadata?.full_name as string) ||
+        (metadata?.name as string) ||
+        sessionUser.email?.split('@')[0] ||
+        'User';
+      const avatar =
+        (metadata?.avatar_url as string) ||
+        (metadata?.picture as string) ||
+        'https://api.dicebear.com/7.x/avataaars/svg?seed=fallback';
+      const provider = (sessionUser.app_metadata?.provider as StudentProfile['provider']) || 'email';
+
+      const storedUser = localStorage.getItem('student_user');
+      const profile = storedUser ? safeParseProfile(storedUser) : null;
+
+      if (!profile) {
+        const created = generateEmptyProfile(provider, sessionUser.email || undefined, name, avatar);
+        localStorage.setItem('student_user', JSON.stringify(created));
+        return created;
+      }
+
+      profile.personalInfo.name = name;
+      profile.personalInfo.email = sessionUser.email || profile.personalInfo.email;
+      profile.personalInfo.avatar = avatar;
+      profile.provider = provider;
+      localStorage.setItem('student_user', JSON.stringify(profile));
+      return profile;
+    },
+    []
+  );
+
+  const signInWithPassword = async (email: string, password: string): Promise<void> => {
+    setIsLoading(true);
+
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error || !data.user) {
+        setIsLoading(false);
+        throw error ?? new Error('Invalid login credentials.');
+      }
+
+      const profile = applySupabaseSession(data.user);
+      setUser(profile);
+      document.cookie = 'student_auth=true; path=/; SameSite=Lax';
+      setIsLoading(false);
+      return;
+    }
+
+    // No backend configured: the demo app trusts the local profile instead of a password
+    const storedUser = localStorage.getItem('student_user');
+    const profile = storedUser ? safeParseProfile(storedUser) : null;
+
+    if (!profile || profile.personalInfo.email?.toLowerCase() !== email.toLowerCase()) {
+      setIsLoading(false);
+      throw new Error('No account found for that email. Create an account first.');
+    }
+
+    setUser(profile);
+    document.cookie = 'student_auth=true; path=/; SameSite=Lax';
+    setIsLoading(false);
+  };
+
+  const signUp = async (email: string, password: string, name?: string): Promise<void> => {
+    setIsLoading(true);
+
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: name ? { full_name: name } : undefined,
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) {
+        setIsLoading(false);
+        throw error;
+      }
+
+      // A confirmed signup returns a session; one that still needs email confirmation does not
+      if (data.user && data.session) {
+        const profile = applySupabaseSession(data.user);
+        setUser(profile);
+        document.cookie = 'student_auth=true; path=/; SameSite=Lax';
+      }
+
+      setIsLoading(false);
+      return;
+    }
+
+    // No backend configured: create the local profile so the app stays usable
+    const finalProfile = generateEmptyProfile('email', email, name);
+
+    setUser(finalProfile);
+    localStorage.setItem('student_user', JSON.stringify(finalProfile));
+    document.cookie = 'student_auth=true; path=/; SameSite=Lax';
+    setIsLoading(false);
+  };
+
   const logout = async () => {
     if (isSupabaseConfigured()) {
       const supabase = createClient();
       await supabase.auth.signOut();
     }
     setUser(null);
+    setIsLoading(false);
     localStorage.removeItem('student_user');
     document.cookie = 'student_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
     
@@ -294,6 +427,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     }
     
+    skipIntroOnNextLanding();
     window.location.href = '/';
   };
 
@@ -321,7 +455,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout, updateProfile, markNotificationRead, clearNotifications }}>
+    <AuthContext.Provider       value={{ user, isLoading, login, signInWithPassword, signUp, logout, updateProfile, markNotificationRead, clearNotifications }}>
       {children}
     </AuthContext.Provider>
   );

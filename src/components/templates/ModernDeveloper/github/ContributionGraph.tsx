@@ -25,17 +25,21 @@ export function ContributionGraph({ username, stats }: Props) {
         </a>
       </div>
       
-      <div className="min-w-[800px] pb-4">
-        <GitHubCalendar 
-          username={username} 
-          colorScheme="dark"
-          blockSize={14}
-          blockMargin={5}
-          fontSize={14}
-        />
+      {/* The calendar is a fixed-width canvas, so it scrolls inside its own
+          box instead of forcing the whole page wider than the viewport */}
+      <div className="w-full max-w-full overflow-x-auto pb-4">
+        <div className="min-w-[800px]">
+          <GitHubCalendar 
+            username={username} 
+            colorScheme="dark"
+            blockSize={14}
+            blockMargin={5}
+            fontSize={14}
+          />
+        </div>
       </div>
 
-      <div className="mt-6 pt-6 border-t border-white/10 grid grid-cols-3 gap-4">
+      <div className="mt-6 pt-6 border-t border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="flex flex-col gap-1">
           <span className="text-xs font-bold uppercase tracking-wider text-white/40">Most Active Month</span>
           <span className="text-lg font-bold text-white">{stats.mostActiveMonth || 'N/A'}</span>

@@ -72,7 +72,7 @@ export default function WorksPage() {
               <button
                 key={cat}
                 onClick={() => setFilter(cat)}
-                className={`font-mono text-[10px] md:text-xs uppercase tracking-wider px-3 py-1 border transition-all ${
+                className={`font-mono text-[10px] md:text-xs uppercase tracking-wider px-3 min-h-[40px] inline-flex items-center border transition-all ${
                   filter === cat
                     ? 'bg-primary text-on-primary border-primary'
                     : 'bg-transparent text-on-background/60 border-transparent hover:border-outline/30 hover:text-on-background'
@@ -113,7 +113,7 @@ export default function WorksPage() {
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
                       <Link
                         href={template.previewLink}
-                        className="bg-background text-on-background px-6 py-2.5 font-mono text-xs uppercase tracking-widest border border-primary hover:bg-primary hover:text-on-primary transition-all"
+                        className="inline-flex items-center min-h-[44px] font-mono text-xs uppercase tracking-widest border border-primary px-6 py-2.5 hover:bg-primary hover:text-on-primary transition-all"
                       >
                         Live Preview ↗
                       </Link>
@@ -142,7 +142,7 @@ export default function WorksPage() {
                       </div>
                       <Link
                         href={template.previewLink}
-                        className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest border border-primary px-4 py-2 hover:bg-primary hover:text-on-primary transition-all w-full justify-center"
+                        className="inline-flex items-center min-h-[44px] font-mono text-xs uppercase tracking-widest border border-primary px-4 py-2 hover:bg-primary hover:text-on-primary transition-all w-full justify-center"
                       >
                         Live Preview
                         <span className="text-[10px]">↗</span>

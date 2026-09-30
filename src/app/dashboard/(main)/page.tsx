@@ -189,22 +189,24 @@ export default function Dashboard() {
       {/* Quick Actions */}
       <div>
         <div className="text-center mb-10">
-          <p className="font-serif text-2xl font-semibold">Quick Actions</p>
-          <p className="font-mono text-xs uppercase tracking-widest text-on-background/50 mt-2">Jump straight in</p>
+          <p className="font-serif text-2xl font-bold">Quick Actions</p>
+          <p className="font-mono text-xs uppercase tracking-widest text-on-background/50 mt-2 font-semibold">Jump straight in</p>
         </div>
-        <div className="flex justify-center flex-wrap gap-4 max-w-5xl mx-auto">
-          {quickActions.map((action) => (
-            <Link key={action.href} href={action.href}
-              className="group flex flex-col gap-4 p-5 bg-background border border-outline/10 rounded-2xl hover:shadow-md hover:border-outline/20 transition-all duration-200 text-center">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center mx-auto" style={{ backgroundColor: `${action.accent}18` }}>
-                <span style={{ color: action.accent }}><action.icon size={20} /></span>
-              </div>
-              <div>
-                <p className="font-mono text-sm font-bold uppercase tracking-widest text-on-background leading-tight">{action.label}</p>
-                <p className="text-sm text-on-background/60 mt-1 leading-snug">{action.desc}</p>
-              </div>
-            </Link>
-          ))}
+        <div className="overflow-x-auto max-w-5xl mx-auto pb-2 -mx-6 px-6 md:mx-0 md:px-0">
+          <div className="flex gap-4 flex-nowrap animate-carousel py-2 w-max">
+            {[...quickActions, ...quickActions].map((action, i) => (
+              <Link key={`${action.href}-${i}`} href={action.href}
+                className="flex-shrink-0 flex flex-col gap-3 p-4 bg-background border border-outline/10 rounded-xl hover:shadow-md hover:border-outline/20 transition-all duration-200 text-center min-w-[140px]">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center mx-auto" style={{ backgroundColor: `${action.accent}18` }}>
+                  <span style={{ color: action.accent }}><action.icon size={20} /></span>
+                </div>
+                <div>
+                  <p className="font-mono text-sm font-bold uppercase tracking-widest text-on-background leading-tight">{action.label}</p>
+                  <p className="text-xs text-on-background/60 mt-1 leading-snug font-medium">{action.desc}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -226,7 +228,7 @@ export default function Dashboard() {
             </p>
           </div>
           <div className="flex gap-4 shrink-0">
-            <Link href="/dashboard/templates"
+              <Link href="/dashboard/templates"
               className="flex items-center gap-2 px-6 py-3 border border-[#F7F4EF]/20 text-[#F7F4EF] dark:border-[#F7F4EF]/30 dark:text-[#F7F4EF] font-mono text-sm uppercase tracking-widest rounded-xl hover:bg-[#F7F4EF]/10 transition-colors">
               <LayoutTemplate size={18} /> Preview
             </Link>

@@ -2,7 +2,9 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { getSupabaseEnv } from '@/utils/supabase/env'
 
-export async function createClient() {
+type CookieToSet = { name: string; value: string; options?: Record<string, unknown> }
+
+export async function createClient(collect?: { cookies: CookieToSet[] }) {
   const env = getSupabaseEnv()
 
   if (!env) {
@@ -22,6 +24,11 @@ export async function createClient() {
           return cookieStore.getAll()
         },
         setAll(cookiesToSet) {
+          // Route Handlers can pass a collector so the refreshed session can be
+          // replayed onto the response they are about to return
+          if (collect) {
+            collect.cookies.push(...(cookiesToSet as CookieToSet[]))
+          }
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)

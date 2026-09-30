@@ -2,35 +2,73 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/utils/supabase/server'
 import { isSupabaseConfigured } from '@/utils/supabase/env'
 
+type CookieToSet = { name: string; value: string; options?: Record<string, unknown> }
+
+function safeNext(next: string | null): string {
+  if (!next) return '/dashboard'
+  if (!next.startsWith('/') || next.startsWith('//')) return '/dashboard'
+  return next
+}
+
+function resolveOrigin(request: Request, fallbackOrigin: string): string {
+  const forwardedHost = request.headers.get('x-forwarded-host')
+  if (forwardedHost && process.env.NODE_ENV !== 'development') {
+    const forwardedProto = request.headers.get('x-forwarded-proto') ?? 'https'
+    return `${forwardedProto}://${forwardedHost}`
+  }
+  return fallbackOrigin
+}
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  // if "next" is in param, use it as the redirect URL
-  const next = searchParams.get('next') ?? '/dashboard'
+  const next = safeNext(searchParams.get('next'))
+  const baseOrigin = resolveOrigin(request, origin)
+
+  const fail = () => NextResponse.redirect(`${baseOrigin}/auth/auth-code-error`)
 
   if (!isSupabaseConfigured()) {
-    return NextResponse.redirect(`${origin}/auth/auth-code-error`)
+    return fail()
   }
 
-  if (code) {
-    const supabase = await createClient()
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) {
-      const forwardedHost = request.headers.get('x-forwarded-host') // original origin before load balancer
-      const isLocalEnv = process.env.NODE_ENV === 'development'
-      if (isLocalEnv) {
-        // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
-        return NextResponse.redirect(`${origin}${next}`)
-      } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}`)
-      } else {
-        return NextResponse.redirect(`${origin}${next}`)
-      }
-    } else {
-      console.error('Supabase auth code exchange error:', error)
-    }
+  if (!code) {
+    return fail()
   }
 
-  // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/auth/auth-code-error`)
+  // Collect the refreshed session cookies so they can be replayed onto the
+  // redirect response. Writing them only to the `cookies()` store is not enough:
+  // the response returned to the browser is a fresh object that would otherwise
+  // carry no Set-Cookie headers at all.
+  const collected: { cookies: CookieToSet[] } = { cookies: [] }
+  const supabase = await createClient(collected)
+  const { error } = await supabase.auth.exchangeCodeForSession(code)
+
+  if (error) {
+    console.error('Supabase auth code exchange error:', error)
+    return fail()
+  }
+
+  const isProduction = process.env.NODE_ENV === 'production'
+  const response = NextResponse.redirect(`${baseOrigin}${next}`)
+
+  for (const { name, value, options } of collected.cookies) {
+    response.cookies.set(name, value, {
+      ...options,
+      path: '/',
+      sameSite: 'lax',
+      secure: isProduction,
+    })
+  }
+
+  // Keeps the proxy auth gate satisfied on the very first /dashboard hit,
+  // before the client AuthContext has mounted. The Supabase session above is
+  // the real authority; this is a non-authoritative hint that keeps a valid
+  // login from bouncing before the browser has a chance to read the session.
+  response.cookies.set('student_auth', 'true', {
+    path: '/',
+    sameSite: 'lax',
+    secure: isProduction,
+  })
+
+  return response
 }

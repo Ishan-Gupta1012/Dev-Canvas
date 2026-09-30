@@ -1,12 +1,12 @@
 'use client';
 
 import type { ComponentType } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
-import { ThemeToggle } from '@/components/ThemeToggle';
+import DashboardAuthGuard from '@/components/auth/DashboardAuthGuard';
 import { cn } from '@/components/dashboard/ui';
 import {
   Bell,
@@ -45,6 +45,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setIsMounted(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   const unreadCount = user?.notifications?.filter((n) => n.unread).length ?? 0;
   const recentNotifications = (user?.notifications ?? [])
@@ -58,16 +64,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   };
 
   return (
-    <div className="bg-background text-on-surface font-sans selection:bg-primary-container selection:text-on-primary-container select-none min-h-screen flex flex-col">
+     <div
+       className="bg-background text-on-surface font-sans selection:bg-primary-container selection:text-on-primary-container select-none min-h-screen flex flex-col transition-opacity duration-500 ease-out motion-reduce:transition-none"
+       style={{ opacity: isMounted ? 1 : 0 }}
+     >
+      <DashboardAuthGuard />
       {/* Top Navbar */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-sm border-b border-outline/15 text-on-background">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[rgba(246,238,216,0.72)] backdrop-blur-xl border-b border-[rgba(139,115,85,0.18)] shadow-[0_4px_20px_rgba(21,24,29,0.04)] text-on-surface">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between relative">
-          {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
             <div className="border border-primary w-7 h-7 rounded-sm flex items-center justify-center font-serif text-sm font-semibold transition-all group-hover:bg-primary group-hover:text-on-primary">
               P
             </div>
-            <span className="font-serif font-semibold text-lg tracking-tight">PAAS</span>
+            <span className="font-serif font-semibold text-lg tracking-tight text-primary">PAAS</span>
           </Link>
 
           {/* Desktop Nav - Centered */}
@@ -84,7 +93,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <button
                       className={cn(
                         'flex items-center gap-1 transition-colors hover:text-primary py-4',
-                        isActive(item) ? 'text-primary font-semibold' : 'text-on-background/60'
+                        isActive(item) ? 'text-primary font-semibold' : 'text-on-surface-variant'
                       )}
                     >
                       {item.name}
@@ -97,13 +106,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 5 }}
                           transition={{ duration: 0.15 }}
-                          className="absolute top-full left-0 w-48 bg-background border border-outline/15 rounded-xl shadow-lg z-[100] py-2"
+                          className="absolute top-full left-0 w-48 bg-surface border border-outline-variant rounded-xl shadow-sm z-[100] py-2"
                         >
                           {item.dropdown.map(d => (
                             <Link
                               key={d.name}
                               href={d.href}
-                              className="block px-4 py-2 text-on-background/70 hover:text-primary hover:bg-on-background/5 transition-colors"
+                              className="block px-4 py-2 text-on-surface-variant hover:text-primary hover:bg-secondary-container transition-colors"
                             >
                               {d.name}
                             </Link>
@@ -121,7 +130,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   href={item.href!}
                   className={cn(
                     'transition-colors hover:text-primary py-4',
-                    isActive(item) ? 'text-primary font-semibold underline underline-offset-4' : 'text-on-background/60'
+                    isActive(item) ? 'text-primary font-semibold underline underline-offset-4 decoration-primary' : 'text-on-surface-variant'
                   )}
                 >
                   {item.name}
@@ -131,21 +140,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </nav>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-
+           <div className="flex items-center gap-4">
             {/* Notifications */}
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-                className="relative p-2 text-on-background/60 hover:text-primary transition-colors rounded-lg"
+                className="relative p-2 text-on-surface-variant hover:text-primary transition-colors rounded-lg"
               >
                 <Bell size={18} />
                 {unreadCount > 0 && (
                   <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
                   </span>
                 )}
               </button>
@@ -157,10 +164,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.96 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute right-0 top-full mt-2 w-72 bg-background border border-outline/15 rounded-xl shadow-lg ring-1 ring-black/5 z-[100]"
+                    className="absolute right-0 top-full mt-2 w-72 bg-surface border border-outline-variant rounded-xl shadow-sm z-[100]"
                   >
                     <div className="p-3 border-b border-outline/10 flex items-center justify-between">
-                      <p className="font-mono text-[10px] uppercase tracking-widest text-on-background/50">
+                      <p className="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant">
                         Notifications
                       </p>
                       {unreadCount > 0 && (
@@ -169,7 +176,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             clearNotifications();
                             setIsNotificationsOpen(false);
                           }}
-                          className="text-[10px] font-mono uppercase tracking-widest text-on-background/60 hover:text-primary"
+                          className="text-[10px] font-mono uppercase tracking-widest text-on-surface-variant hover:text-primary"
                         >
                           Mark read
                         </button>
@@ -177,16 +184,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     </div>
                     <div className="max-h-80 overflow-y-auto">
                       {recentNotifications.length === 0 ? (
-                        <p className="p-4 text-xs text-on-background/50 text-center">No notifications.</p>
+                        <p className="p-4 text-xs text-on-surface-variant text-center">No notifications.</p>
                       ) : (
                         recentNotifications.map((n) => (
-                          <div key={n.id} className="p-3 hover:bg-on-background/5 transition-colors border-b last:border-0 border-outline/5">
+                          <div key={n.id} className="p-3 hover:bg-secondary-container transition-colors border-b last:border-0 border-outline/5">
                             <div className="flex gap-2">
-                              <span className={cn('mt-1 h-1.5 w-1.5 shrink-0 rounded-full', n.unread ? 'bg-black' : 'bg-transparent')} />
+                              <span className={cn('mt-1 h-1.5 w-1.5 shrink-0 rounded-full', n.unread ? 'bg-primary' : 'bg-transparent')} />
                               <div className="flex-1">
-                                <p className="text-xs font-bold">{n.title}</p>
-                                <p className="mt-0.5 text-xs text-on-background/60">{n.description}</p>
-                                <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-on-background/40">{n.time}</p>
+                                <p className="text-xs font-bold text-on-surface">{n.title}</p>
+                                <p className="mt-0.5 text-xs text-on-surface-variant">{n.description}</p>
+                                <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-on-surface-variant/40">{n.time}</p>
                               </div>
                             </div>
                           </div>
@@ -205,14 +212,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <button
                 type="button"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-2 p-1 rounded-lg hover:bg-on-background/5 transition-colors"
+                className="flex items-center gap-2 p-1 rounded-lg hover:bg-secondary-container transition-colors"
               >
                 <img
                   className="w-7 h-7 rounded-sm border border-outline/20 object-cover"
                   src={user?.personalInfo?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=fallback'}
                   alt="Profile"
                 />
-                <ChevronDown size={14} className={cn('text-on-background transition-transform', isDropdownOpen && 'rotate-180')} />
+                <ChevronDown size={14}                 className={cn('text-on-surface transition-transform', isDropdownOpen && 'rotate-180')} />
               </button>
 
               <AnimatePresence>
@@ -222,18 +229,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.96 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute right-0 top-full mt-2 w-48 bg-background border border-outline/15 rounded-xl shadow-lg z-[100]"
+                    className="absolute right-0 top-full mt-2 w-48 bg-surface border border-outline-variant rounded-xl shadow-sm z-[100]"
                   >
                     <div className="p-3 border-b border-outline/10">
-                      <p className="font-bold text-sm truncate">{user?.personalInfo?.name || 'Developer'}</p>
-                      <p className="font-mono text-[10px] uppercase tracking-widest text-on-background/50 truncate">
+                      <p className="font-bold text-sm truncate text-on-surface">{user?.personalInfo?.name || 'Developer'}</p>
+                      <p className="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant/50 truncate">
                         {user?.personalInfo?.email || 'Signed in'}
                       </p>
                     </div>
                     <div className="py-1">
                       <Link
                         href="/dashboard/profile"
-                        className="flex items-center gap-2 px-4 py-2 text-on-background hover:bg-on-background/5 transition-colors font-mono text-xs uppercase tracking-widest"
+                        className="flex items-center gap-2 px-4 py-2 text-on-surface-variant hover:text-primary transition-colors font-mono text-xs uppercase tracking-widest"
                       >
                         <UserCircle size={14} /> Profile
                       </Link>
@@ -241,7 +248,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <div className="py-1 border-t border-outline/10">
                       <Link
                         href="/dashboard/settings"
-                        className="flex items-center gap-2 px-4 py-2 text-on-background hover:bg-on-background/5 transition-colors font-mono text-xs uppercase tracking-widest"
+                        className="flex items-center gap-2 px-4 py-2 text-on-surface-variant hover:text-primary transition-colors font-mono text-xs uppercase tracking-widest"
                       >
                         <UserCircle size={14} /> Settings
                       </Link>
@@ -249,7 +256,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <div className="border-t border-outline/10 py-1">
                       <button
                         onClick={logout}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-on-background/5 transition-colors font-mono text-xs uppercase tracking-widest"
+                        className="w-full flex items-center gap-2 px-4 py-2 text-tertiary hover:text-tertiary/80 hover:bg-secondary-container transition-colors font-mono text-xs uppercase tracking-widest"
                       >
                         <LogOut size={14} /> Log out
                       </button>

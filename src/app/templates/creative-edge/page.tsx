@@ -74,7 +74,7 @@ export default function CreativeEdgeTemplate() {
   };
 
   return (
-    <div className="min-h-screen bg-[#060814] text-slate-200 font-sans selection:bg-purple-500 selection:text-white antialiased">
+    <div className="min-h-screen bg-[#060814] text-slate-200 font-sans selection:bg-purple-500 selection:text-white antialiased overflow-x-clip">
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes gradient-x {
           0%, 100% { background-position: 0% 50%; }
@@ -97,14 +97,15 @@ export default function CreativeEdgeTemplate() {
         ::-webkit-scrollbar-thumb:hover { background: #5b21b6; }
       `}} />
 
-      {/* Ambient Orbs */}
+      {/* Ambient Orbs. `overflow-clip` keeps these decorative off-screen shapes
+          from widening the page on narrower viewports. */}
       <div className="fixed top-[-20%] left-[-10%] w-[60vw] h-[60vw] max-w-[700px] max-h-[700px] bg-purple-700/10 rounded-full blur-[140px] pointer-events-none z-0" />
       <div className="fixed bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] max-w-[700px] max-h-[700px] bg-pink-700/10 rounded-full blur-[140px] pointer-events-none z-0" />
 
       {/* Header */}
       <header className="sticky top-[44px] z-50 w-full border-b border-white/5 bg-[#060814]/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-8">
-          <a href="#home" onClick={(e) => handleScrollTo(e, "home")} className="group flex items-center gap-3">
+          <a href="#home" onClick={(e) => handleScrollTo(e, "home")} className="group flex items-center gap-3 min-h-[44px]">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 font-black text-white text-base shadow-lg shadow-purple-500/25 group-hover:scale-105 transition-transform">M</span>
             <div className="flex flex-col">
               <span className="font-bold leading-tight text-white group-hover:text-purple-300 transition-colors">Morgan Vance</span>
@@ -123,7 +124,7 @@ export default function CreativeEdgeTemplate() {
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
             {[{ label: "Work", id: "work" }, { label: "Process", id: "process" }, { label: "About", id: "about" }, { label: "Contact", id: "contact" }].map((link) => (
               <a key={link.id} href={`#${link.id}`} onClick={(e) => handleScrollTo(e, link.id)}
-                className={`relative py-1 transition-colors hover:text-white ${activeSection === link.id ? "text-white" : "text-slate-400"}`}>
+                className={`relative py-1 inline-flex items-center min-h-[40px] transition-colors hover:text-white ${activeSection === link.id ? "text-white" : "text-slate-400"}`}>
                 {link.label}
                 {activeSection === link.id && <span className="absolute bottom-0 left-0 h-0.5 w-full rounded-full bg-gradient-to-r from-purple-500 to-pink-500" />}
               </a>
@@ -131,7 +132,7 @@ export default function CreativeEdgeTemplate() {
           </nav>
 
           <a href="#contact" onClick={(e) => handleScrollTo(e, "contact")}
-            className="inline-flex h-9 items-center justify-center rounded-xl bg-gradient-to-r from-purple-600 to-pink-500 px-4 text-xs font-bold text-white shadow-lg shadow-purple-500/20 hover:opacity-90 active:scale-95 transition-all">
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-gradient-to-r from-purple-600 to-pink-500 px-4 text-xs font-bold text-white shadow-lg shadow-purple-500/20 hover:opacity-90 active:scale-95 transition-all">
             Hire Me
           </a>
         </div>
@@ -174,7 +175,7 @@ export default function CreativeEdgeTemplate() {
                   { name: "Twitter", url: "https://twitter.com", icon: <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg> },
                   { name: "Dribbble", url: "https://dribbble.com", icon: <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm6.65 6.03c.51.66.9 1.41 1.15 2.23-1.03-.23-2.61-.31-4.32-.08-.18-.46-.38-.91-.6-1.34 1.83-.56 3.25-.79 3.77-.81zm-3.08-1.52c-.44-.06-.9-.09-1.37-.09-1.36 0-2.6.27-3.72.75.14.3.29.62.43.94 1.25-.43 2.76-.7 4.22-.64.16-.33.31-.65.44-.96zm-7.39 1.62c.79-.62 1.72-1.07 2.74-1.28-.15-.34-.33-.67-.52-.98-1.42.34-2.69.96-3.7 1.8.38.16.92.35 1.48.46zm-2.07 2.1c.36-.08.79-.13 1.28-.13.88 0 1.86.18 2.87.5-1.51 3.51-2.68 6.55-3.37 8.35-.45-.96-.77-2.01-.93-3.12 1-.22 2.17-.38 3.27-.41-.5-1.54-1.74-3.79-3.12-5.19zm1.32 10.15c.67-1.74 1.8-4.66 3.25-8.08 1.46.33 2.83.91 3.99 1.68-.9 2.5-1.78 5.4-2.38 8.16a8.03 8.03 0 01-4.86-1.76zm6.38.9c.56-2.58 1.42-5.32 2.29-7.7.98.54 1.79 1.27 2.37 2.15-.32.08-.68.13-1.08.13-1.58 0-2.8-.23-3.58-.58z" clipRule="evenodd" /></svg> },
                 ].map((s) => (
-                  <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-purple-400 transition-colors duration-300" aria-label={s.name}>{s.icon}</a>
+                  <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center w-11 h-11 -m-1 text-slate-600 hover:text-purple-400 transition-colors duration-300" aria-label={s.name}>{s.icon}</a>
                 ))}
               </div>
             </div>
@@ -254,7 +255,7 @@ export default function CreativeEdgeTemplate() {
                 <div className="flex flex-wrap gap-2 mb-5">
                   {p.tags.map((t, ti) => <span key={ti} className="rounded-md bg-white/5 border border-white/8 px-2 py-0.5 text-xs font-medium text-slate-400">{t}</span>)}
                 </div>
-                <a href="#" className={`inline-flex items-center gap-2 text-sm font-bold ${p.tc} transition-colors`}>
+                <a href="#" className={`inline-flex items-center gap-2 min-h-[44px] text-sm font-bold ${p.tc} transition-colors`}>
                   View experiment
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="h-3.5 w-3.5 transform transition-transform group-hover:translate-x-1"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" /></svg>
                 </a>
@@ -349,7 +350,7 @@ export default function CreativeEdgeTemplate() {
               <p>I believe the best digital experiences don&apos;t just function — they resonate. Every project is an opportunity to push what&apos;s possible in the browser and leave users genuinely surprised.</p>
               <p>When I&apos;m not experimenting with shaders and physics simulations, you&apos;ll find me at the climbing wall or DJing at local venues in Portland.</p>
             </div>
-            <div className="grid grid-cols-3 gap-4 mt-4 pt-6 border-t border-white/5 max-w-md">
+            <div className="grid grid-cols-1 xs:grid-cols-3 gap-4 mt-4 pt-6 border-t border-white/5 max-w-md">
               {[{ value: "50+", label: "Experiments" }, { value: "20+", label: "Client Projects" }, { value: "12k+", label: "GitHub Stars" }].map((stat, i) => (
                 <div key={i}>
                   <div className="text-2xl font-black text-white">{stat.value}</div>
@@ -405,9 +406,9 @@ export default function CreativeEdgeTemplate() {
       {/* Footer */}
       <footer className="mx-auto max-w-7xl px-6 py-10 md:px-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-slate-600">
         <div>&copy; {new Date().getFullYear()} Morgan Vance. Built on the edge.</div>
-        <div className="flex items-center gap-6">
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
           {["work", "process", "about", "contact"].map((id) => (
-            <a key={id} href={`#${id}`} onClick={(e) => handleScrollTo(e, id)} className="hover:text-white transition-colors capitalize">{id}</a>
+            <a key={id} href={`#${id}`} onClick={(e) => handleScrollTo(e, id)} className="inline-flex items-center min-h-[40px] hover:text-white transition-colors capitalize">{id}</a>
           ))}
         </div>
       </footer>

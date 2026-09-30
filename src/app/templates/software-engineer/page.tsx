@@ -67,9 +67,9 @@ const NAV = [{id:"home",label:"Home"},{id:"projects",label:"Projects"},{id:"expe
 
 function EchoHeading({ text }: { text: string }) {
   return (
-    <div style={{ position: "relative", marginBottom: "56px", paddingTop: "16px", userSelect: "none" }}>
-      <span aria-hidden="true" style={{ position: "absolute", top: "-10px", left: "-2px", fontSize: "78px", fontWeight: 900, lineHeight: 1, letterSpacing: "-0.04em", color: "transparent", WebkitTextStroke: "1px rgba(45,212,191,0.07)", pointerEvents: "none", whiteSpace: "nowrap" }}>{text}</span>
-      <h2 style={{ position: "relative", fontSize: "40px", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.03em", color: "#2DD4BF", margin: 0 }}>{text}</h2>
+    <div className="se-echo" style={{ position: "relative", marginBottom: "56px", paddingTop: "16px", userSelect: "none", overflow: "hidden" }}>
+      <span aria-hidden="true" className="se-echo-ghost" style={{ position: "absolute", top: "-10px", left: "-2px", fontSize: "78px", fontWeight: 900, lineHeight: 1, letterSpacing: "-0.04em", color: "transparent", WebkitTextStroke: "1px rgba(45,212,191,0.07)", pointerEvents: "none", whiteSpace: "nowrap" }}>{text}</span>
+      <h2 className="se-echo-title" style={{ position: "relative", fontSize: "40px", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.03em", color: "#2DD4BF", margin: 0 }}>{text}</h2>
     </div>
   );
 }
@@ -164,11 +164,12 @@ export default function SoftwareEngineerTemplate() {
         .se-input:focus{border-color:rgba(45,212,191,.4);box-shadow:0 0 0 3px rgba(45,212,191,.08)}
         .se-ach{display:flex;gap:20px;padding:20px;border-radius:16px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);transition:border-color .25s,transform .25s}
         .se-ach:hover{border-color:rgba(45,212,191,.2);transform:translateY(-2px)}
-        .se-nav-a{font-size:14px;font-weight:500;text-decoration:none;transition:color .2s}
+        .se-nav-a{font-size:14px;font-weight:500;text-decoration:none;transition:color .2s;display:inline-flex;align-items:center;min-height:40px}
         .se-pr{position:relative;padding:28px 0;border-bottom:1px solid rgba(255,255,255,.05);cursor:pointer}
         .se-pr::before{content:'';position:absolute;inset:0;border-radius:16px;background:rgba(45,212,191,.03);opacity:0;transition:opacity .25s;margin:0 -20px}
         .se-pr:hover::before{opacity:1}
         @media(max-width:768px){.se-r{display:none!important}.se-g2{grid-template-columns:1fr!important}.se-dn{display:none!important}}
+        @media(max-width:480px){.se-g3{grid-template-columns:1fr!important}.se-echo-ghost{font-size:44px!important}.se-echo-title{font-size:28px!important}}
       `}</style>
 
       {/* NAV */}
@@ -183,7 +184,7 @@ export default function SoftwareEngineerTemplate() {
               <a key={l.id} href={`#${l.id}`} className="se-nav-a" onClick={e=>goTo(e,l.id)} style={{ color:activeSection===l.id?"#2DD4BF":C.secondary }}>{l.label}</a>
             ))}
           </nav>
-          <a href="#contact" onClick={e=>goTo(e,"contact")} style={{ padding:"8px 18px", borderRadius:"10px", fontSize:"13px", fontWeight:600, backgroundColor:"#2DD4BF", color:"#09090B", textDecoration:"none", transition:"transform .15s,box-shadow .15s", display:"inline-flex", alignItems:"center" }}
+          <a href="#contact" onClick={e=>goTo(e,"contact")} style={{ padding:"10px 18px", minHeight:"40px", borderRadius:"10px", fontSize:"13px", fontWeight:600, backgroundColor:"#2DD4BF", color:"#09090B", textDecoration:"none", transition:"transform .15s,box-shadow .15s", display:"inline-flex", alignItems:"center" }}
             onMouseEnter={e=>{e.currentTarget.style.transform="scale(1.03)";e.currentTarget.style.boxShadow="0 0 28px rgba(45,212,191,.4)"}}
             onMouseLeave={e=>{e.currentTarget.style.transform="scale(1)";e.currentTarget.style.boxShadow="none"}}>
             Hire Me
@@ -395,7 +396,7 @@ export default function SoftwareEngineerTemplate() {
       <footer style={{ borderTop:"1px solid rgba(255,255,255,.06)", padding:"28px 0" }}>
         <div style={{ maxWidth:"1140px", margin:"0 auto", padding:"0 32px", display:"flex", flexWrap:"wrap", alignItems:"center", justifyContent:"space-between", gap:"16px" }}>
           <span style={{ fontSize:"13px", color:C.muted }}>&copy; {new Date().getFullYear()} John Doe &mdash; Built with Next.js</span>
-          <div style={{ display:"flex", gap:"28px" }}>
+          <div style={{ display:"flex", gap:"28px", flexWrap:"wrap" }}>
             {NAV.map(l=>(
               <a key={l.id} href={`#${l.id}`} className="se-nav-a" onClick={e=>goTo(e,l.id)} style={{ color:C.muted, fontSize:"13px" }}
                 onMouseEnter={e=>e.currentTarget.style.color="#fff"}

@@ -4,9 +4,11 @@ import React, { useEffect, useRef } from 'react';
 
 interface GenerativeAttractorCanvasProps {
   className?: string;
+  /** 'landing' scrolls with page sections; 'static' holds a fixed auth-page pose */
+  mode?: 'landing' | 'static';
 }
 
-export default function GenerativeAttractorCanvas({ className = '' }: GenerativeAttractorCanvasProps) {
+export default function GenerativeAttractorCanvas({ className = '', mode = 'landing' }: GenerativeAttractorCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef<{ x: number; y: number }>({ x: -9999, y: -9999 });
 
@@ -158,6 +160,7 @@ export default function GenerativeAttractorCanvas({ className = '' }: Generative
     let isCanvasVisible = true;
 
     const measureSections = () => {
+      if (mode === 'static') return;
       const elStatement = document.getElementById('statement');
       if (elStatement) statementTop = elStatement.offsetTop;
 
@@ -173,9 +176,10 @@ export default function GenerativeAttractorCanvas({ className = '' }: Generative
 
     resize();
 
-    // Track scroll position passively
+    // Track scroll position passively (landing mode only)
     let scrollY = window.scrollY;
     const handleScroll = () => {
+      if (mode === 'static') return;
       scrollY = window.scrollY;
       if (scrollY > manifestoTop + 1400) {
         isCanvasVisible = false;
@@ -183,7 +187,9 @@ export default function GenerativeAttractorCanvas({ className = '' }: Generative
         isCanvasVisible = true;
       }
     };
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    if (mode === 'landing') {
+      window.addEventListener('scroll', handleScroll, { passive: true });
+    }
 
     let animationFrameId: number;
 
@@ -206,19 +212,27 @@ export default function GenerativeAttractorCanvas({ className = '' }: Generative
         return t * t * (3 - 2 * t);
       };
 
-      const pStatement = calcProg(statementTop);
-      const pAbout = calcProg(aboutTop);
-      const pArchive = calcProg(archiveTop);
-      const pManifesto = calcProg(manifestoTop);
+      const pStatement = mode === 'static' ? 0 : calcProg(statementTop);
+      const pAbout = mode === 'static' ? 0 : calcProg(aboutTop);
+      const pArchive = mode === 'static' ? 0 : calcProg(archiveTop);
+      const pManifesto = mode === 'static' ? 0 : calcProg(manifestoTop);
 
       // --- 5. MULTI-KEYFRAME TRANSFORMATION TARGETS ---
-      const kf0 = {
-        cx: 0.5 * width,
-        cy: 0.54 * height,
-        scl: Math.min(width, height) / 44,
-        yaw: 0,
-        pitch: 0,
-      };
+      const kf0 = mode === 'static'
+        ? {
+            cx: isMobile ? 0.5 * width : 0.36 * width,
+            cy: 0.52 * height,
+            scl: Math.min(width, height) / 40,
+            yaw: 0.35,
+            pitch: 0.25,
+          }
+        : {
+            cx: 0.5 * width,
+            cy: 0.54 * height,
+            scl: Math.min(width, height) / 44,
+            yaw: 0,
+            pitch: 0,
+          };
 
       const kf1 = {
         cx: 0.33 * width,
@@ -382,8 +396,8 @@ export default function GenerativeAttractorCanvas({ className = '' }: Generative
         const dBucket = Math.min(15, Math.max(0, (((projDepth[mid] + 1) * 0.5) * 15) | 0));
 
         ctx.beginPath();
-        let prevMidX = (projX[b - step] + projX[b]) * 0.5;
-        let prevMidY = (projY[b - step] + projY[b]) * 0.5;
+        const prevMidX = (projX[b - step] + projX[b]) * 0.5;
+        const prevMidY = (projY[b - step] + projY[b]) * 0.5;
         ctx.moveTo(prevMidX, prevMidY);
 
         for (let i = b; i < end; i += step) {
@@ -445,11 +459,13 @@ export default function GenerativeAttractorCanvas({ className = '' }: Generative
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', handleScroll);
+      if (mode === 'landing') {
+        window.removeEventListener('scroll', handleScroll);
+      }
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, []);
+  }, [mode]);
 
   return (
     <canvas

@@ -127,7 +127,7 @@ export default function ContactPage() {
                       id="projectType"
                       value={formData.projectType}
                       onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
-                      className="w-full bg-transparent py-2 text-sm md:text-base outline-hidden appearance-none pr-8 cursor-pointer font-mono uppercase tracking-wide"
+                      className="w-full bg-transparent py-2 min-h-[44px] text-sm md:text-base outline-hidden appearance-none pr-8 cursor-pointer font-mono uppercase tracking-wide"
                       required
                     >
                       <option value="portfolio" className="bg-background">Developer Portfolio</option>

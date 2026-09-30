@@ -1,94 +1,103 @@
 'use client';
 
-import { useState, useCallback, useEffect } from "react";
-import Hero from "@/components/Hero";
-import TechMarquee from "@/components/TechMarquee";
-import ParadoxSection from "@/components/ParadoxSection";
-import HowItWorksSection from "@/components/HowItWorksSection";
-import TemplatesSection from "@/components/TemplatesSection";
-import CtaSection from "@/components/CtaSection";
-import Footer from "@/components/Footer";
-import LandingRedirect from "@/components/LandingRedirect";
-import { ScrollProgress } from "@/components/ScrollProgress";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import RechromaPreloader from "@/components/RechromaPreloader";
-import AxiomIntroPage from "@/components/OpeningExperience/AxiomIntroPage";
+import PortalIntroPage from "@/components/OpeningExperience/PortalIntroPage";
+import { shouldSkipIntro } from "@/lib/intro-entry";
+
+const FADE_MS = 550;
+// The preloader owns Escape until it has dissolved
+const PRELOADER_MS = 3200;
+// The intro stays dimmed until the preloader panel starts lifting away
+const REVEAL_DELAY_MS = 1750;
+const REVEAL_MS = 1100;
 
 export default function Home() {
-  const [showMainSite, setShowMainSite] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
+  const [showPreloader, setShowPreloader] = useState<boolean | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isLeaving, setIsLeaving] = useState(false);
+  const isLeavingRef = useRef(false);
+  const isPreloaderDoneRef = useRef(false);
+  const skipPreloaderRef = useRef<boolean | null>(null);
 
-  // Transition to main website
+  // An authenticated visitor never belongs on the landing page. Send them
+  // straight to the dashboard.
+  useEffect(() => {
+    if (isLoading || !user) return;
+    router.replace("/dashboard");
+  }, [isLoading, user, router]);
+
+  // The preloader only belongs to a fresh landing load, never to a return from
+  // the access gateway. It also waits for the session check to settle and stays
+  // off entirely for an authenticated visitor, so the redirect above never
+  // paints it. No skip is parked here, otherwise it would leak into the next
+  // genuine landing visit and swallow that visitor's preloader.
+  useEffect(() => {
+    if (isLoading || user) return;
+    if (skipPreloaderRef.current === null) {
+      skipPreloaderRef.current = shouldSkipIntro();
+    }
+    const frame = window.requestAnimationFrame(() => {
+      if (skipPreloaderRef.current) {
+        isPreloaderDoneRef.current = true;
+        setIsVisible(true);
+      }
+      setShowPreloader(!skipPreloaderRef.current);
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [isLoading, user]);
+
+  useEffect(() => {
+    if (showPreloader !== true) return;
+    const timer = window.setTimeout(() => setIsVisible(true), REVEAL_DELAY_MS);
+    return () => window.clearTimeout(timer);
+  }, [showPreloader]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      isPreloaderDoneRef.current = true;
+    }, PRELOADER_MS);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  // Entering the main website fades the intro out, then sends authed users to the
+  // dashboard and everyone else to sign in
   const handleEnterMainSite = useCallback(() => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setShowMainSite(true);
-      setIsTransitioning(false);
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    }, 400);
-  }, []);
+    if (isLeavingRef.current) return;
+    isLeavingRef.current = true;
+    setIsLeaving(true);
+    window.setTimeout(() => {
+      router.push(user ? "/dashboard" : "/signin");
+    }, FADE_MS);
+  }, [router, user]);
 
-  // Return to introductory Axiom experience
-  const handleReturnToIntro = useCallback(() => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setShowMainSite(false);
-      setIsTransitioning(false);
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    }, 400);
-  }, []);
-
-  // Escape key shortcut to toggle / enter main site
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && !showMainSite) {
+      if (e.key === "Escape" && isPreloaderDoneRef.current) {
         handleEnterMainSite();
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [showMainSite, handleEnterMainSite]);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleEnterMainSite]);
 
   return (
-    <div className="bg-background text-on-background min-h-screen flex flex-col custom-cursor font-sans">
-      <RechromaPreloader />
-      <LandingRedirect />
+    <div className="relative bg-background text-on-background min-h-screen flex flex-col custom-cursor font-sans">
+      {showPreloader === true && <RechromaPreloader />}
 
-      {!showMainSite ? (
-        <div
-          className="relative w-full transition-opacity duration-400 ease-out"
-          style={{ opacity: isTransitioning ? 0 : 1 }}
-        >
-          <AxiomIntroPage onEnterMainSite={handleEnterMainSite} />
-        </div>
-      ) : (
-        <div
-          id="existing-main-website"
-          className="relative w-full transition-opacity duration-400 ease-out"
-          style={{ opacity: isTransitioning ? 0 : 1 }}
-        >
-          <ScrollProgress />
-          
-          {/* Floating pill to return to Axiom opening experience */}
-          <button
-            onClick={handleReturnToIntro}
-            className="fixed bottom-6 right-6 z-[999] flex items-center gap-2 px-4 py-2 rounded-full bg-[#EEEBE7]/95 backdrop-blur-md border border-[#56241A]/40 text-[#56241A] hover:text-[#FFFFFF] hover:border-[#7C3F2F] hover:bg-[#56241A] text-[11px] font-mono tracking-widest uppercase shadow-2xl transition-all duration-200 hover:scale-105 cursor-pointer group"
-            title="Return to Axiom Introductory Experience"
-            aria-label="Return to Axiom Introductory Experience"
-          >
-            <span className="w-2 h-2 rounded-full bg-[#56241A] group-hover:bg-[#FFFFFF] animate-pulse" />
-            <span>AXIOM INTRO</span>
-          </button>
-
-          {/* Existing Website Components - Preserved exactly as originally constructed */}
-          <Hero />
-          <TechMarquee />
-          <ParadoxSection />
-          <HowItWorksSection />
-          <TemplatesSection />
-          <CtaSection />
-          <Footer />
-        </div>
-      )}
+      <div
+        className="transition-opacity ease-out motion-reduce:transition-none"
+        style={{
+          opacity: isVisible && !isLeaving ? 1 : 0,
+          transitionDuration: isVisible && !isLeaving ? `${REVEAL_MS}ms` : `${FADE_MS}ms`,
+        }}
+      >
+        <PortalIntroPage onEnterMainSite={handleEnterMainSite} />
+      </div>
     </div>
   );
 }

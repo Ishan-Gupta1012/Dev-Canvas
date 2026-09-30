@@ -3,6 +3,11 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Extra small breakpoint for phones narrower than Tailwind's 640px `sm` floor */
+@theme {
+  --breakpoint-xs: 400px;
+}
+
 :root {
   --th-primary: #56241A;             /* Earthy Burgundy - Primary Accent */
   --th-primary-hover: #7C3F2F;       /* Terracotta - Secondary Accent / Hover */
@@ -364,5 +369,45 @@ body {
 .text-stroke {
   -webkit-text-stroke: 1px var(--th-outline);
   color: transparent;
+}
+
+@keyframes auth-ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes auth-ticker-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-auth-ticker {
+  animation: auth-ticker 40s linear infinite;
+}
+
+.animate-auth-ticker-reverse {
+  animation: auth-ticker-reverse 40s linear infinite;
+}
+
+@keyframes auth-glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.85; }
+}
+
+.auth-glow-pulse {
+  animation: auth-glow-pulse 3s ease-in-out infinite;
+}
+
+.auth-input-glow:focus {
+  box-shadow: 0 0 0 1px rgba(232, 168, 124, 0.5), 0 0 24px rgba(255, 107, 74, 0.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-marquee-reverse,
+  .animate-auth-ticker,
+  .animate-auth-ticker-reverse {
+    animation: none;
+  }
 }
 

@@ -74,7 +74,7 @@ export default function OpeningOverlay({
         transition: 'opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
       }}
     >
-      {/* Axiom-inspired Interactive Amber Cursor Follower */}
+      {/* Portal-inspired Interactive Amber Cursor Follower */}
       {isPointerActive && scrollProgress < 0.85 && (
         <div
           className="fixed pointer-events-none z-[99999] rounded-full transition-transform duration-75 ease-out hidden md:block"
@@ -115,7 +115,7 @@ export default function OpeningOverlay({
           </div>
         </div>
 
-        {/* Center: Live Clock & Coordinates (Axiom style) */}
+        {/* Center: Live Clock & Coordinates (Portal style) */}
         <div className="hidden lg:flex flex-col items-center gap-0.5 text-center">
           <div className="text-white/90 tracking-widest font-mono text-[11px]">
             HANOI: {localTime || '12:00:00'} VN
