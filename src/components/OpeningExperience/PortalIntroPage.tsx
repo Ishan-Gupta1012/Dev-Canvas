@@ -43,7 +43,7 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
                 DEVCANVAS
               </span>
               <span className="font-mono text-[9px] text-[#7C3F2F] border border-[#7C3F2F]/40 bg-[#7C3F2F]/10 px-1.5 py-0.2 rounded-xs uppercase hidden sm:inline">
-                PAAS // ARCHITECTURE
+                RESUME → PORTFOLIO BUILDER
               </span>
             </a>
           </div>
@@ -52,10 +52,10 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
           <button
             onClick={onEnterMainSite}
             className="relative overflow-hidden inline-flex items-center gap-[6px] min-h-[44px] px-4 rounded-xs border border-[#3E1510] bg-[#56241A] hover:bg-[#7C3F2F] text-[#FFFFFF] transition-all duration-200 cursor-pointer group shadow-sm"
-            aria-label="Enter Main Website"
+            aria-label="Create My Portfolio"
           >
             <span className="font-mono font-bold text-[11px] uppercase tracking-wider">
-              ENTER MAIN WEBSITE
+              CREATE MY PORTFOLIO
             </span>
             <span className="group-hover:translate-x-0.5 transition-transform duration-200 text-sm">
               →
@@ -79,8 +79,8 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
             <div className="flex gap-[10px] items-center shrink-0 max-md:hidden">
               <div className="w-[1px] h-6 bg-[#7C3F2F]/50 animate-pulse" />
               <p className="font-mono text-[12px] tracking-[-0.36px] uppercase text-[#3E1510]/70 leading-[1.2] whitespace-pre w-[135px]">
-                Scroll down <br />
-                to discover more
+                See How It Works <br />
+                Scroll down
               </p>
             </div>
 
@@ -91,12 +91,12 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
                   DevCanvas
                 </h1>
                 <div className="font-serif italic text-4xl sm:text-6xl text-[#7C3F2F] mt-2">
-                  Portfolio Architecture
+                  Your Resume. Your Story. Your Portfolio.
                 </div>
               </div>
 
               <p className="font-mono text-[16px] leading-[1.3] uppercase text-[#3E1510] w-[440px] max-md:w-auto text-right max-md:text-left">
-                Platform for the architecture of developer portfolios as living engineering brands.
+                Turn your resume into a professional portfolio website. Let your skills, projects, education, and achievements speak for themselves.
               </p>
             </div>
           </div>
@@ -109,14 +109,14 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
         >
           <div className="bg-[#3E1510] border border-[#270F05] p-12 max-sm:p-8 rounded-xs shadow-2xl flex flex-col gap-[32px] items-start w-[725px] max-lg:w-[517px] max-sm:w-full">
             <p className="font-mono text-[14px] leading-[1.2] uppercase text-[#A0674F] font-bold whitespace-nowrap border-b border-[#270F05] pb-2 w-full">
-              [01 // THE CONVICTION]
+              [01 // THE PURPOSE]
             </p>
             <div className="font-serif text-[44px] max-lg:text-[36px] max-sm:text-[28px] leading-tight tracking-tight text-[#FFFFFF] w-full">
               <div className="mb-[20px]">
-                <h2>We stopped building developer portfolios that look like 2020 resumes.</h2>
+                <h2>Stop spending days building your portfolio website from scratch.</h2>
               </div>
               <div className="text-[#CCC0B5] italic">
-                <p>We started creating architectural environments that prove engineering depth.</p>
+                <p>Upload your resume, and turn your experience into a structured, professional portfolio that proves your capabilities.</p>
               </div>
             </div>
           </div>
@@ -129,35 +129,35 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
         >
           <div className="flex flex-col gap-[40px] items-start w-[580px] max-md:w-full">
             <p className="font-mono text-[16px] leading-[1.2] uppercase text-[#7C3F2F] font-bold">
-              [02 // CORE MOTIVE]
+              [02 // BUILT FOR STUDENTS & ASPIRING TALENT]
             </p>
             <div className="font-serif text-[48px] max-lg:text-[40px] max-sm:text-[32px] leading-none tracking-[-1.44px] max-lg:tracking-[-1.2px] max-sm:tracking-[-0.96px] text-[#0A0402]">
               <div>
-                <h2>We do not build templates.</h2>
+                <h2>Your resume turned into a website.</h2>
               </div>
               <div className="text-[#56241A] italic">
-                <p>We architect identities.</p>
+                <p>Structured, verified, and shareable.</p>
               </div>
             </div>
 
             <div className="max-md:flex max-md:flex-row max-md:gap-[30px] max-sm:flex-col max-sm:gap-[24px]">
               <div className="font-mono text-[12px] leading-[1.5] uppercase text-[#0A0402] max-md:flex-1">
                 <p className="mb-[12px]">
-                  DevCanvas is a conceptual laboratory and studio dedicated to transforming raw code, GitHub repositories, and system achievements into bespoke digital brands.
+                  DevCanvas is a resume-to-portfolio builder created for college students, fresh graduates, and aspiring professionals who want to showcase their skills online without building from zero.
                 </p>
                 <p className="text-[#3E1510]/80">
-                  Free from generic template bloat, we focus on what precedes recruitment: the structure, depth, and presentation of thinking itself.
+                  Simply provide your resume. Our platform parses your details, structures your education, experience, and projects, and helps you launch an impactful personal portfolio website.
                 </p>
               </div>
 
               {/* Bullet Marker & List */}
               <div className="flex gap-[4px] items-start pl-[60px] max-md:pl-0 max-md:flex-1 max-sm:pl-0 max-sm:flex-none mt-[32px] max-md:mt-0 border-l border-[#CCC0B5]">
                 <ul className="font-mono text-[12px] leading-[1.6] uppercase text-[#3E1510] list-disc pl-[24px] space-y-1">
-                  <li>We do not build generic builders</li>
-                  <li>We do not produce boilerplate templates</li>
-                  <li>We shape engineering depth</li>
-                  <li>We automate technical storytelling</li>
-                  <li>We deliver full Next.js code ownership</li>
+                  <li>Automated resume information extraction</li>
+                  <li>Structured showcase for projects and skills</li>
+                  <li>Highlights education, internships and achievements</li>
+                  <li>Less manual work creating a portfolio</li>
+                  <li>Ready to share with recruiters and teams</li>
                 </ul>
               </div>
             </div>
@@ -177,16 +177,16 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
             <div className="flex gap-[60px] items-baseline max-md:flex-col max-md:gap-[24px]">
               <div className="flex-1 min-w-0 flex items-center">
                 <p className="font-mono text-[16px] leading-[1.2] uppercase text-[#A0674F] font-bold whitespace-nowrap">
-                  [04 // CONDITIONS]
+                  [04 // CORE ADVANTAGES]
                 </p>
               </div>
               <div className="flex flex-col gap-[24px] w-[725px] max-lg:w-[517px] max-md:w-full shrink-0 font-serif text-[40px] max-lg:text-[32px] max-sm:text-[28px] leading-tight tracking-[-1.2px] max-lg:tracking-[-0.96px] max-sm:tracking-[-0.84px] text-[#FFFFFF]">
                 <div>
-                  <h2>The emergence of standout presence depends on deliberate presentation.</h2>
+                  <h2>Stand out to recruiters with a portfolio that highlights what matters.</h2>
                 </div>
                 <div>
                   <p className="text-[#CCC0B5] text-2xl max-sm:text-xl font-normal font-sans">
-                    Small variations in density, latency and threshold states produce irreversible structural change.
+                    Turn raw resume bullets into clear, structured sections that showcase your true potential.
                   </p>
                 </div>
               </div>
@@ -197,16 +197,16 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
               {/* Column 1 */}
               <div className="flex-1 bg-[#270F05] border border-[#3E1510] p-[32px] rounded-xs flex flex-col gap-[32px] shadow-lg">
                 <div className="flex flex-wrap justify-between gap-x-4 font-mono text-[12px] leading-[1.2] uppercase text-[#CCC0B5] border-b border-[#3E1510] pb-3">
-                  <span className="text-[#A0674F] font-semibold">[01 // PARAMETER]</span>
-                  <span className="text-[#7C3F2F] font-bold">METRIC // 100%</span>
+                  <span className="text-[#A0674F] font-semibold">[01 // EXTRACTION]</span>
+                  <span className="text-[#7C3F2F] font-bold">AUTOMATED</span>
                 </div>
                 <div className="flex flex-col gap-[16px]">
                   <h3 className="font-serif text-[38px] max-lg:text-[30px] leading-none tracking-[-1.2px] text-[#FFFFFF]">
-                    Field Density
+                    Resume Parsing
                   </h3>
                   <div className="flex flex-col gap-[12px] font-mono text-[12px] leading-[1.4] uppercase text-[#EEEBE7]/80">
-                    <p>Increasing engineering density alters how your code is perceived.</p>
-                    <p>Depth becomes undeniable only beyond critical concentration and narrative clarity.</p>
+                    <p>Instantly extracts your bio, education, technical skills, projects, and work history.</p>
+                    <p>No need to re-type existing information into dozens of separate form fields.</p>
                   </div>
                 </div>
               </div>
@@ -214,16 +214,16 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
               {/* Column 2 */}
               <div className="flex-1 bg-[#270F05] border border-[#3E1510] p-[32px] rounded-xs flex flex-col gap-[32px] shadow-lg">
                 <div className="flex flex-wrap justify-between gap-x-4 font-mono text-[12px] leading-[1.2] uppercase text-[#CCC0B5] border-b border-[#3E1510] pb-3">
-                  <span className="text-[#A0674F] font-semibold">[02 // PARAMETER]</span>
-                  <span className="text-[#7C3F2F] font-bold">0MS LATENCY</span>
+                  <span className="text-[#A0674F] font-semibold">[02 // STRUCTURE]</span>
+                  <span className="text-[#7C3F2F] font-bold">ORGANIZED</span>
                 </div>
                 <div className="flex flex-col gap-[16px]">
                   <h3 className="font-serif text-[38px] max-lg:text-[30px] leading-none tracking-[-1.2px] text-[#FFFFFF]">
-                    Signal Latency
+                    Project Showcase
                   </h3>
                   <div className="flex flex-col gap-[12px] font-mono text-[12px] leading-[1.4] uppercase text-[#EEEBE7]/80">
-                    <p>Delayed system response destroys visitor engagement instantly.</p>
-                    <p>100/100 Lighthouse performance reshapes the continuity of observed craft.</p>
+                    <p>Displays your projects, tech stacks, live links, and achievements in structured cards.</p>
+                    <p>Gives hiring managers and recruiters a fast, organized view of your technical capabilities.</p>
                   </div>
                 </div>
               </div>
@@ -231,16 +231,16 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
               {/* Column 3 */}
               <div className="flex-1 bg-[#270F05] border border-[#3E1510] p-[32px] rounded-xs flex flex-col gap-[32px] shadow-lg">
                 <div className="flex flex-wrap justify-between gap-x-4 font-mono text-[12px] leading-[1.2] uppercase text-[#CCC0B5] border-b border-[#3E1510] pb-3">
-                  <span className="text-[#A0674F] font-semibold">[03 // PARAMETER]</span>
-                  <span className="text-[#7C3F2F] font-bold">PERMANENT</span>
+                  <span className="text-[#A0674F] font-semibold">[03 // IMPACT]</span>
+                  <span className="text-[#7C3F2F] font-bold">SHAREABLE</span>
                 </div>
                 <div className="flex flex-col gap-[16px]">
                   <h3 className="font-serif text-[38px] max-lg:text-[30px] leading-none tracking-[-1.2px] text-[#FFFFFF]">
-                    Critical Threshold
+                    Online Presence
                   </h3>
                   <div className="flex flex-col gap-[12px] font-mono text-[12px] leading-[1.4] uppercase text-[#EEEBE7]/80">
-                    <p>Near hiring thresholds, generic template builders collapse into boilerplate noise.</p>
-                    <p>Bespoke architecture guarantees permanent retention in the minds of leaders.</p>
+                    <p>Provides a clean, professional web link to share on resumes, LinkedIn, and applications.</p>
+                    <p>A convenient starting point for students and early-career developers launching their careers.</p>
                   </div>
                 </div>
               </div>
@@ -255,16 +255,16 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
         >
           <div className="font-serif text-[40px] max-lg:text-[32px] leading-tight tracking-[-1.2px] max-lg:tracking-[-0.96px] text-[#0A0402] flex-1 max-w-4xl">
             <div className="font-mono text-[14px] text-[#56241A] font-bold uppercase tracking-widest mb-6">
-              [05 // MANIFESTO]
+              [05 // OUR PHILOSOPHY]
             </div>
             <div className="mb-[20px]">
-              <h2>A portfolio is not something you copy.<br />It is an environment you command.</h2>
+              <h2>Your portfolio should reflect the hard work<br />you put into your projects and education.</h2>
             </div>
             <div className="mb-[20px] text-[#7C3F2F]">
-              <p>Not an object.<br />Not a function.</p>
+              <p>No tedious boilerplate setup.<br />No building everything from scratch.</p>
             </div>
             <div className="text-[#56241A] font-semibold">
-              <p>A condition of reality we are only beginning to notice.</p>
+              <p>Just a clear, structured website that lets your achievements speak for themselves.</p>
             </div>
           </div>
         </section>
@@ -279,7 +279,7 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
             <div>
               <div className="w-[12px] h-[12px] bg-[#56241A] rounded-full mb-6 animate-pulse" />
               <div className="font-mono text-[12px] uppercase text-[#A0674F] tracking-widest font-medium">
-                CREATIVE PRACTICE // HANOI, VN
+                RESUME-TO-PORTFOLIO BUILDER // STUDENTS &amp; DEVELOPERS
               </div>
             </div>
 
@@ -294,10 +294,10 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
               <div className="flex flex-col gap-[24px] w-[585px] max-lg:w-full">
                 <div className="font-mono text-[12px] leading-[1.4] uppercase text-[#EEEBE7]">
                   <p className="mb-[12px]">
-                    The introductory portal has stabilized. Explore our live templates, interactive ruler, and curated developer portfolios.
+                    Turn your resume into a professional portfolio website in minutes. Extract your skills, projects, and education into a clean, shareable showcase.
                   </p>
                   <p className="text-[#A0674F] font-semibold">
-                    Step forward into the main website:
+                    Start building your portfolio today:
                   </p>
                 </div>
 
@@ -305,10 +305,10 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
                 <button
                   onClick={onEnterMainSite}
                   className="relative overflow-hidden inline-flex items-center gap-[8px] h-[52px] px-8 bg-[#56241A] hover:bg-[#7C3F2F] text-[#FFFFFF] border border-[#3E1510] font-mono font-bold text-[13px] uppercase tracking-[0.2em] transition-colors duration-300 group self-start cursor-pointer rounded-xs shadow-xl"
-                  aria-label="Enter Main Website"
+                  aria-label="Create My Portfolio"
                 >
                   <span className="flex items-center gap-[6px]">
-                    <span>ENTER MAIN WEBSITE</span>
+                    <span>CREATE MY PORTFOLIO</span>
                     <span className="group-hover:translate-x-1.5 transition-transform duration-200">
                       →
                     </span>
@@ -321,7 +321,7 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
           {/* Bottom Line */}
           <div className="max-w-[1440px] mx-auto w-full flex items-center justify-between font-mono text-[12px] tracking-[-0.36px] uppercase leading-[1.2] text-[#CCC0B5]/70 max-md:mt-[100px] max-sm:mt-[80px] border-t border-[#3E1510] pt-6">
             <p>© 2026 DevCanvas // PAAS. All rights reserved.</p>
-            <p>Architects: Ishan Gupta &amp; Aparna Jha</p>
+            <p>Designed for students, fresh graduates, and aspiring professionals</p>
           </div>
         </footer>
       </main>

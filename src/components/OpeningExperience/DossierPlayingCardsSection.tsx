@@ -51,7 +51,7 @@ export default function DossierPlayingCardsSection() {
           <div className="flex justify-between items-baseline border-b border-[#CCC0B5] pb-4">
             <div className="flex items-center gap-3">
               <h2 className="font-mono text-[16px] leading-[1.2] uppercase text-[#56241A] font-bold">
-                [03 // RESEARCH DOSSIERS]
+                [03 // HOW IT WORKS]
               </h2>
               <span className="font-mono text-[10px] text-[#A0674F] border border-[#A0674F]/40 bg-[#A0674F]/10 px-2 py-0.5 rounded-xs uppercase tracking-wider hidden sm:inline">
                 SCROLL-CONTROLLED 3D CARDS
@@ -61,10 +61,10 @@ export default function DossierPlayingCardsSection() {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-1.5 font-mono text-[11px] text-[#7C3F2F] uppercase hidden md:flex">
                 <span>FLIP SEQUENCE:</span>
-                <span className="text-[#56241A] font-bold">RIGHT → LEFT 180°</span>
+                <span className="text-[#56241A] font-bold">STEP 01 → 02 → 03</span>
               </div>
               <span className="font-mono text-[12px] uppercase text-[#7C3F2F] font-medium">
-                CASE STUDIES IN PORTFOLIO COHERENCE
+                FROM RESUME TO COMPLETE PORTFOLIO
               </span>
             </div>
           </div>
@@ -96,19 +96,19 @@ export default function DossierPlayingCardsSection() {
                 >
                   <div>
                     <div className="flex justify-between font-mono text-[12px] tracking-[-0.36px] uppercase border-b border-[#3E1510] pb-3 mb-4">
-                      <span className="font-bold text-[#CCC0B5]">DOSSIER 01</span>
-                      <span className="text-[#A0674F] font-semibold">[COHERENCE]</span>
+                      <span className="font-bold text-[#CCC0B5]">STEP 01</span>
+                      <span className="text-[#A0674F] font-semibold">[UPLOAD]</span>
                     </div>
                     <h3 className="font-serif text-[34px] max-sm:text-[26px] leading-tight tracking-[-1.2px] py-2 text-[#FFFFFF]">
-                      Field Coherence in Technical Portfolios
+                      Upload Your Resume
                     </h3>
                   </div>
                   <div className="flex flex-col gap-[12px] font-mono text-[12px] max-sm:text-[11px] leading-[1.4] uppercase border-t border-[#3E1510] pt-4">
                     <p className="text-[#EEEBE7]/80">
-                      Under typical conditions, developer achievements remain buried in unread PDFs.
+                      Start with the resume you already have. No need to manually enter every detail from scratch.
                     </p>
                     <p className="text-[#EEEBE7]/80">
-                      Coherence emerges not from text bloat, but as an immediate stabilization of technical trajectories and commit architectures.
+                      Provide your PDF to immediately initiate structured parsing and extraction.
                     </p>
                   </div>
                 </div>
@@ -132,17 +132,17 @@ export default function DossierPlayingCardsSection() {
                     {/* Central Seal & Monogram */}
                     <div className="flex flex-col items-center justify-center text-center gap-3 my-auto">
                       <div className="w-16 h-16 rounded-full border border-[#56241A] bg-[#34281D] flex items-center justify-center shadow-lg">
-                        <span className="font-serif italic text-2xl text-[#A0674F]">C</span>
+                        <span className="font-serif italic text-2xl text-[#A0674F]">U</span>
                       </div>
                       <div className="font-mono text-[12px] tracking-[0.25em] uppercase text-[#EEEBE7] font-bold">
-                        COHERENCE SPEC
+                        STEP 01 // UPLOAD
                       </div>
                       <div className="font-mono text-[9px] tracking-widest uppercase text-[#CCC0B5]/60">
-                        DEVCANVAS // ARCHITECTURE 01
+                        DEVCANVAS // WORKFLOW 01
                       </div>
                       <div className="w-12 h-[1px] bg-[#A0674F]/40 my-1" />
                       <div className="font-mono text-[9px] uppercase tracking-wider text-[#7C3F2F] font-semibold">
-                        STATUS: STABILIZED MANIFOLD
+                        STATUS: READY FOR PARSING
                       </div>
                     </div>
 
@@ -180,19 +180,19 @@ export default function DossierPlayingCardsSection() {
                 >
                   <div>
                     <div className="flex justify-between font-mono text-[12px] tracking-[-0.36px] uppercase border-b border-[#270F05] pb-3 mb-4">
-                      <span className="font-bold text-[#CCC0B5]">DOSSIER 02</span>
-                      <span className="text-[#7C3F2F] font-semibold">[ATTRACTOR]</span>
+                      <span className="font-bold text-[#CCC0B5]">STEP 02</span>
+                      <span className="text-[#7C3F2F] font-semibold">[EXTRACT]</span>
                     </div>
                     <h3 className="font-serif text-[34px] max-sm:text-[26px] leading-tight tracking-[-1.2px] py-2 text-[#FFFFFF]">
-                      Attractor Formation in Engineering Identity
+                      Extract Your Information
                     </h3>
                   </div>
                   <div className="flex flex-col gap-[12px] font-mono text-[12px] max-sm:text-[11px] leading-[1.4] uppercase border-t border-[#270F05] pt-4">
                     <p className="text-[#EEEBE7]/80">
-                      Recruiters and engineering leads spend under 15 seconds evaluating a portfolio.
+                      The platform parses your resume and organizes available information into clean, structured sections.
                     </p>
                     <p className="text-[#EEEBE7]/80">
-                      A bespoke architectural presence acts as an immediate gravitational attractor, permanently altering evaluation states.
+                      Skills, education, experience, internships, and projects are organized without manual data entry.
                     </p>
                   </div>
                 </div>
@@ -216,17 +216,17 @@ export default function DossierPlayingCardsSection() {
                     {/* Central Seal & Monogram */}
                     <div className="flex flex-col items-center justify-center text-center gap-3 my-auto">
                       <div className="w-16 h-16 rounded-full border border-[#7C3F2F] bg-[#270F05] flex items-center justify-center shadow-lg">
-                        <span className="font-serif italic text-2xl text-[#7C3F2F]">A</span>
+                        <span className="font-serif italic text-2xl text-[#7C3F2F]">E</span>
                       </div>
                       <div className="font-mono text-[12px] tracking-[0.25em] uppercase text-[#EEEBE7] font-bold">
-                        ATTRACTOR FIELD
+                        STEP 02 // EXTRACT
                       </div>
                       <div className="font-mono text-[9px] tracking-widest uppercase text-[#CCC0B5]/60">
-                        DEVCANVAS // TRAJECTORY 02
+                        DEVCANVAS // WORKFLOW 02
                       </div>
                       <div className="w-12 h-[1px] bg-[#7C3F2F]/40 my-1" />
                       <div className="font-mono text-[9px] uppercase tracking-wider text-[#A0674F] font-semibold">
-                        STATUS: GRAVITATIONAL LOCK
+                        STATUS: PROFILE ORGANIZED
                       </div>
                     </div>
 
@@ -264,19 +264,19 @@ export default function DossierPlayingCardsSection() {
                 >
                   <div>
                     <div className="flex justify-between font-mono text-[12px] tracking-[-0.36px] uppercase border-b border-[#3E1510] pb-3 mb-4">
-                      <span className="font-bold text-[#CCC0B5]">DOSSIER 03</span>
-                      <span className="text-[#A0674F] font-semibold">[BIFURCATION]</span>
+                      <span className="font-bold text-[#CCC0B5]">STEP 03 &amp; 04</span>
+                      <span className="text-[#A0674F] font-semibold">[SHOWCASE]</span>
                     </div>
                     <h3 className="font-serif text-[34px] max-sm:text-[26px] leading-tight tracking-[-1.2px] py-2 text-[#FFFFFF]">
-                      Bifurcation Points in Career Trajectories
+                      Build &amp; Showcase
                     </h3>
                   </div>
                   <div className="flex flex-col gap-[12px] font-mono text-[12px] max-sm:text-[11px] leading-[1.4] uppercase border-t border-[#3E1510] pt-4">
                     <p className="text-[#EEEBE7]/80">
-                      At specific thresholds, minimal variations in presentation produce irreversible divergence.
+                      Use the extracted information to create a structured portfolio that presents your profile clearly.
                     </p>
                     <p className="text-[#EEEBE7]/80">
-                      Engineers presenting bespoke code diverge permanently from those trapped in generic boilerplates.
+                      Showcase your projects, skills, and achievements through a shareable portfolio designed for recruiters.
                     </p>
                   </div>
                 </div>
@@ -300,17 +300,17 @@ export default function DossierPlayingCardsSection() {
                     {/* Central Seal & Monogram */}
                     <div className="flex flex-col items-center justify-center text-center gap-3 my-auto">
                       <div className="w-16 h-16 rounded-full border border-[#A0674F] bg-[#270F05] flex items-center justify-center shadow-lg">
-                        <span className="font-serif italic text-2xl text-[#A0674F]">B</span>
+                        <span className="font-serif italic text-2xl text-[#A0674F]">S</span>
                       </div>
                       <div className="font-mono text-[12px] tracking-[0.25em] uppercase text-[#EEEBE7] font-bold">
-                        BIFURCATION POINT
+                        STEP 03 // SHOWCASE
                       </div>
                       <div className="font-mono text-[9px] tracking-widest uppercase text-[#CCC0B5]/60">
-                        DEVCANVAS // DIVERGENCE 03
+                        DEVCANVAS // WORKFLOW 03
                       </div>
                       <div className="w-12 h-[1px] bg-[#A0674F]/40 my-1" />
                       <div className="font-mono text-[9px] uppercase tracking-wider text-[#56241A] font-bold">
-                        STATUS: PERMANENT RETENTION
+                        STATUS: READY TO SHARE
                       </div>
                     </div>
 
@@ -330,10 +330,10 @@ export default function DossierPlayingCardsSection() {
           <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-wider text-[#CCC0B5] pt-2">
             <div className="flex items-center gap-3">
               <span className="w-1.5 h-1.5 rounded-full bg-[#56241A] animate-pulse" />
-              <span>SCROLL DOWN TO FLIP CARDS CONSECUTIVELY</span>
+              <span>SCROLL DOWN TO FLIP WORKFLOW STEPS</span>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-[#A0674F]">CARD 01 → 02 → 03</span>
+              <span className="text-[#A0674F]">STEP 01 → 02 → 03</span>
               <div className="w-24 h-1.5 bg-[#CCC0B5]/25 rounded-full overflow-hidden">
                 <motion.div
                   className="h-full bg-[#56241A]"

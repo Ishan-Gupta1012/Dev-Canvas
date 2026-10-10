@@ -24,7 +24,7 @@ export default function Footer() {
           </Link>
         </div>
         <div>
-          © 2026 PAAS. All Rights Reserved.
+          © 2026 DevCanvas // Resume to Portfolio Builder. All Rights Reserved.
         </div>
       </div>
     </motion.footer>

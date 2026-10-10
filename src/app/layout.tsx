@@ -23,8 +23,8 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Portfol.io | Modern Developer Portfolios",
-  description: "Why are developer portfolios still stuck in 2020?",
+  title: "DevCanvas | Resume to Portfolio Website Builder",
+  description: "Turn your resume into a professional portfolio website. Automatically extract your skills, projects, education, and achievements into a structured, shareable showcase.",
 };
 
 export default function RootLayout({

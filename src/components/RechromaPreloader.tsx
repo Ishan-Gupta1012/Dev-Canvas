@@ -166,7 +166,7 @@ const EXIT_MS = 900;
 export default function RechromaPreloader() {
   const [isVisible, setIsVisible] = useState(true);
   const [opacity, setOpacity] = useState(1);
-  const [statusText, setStatusText] = useState('ASSEMBLING DEVCANVAS MATRIX');
+  const [statusText, setStatusText] = useState('PREPARING RESUME-TO-PORTFOLIO BUILDER');
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animFrameRef = useRef<number | null>(null);
@@ -243,9 +243,9 @@ export default function RechromaPreloader() {
 
       // Status text progression
       if (elapsed > 1.0 && elapsed < 1.8) {
-        setStatusText('DEVCANVAS MATRIX LOCKED');
+        setStatusText('ORGANIZING WORKFLOW & TEMPLATES');
       } else if (elapsed >= 1.8) {
-        setStatusText('DEVCANVAS READY');
+        setStatusText('PORTFOLIO BUILDER READY');
       }
 
       // Automatically trigger finish at 2.2s
@@ -372,7 +372,7 @@ export default function RechromaPreloader() {
         transition: `opacity ${EXIT_MS}ms cubic-bezier(0.4, 0, 0.2, 1)`,
         pointerEvents: opacity <= 0 ? 'none' : 'auto',
       }}
-      title="Click anywhere or press [ESC] to skip"
+      title="Click anywhere or press [ESC] to enter"
     >
       {/* Background Subtle Radial Glow */}
       <div

@@ -107,11 +107,11 @@ export default function OpeningOverlay({
             </span>
             <span className="text-neutral-500 hidden sm:inline">/</span>
             <span className="text-neutral-400 hidden sm:inline tracking-widest text-[11px]">
-              PORTFOLIO ARCHITECTURE
+              RESUME → PORTFOLIO BUILDER
             </span>
           </div>
           <div className="text-[10px] text-neutral-500 pl-4 tracking-widest">
-            EST. 2026 · HANOI // GLOBAL
+            EST. 2026 · FOR STUDENTS &amp; ASPIRING DEVELOPERS
           </div>
         </div>
 
@@ -142,7 +142,7 @@ export default function OpeningOverlay({
             onClick={onEnterSite}
             className="pointer-events-auto px-3.5 py-1.5 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase rounded border border-white/20 text-neutral-300 hover:text-white hover:border-amber-400 hover:bg-amber-500/10 transition-all duration-200 flex items-center gap-1.5 group cursor-pointer"
           >
-            <span>ENTER SITE</span>
+            <span>CREATE MY PORTFOLIO</span>
             <span className="text-amber-400 group-hover:translate-y-0.5 transition-transform duration-200">
               ↓
             </span>
@@ -168,7 +168,7 @@ export default function OpeningOverlay({
           <span>✦</span>
           <span>[00 // ENTRANCE PORTAL]</span>
           <span className="text-neutral-600">—</span>
-          <span className="text-neutral-400">RESEARCH &amp; CREATIVE PRACTICE</span>
+          <span className="text-neutral-400">RESUME-TO-PORTFOLIO BUILDER</span>
         </motion.div>
 
         {/* Large Statement Headline */}
@@ -178,9 +178,9 @@ export default function OpeningOverlay({
           transition={{ duration: 1.0, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tight text-white mb-6 max-w-4xl"
         >
-          Why are developer portfolios{' '}
+          Your Resume. Your Story.{' '}
           <span className="italic font-light text-neutral-400 text-stroke">
-            still stuck in 2020?
+            Your Portfolio.
           </span>
         </motion.h1>
 
@@ -193,7 +193,7 @@ export default function OpeningOverlay({
         >
           <div className="md:col-span-7">
             <p className="border-l border-amber-500/60 pl-4 py-1 text-neutral-300/90 font-light">
-              We turn developer code into bespoke visual brands. Every portfolio begins with intention—sketched on craft paper, refined with care, and engineered to endure.
+              Turn your resume into a professional portfolio website. We parse your skills, education, projects, and achievements so you can showcase your work without building everything from scratch.
             </p>
           </div>
           <div className="md:col-span-5 flex flex-col justify-end font-mono text-[10px] sm:text-[11px] text-neutral-400 tracking-wider">
@@ -221,7 +221,7 @@ export default function OpeningOverlay({
             />
           </div>
           <div className="flex flex-col text-[10px] sm:text-[11px]">
-            <span className="text-white tracking-widest">SCROLL TO TRANSFORM</span>
+            <span className="text-white tracking-widest">SCROLL TO EXPLORE WORKFLOW</span>
             <span className="text-neutral-500 text-[9px] tracking-wider">
               PORTAL UNLOCKS AT 100%
             </span>
