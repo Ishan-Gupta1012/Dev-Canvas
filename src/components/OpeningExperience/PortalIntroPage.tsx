@@ -320,7 +320,7 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
 
           {/* Bottom Line */}
           <div className="max-w-[1440px] mx-auto w-full flex items-center justify-between font-mono text-[12px] tracking-[-0.36px] uppercase leading-[1.2] text-[#CCC0B5]/70 max-md:mt-[100px] max-sm:mt-[80px] border-t border-[#3E1510] pt-6">
-            <p>© 2026 DevCanvas // PAAS. All rights reserved.</p>
+            <p>© 2026 DevCanvas. All rights reserved.</p>
             <p>Designed for students, fresh graduates, and aspiring professionals</p>
           </div>
         </footer>

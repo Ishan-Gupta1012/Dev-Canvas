@@ -2,24 +2,25 @@ import type { Metadata } from "next";
 import { Inter, Cormorant_Garamond, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
-
 import { ThemeProvider } from "@/components/ThemeProvider";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-serif",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
 });
 
 const jetbrains = JetBrains_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -38,7 +39,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${cormorant.variable} ${jetbrains.variable} antialiased scroll-smooth`}
     >
-      <body className="min-h-screen bg-background text-on-background font-sans font-medium flex flex-col overflow-x-clip">
+      <body className="min-h-screen bg-background text-on-background font-sans font-semibold flex flex-col overflow-x-clip">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

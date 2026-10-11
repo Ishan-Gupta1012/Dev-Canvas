@@ -74,7 +74,7 @@ export default function AboutPage() {
               </div>
               <div className="lg:col-span-4 lg:pl-6 pt-2">
                 <p className="text-sm md:text-base text-on-background/80 leading-relaxed">
-                  PAAS is a curated platform for creators. We believe every portfolio begins with intention — sketched on craft paper, refined with care, and built to last. We shape your work into a premium, editorial presence.
+                  DevCanvas is a curated platform for creators. We believe every portfolio begins with intention — sketched on craft paper, refined with care, and built to last. We shape your work into a premium, editorial presence.
                 </p>
               </div>
             </div>
@@ -114,7 +114,7 @@ export default function AboutPage() {
                   Between open-source contributions, GitHub repositories, and technical interviews, developers spend years perfecting their craft — only to present it through templates that look like they were made in 2015.
                 </p>
                 <p className="text-sm md:text-base text-on-background/75 leading-relaxed">
-                  That gap — between the quality of the code and the quality of its presentation — is what sparked PAAS. We wanted to build something that lets developers showcase their work with the same deliberate care they put into writing it.
+                  That gap — between the quality of the code and the quality of its presentation — is what sparked DevCanvas. We wanted to build something that lets developers showcase their work with the same deliberate care they put into writing it.
                 </p>
               </div>
               <div className="lg:col-span-6 lg:pl-6">
@@ -125,7 +125,7 @@ export default function AboutPage() {
                   Raw engineering data <span className="italic font-normal text-stroke">transformed into premium portfolios.</span>
                 </h2>
                 <p className="text-sm md:text-base text-on-background/75 leading-relaxed mb-4">
-                  PAAS takes your resume, GitHub stats, and project details — then restructures, rewrites, and refines them through AI-powered copywriting. You pick from hand-crafted templates packed with smooth animations, then export clean Next.js code you fully own.
+                  DevCanvas takes your resume, GitHub stats, and project details — then restructures, rewrites, and refines them through AI-powered copywriting. You pick from hand-crafted templates packed with smooth animations, then export clean Next.js code you fully own.
                 </p>
                 <p className="text-sm md:text-base text-on-background/75 leading-relaxed">
                   Four simple steps. No configuration. No generic templates. Just your work, framed by design that matches the quality of your code.
@@ -209,7 +209,7 @@ export default function AboutPage() {
                 </div>
                 <div className="lg:col-span-5">
                   <p className="text-sm text-on-background/70 leading-relaxed">
-                    Meet Ishan and Aparna, the minds behind PAAS. Together they set out to fix what they saw as a broken system — developers with incredible code trapped behind generic portfolio shells.
+                    Meet Ishan and Aparna, the minds behind DevCanvas. Together they set out to fix what they saw as a broken system — developers with incredible code trapped behind generic portfolio shells.
                   </p>
                 </div>
               </div>

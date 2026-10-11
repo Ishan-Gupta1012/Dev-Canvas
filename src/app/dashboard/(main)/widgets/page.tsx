@@ -5,7 +5,7 @@ export default function WidgetsPage() {
   return (
     <div className="p-lg md:p-xl max-w-5xl mx-auto w-full">
       <div className="mb-xl">
-        <h1 className="font-display-sm text-2xl font-bold text-on-surface mb-2">Widget Management</h1>
+        <h1 className="font-serif text-2xl font-bold text-on-surface mb-2">Widget Management</h1>
         <p className="text-on-surface-variant text-sm">Configure, reorder, and toggle the sections displayed on your portfolio.</p>
       </div>
 

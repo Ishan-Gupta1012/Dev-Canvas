@@ -134,7 +134,7 @@ export function SectionHeader({ title, eyebrow, subtitle, action, className }: S
             {eyebrow}
           </p>
         )}
-        <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface">{title}</h2>
+        <h2 className="font-serif text-2xl font-bold text-on-surface">{title}</h2>
         {subtitle && (
           <p className="text-sm text-on-surface-variant mt-xs">{subtitle}</p>
         )}
@@ -215,7 +215,7 @@ export function ProgressRing({ value, size = 104, strokeWidth = 8, label, sublab
         />
       </svg>
       <div className="absolute flex flex-col items-center justify-center">
-        <span className="font-display-md text-display-md font-bold text-on-surface">{pct}</span>
+        <span className="font-serif text-4xl font-bold text-on-surface">{pct}</span>
         <span className="font-mono text-[9px] uppercase tracking-widest text-on-surface-variant/60">
           {label}
         </span>

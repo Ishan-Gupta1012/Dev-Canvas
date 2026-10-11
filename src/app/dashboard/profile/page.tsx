@@ -15,7 +15,7 @@ export default function ProfilePage() {
   const provider = userProvider ? userProvider.charAt(0).toUpperCase() + userProvider.slice(1) : "Supabase Auth";
 
   return (
-    <div className="min-h-screen bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
+    <div className="min-h-screen bg-background text-on-surface font-sans selection:bg-primary-container selection:text-on-primary-container">
       {/* Top Navigation Bar */}
       <header className="flex items-center w-full h-16 px-lg sticky top-0 z-50 bg-surface-container-lowest/80 backdrop-blur-md border-b border-outline-variant">
         <div className="flex items-center gap-md">
@@ -36,8 +36,8 @@ export default function ProfilePage() {
         >
           {/* Header Title */}
           <div>
-            <h1 className="font-headline-lg text-headline-lg font-bold">My Profile</h1>
-            <p className="text-body-md text-on-surface-variant mt-xs">Manage your personal information and authentication settings.</p>
+            <h1 className="font-serif text-2xl font-bold">My Profile</h1>
+            <p className="text-base text-on-surface-variant mt-1">Manage your personal information and authentication settings.</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-lg">
@@ -55,10 +55,10 @@ export default function ProfilePage() {
                   </div>
                 </div>
                 
-                <h2 className="font-headline-md text-headline-md font-bold mb-xs">
+                <h2 className="font-serif text-xl font-bold mb-2">
                   {personalInfo?.name || "Developer"}
                 </h2>
-                <p className="text-body-md text-on-surface-variant mb-md">
+                <p className="text-base text-on-surface-variant mb-4">
                   {personalInfo?.title || "Software Engineer"}
                 </p>
 
@@ -81,7 +81,7 @@ export default function ProfilePage() {
             <div className="lg:col-span-2 space-y-lg">
               {/* Personal Details */}
               <div className="bg-surface-container-lowest p-lg rounded-2xl border border-outline-variant shadow-sm">
-                <h3 className="font-headline-sm text-headline-sm font-bold mb-lg pb-sm border-b border-outline-variant">Personal Information</h3>
+                <h3 className="font-serif text-lg font-bold mb-6 pb-2 border-b border-outline-variant">Personal Information</h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-y-lg gap-x-md">
                   <div>
@@ -117,7 +117,7 @@ export default function ProfilePage() {
 
               {/* Authentication Status */}
               <div className="bg-surface-container-lowest p-lg rounded-2xl border border-outline-variant shadow-sm">
-                <h3 className="font-headline-sm text-headline-sm font-bold mb-lg pb-sm border-b border-outline-variant">Authentication</h3>
+                <h3 className="font-serif text-lg font-bold mb-6 pb-2 border-b border-outline-variant">Authentication</h3>
                 
                 <div className="flex items-center justify-between p-md bg-surface-container-low rounded-xl border border-outline-variant">
                   <div className="flex items-center gap-4">

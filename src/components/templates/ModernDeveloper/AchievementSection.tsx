@@ -19,7 +19,7 @@ export const AchievementSection: React.FC<Props> = ({ data }) => {
         {/* Header */}
         <div className="flex flex-col items-center justify-center mb-32 text-center">
           <p className="text-gray-500 text-xs font-semibold tracking-widest uppercase mb-4">My Journey</p>
-          <h2 className="font-display text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6">
+          <h2 className="font-serif text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6">
             Achievements
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-transparent via-[#ccff00] to-transparent rounded-full shadow-[0_0_15px_#ccff00]" />
@@ -69,7 +69,7 @@ export const AchievementSection: React.FC<Props> = ({ data }) => {
                         </span>
                       </div>
 
-                      <h3 className="font-display text-3xl font-bold tracking-tight text-white mb-2 group-hover:text-[#ccff00] transition-colors">
+                      <h3 className="font-serif text-3xl font-bold tracking-tight text-white mb-2 group-hover:text-[#ccff00] transition-colors">
                         {item.title || item.organization || 'Experience'}
                       </h3>
                       

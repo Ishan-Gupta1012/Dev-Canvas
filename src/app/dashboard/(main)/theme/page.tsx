@@ -5,7 +5,7 @@ export default function ThemePage() {
   return (
     <div className="p-lg md:p-xl max-w-5xl mx-auto w-full">
       <div className="mb-xl">
-        <h1 className="font-display-sm text-2xl font-bold text-on-surface mb-2">Theme Settings</h1>
+        <h1 className="font-serif text-2xl font-bold text-on-surface mb-2">Theme Settings</h1>
         <p className="text-on-surface-variant text-sm">Customize colors, typography, and visual preferences for your portfolio.</p>
       </div>
 

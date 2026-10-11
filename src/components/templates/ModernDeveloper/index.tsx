@@ -49,7 +49,7 @@ export default function ModernDeveloperTemplate({ data }: Props) {
       <main className="relative z-10">
         <div className="sticky top-0 z-50 w-full bg-transparent">
           <nav className="w-full max-w-[1200px] mx-auto px-6 py-6 flex justify-between items-center">
-            <div className="font-display text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-3">
+            <div className="font-serif text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-[#ccff00] text-black flex items-center justify-center font-bold">
                 {data.hero.logoText ? data.hero.logoText.substring(0, 1).toUpperCase() : 'A'}
               </div>

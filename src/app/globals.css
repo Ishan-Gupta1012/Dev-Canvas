@@ -255,30 +255,22 @@ body {
   --color-on-tertiary-fixed-variant: var(--th-on-tertiary-fixed-variant);
   --color-on-primary-container: var(--th-on-primary-container);
   --color-secondary: var(--th-secondary);
-  --spacing-xs: 4px;
-  --spacing-lg: 24px;
+  /* Custom layout spacing */
   --spacing-container-max: 1280px;
-  --spacing-xxl: 48px;
-  --spacing-base: 4px;
-  --spacing-md: 16px;
-  --spacing-sm: 8px;
   --spacing-section: 80px;
   --spacing-gutter: 24px;
-  --spacing-xl: 32px;
   --radius: 0.25rem;
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
   --radius-full: 9999px;
-  --font-display-md: Inter;
-  --font-display-lg: Inter;
-  --font-headline-md: Inter;
-  --font-body-sm: Inter;
-  --font-body-lg: Inter;
-  --font-label-md: Geist, sans-serif;
-  --font-label-sm: Geist, sans-serif;
-  --font-headline-lg: Inter;
-  --font-headline-lg-mobile: Inter;
-  --font-body-md: Inter;
+  --font-display-md: var(--font-sans);
+  --font-display-lg: var(--font-sans);
+  --font-headline-md: var(--font-sans);
+  --font-body-sm: var(--font-sans);
+  --font-body-lg: var(--font-sans);
+  --font-label-md: var(--font-sans);
+  --font-label-sm: var(--font-sans);
+  --font-headline-lg: var(--font-sans);
   --text-display-md: 36px;
   --text-display-md--line-height: 1.2;
   --text-display-md--letter-spacing: -0.02em;
@@ -290,35 +282,35 @@ body {
   --text-headline-md: 20px;
   --text-headline-md--line-height: 28px;
   --text-headline-md--letter-spacing: -0.01em;
-  --text-headline-md--font-weight: 600;
+  --text-headline-md--font-weight: 700;
   --text-body-sm: 14px;
   --text-body-sm--line-height: 20px;
   --text-body-sm--letter-spacing: 0em;
-  --text-body-sm--font-weight: 400;
+  --text-body-sm--font-weight: 500;
   --text-body-lg: 18px;
   --text-body-lg--line-height: 28px;
   --text-body-lg--letter-spacing: 0em;
-  --text-body-lg--font-weight: 400;
+  --text-body-lg--font-weight: 500;
   --text-label-md: 14px;
   --text-label-md--line-height: 16px;
   --text-label-md--letter-spacing: 0.02em;
-  --text-label-md--font-weight: 500;
+  --text-label-md--font-weight: 600;
   --text-label-sm: 12px;
   --text-label-sm--line-height: 14px;
   --text-label-sm--letter-spacing: 0.04em;
-  --text-label-sm--font-weight: 500;
+  --text-label-sm--font-weight: 600;
   --text-headline-lg: 30px;
   --text-headline-lg--line-height: 38px;
   --text-headline-lg--letter-spacing: -0.01em;
-  --text-headline-lg--font-weight: 600;
+  --text-headline-lg--font-weight: 700;
   --text-headline-lg-mobile: 24px;
   --text-headline-lg-mobile--line-height: 32px;
   --text-headline-lg-mobile--letter-spacing: -0.01em;
-  --text-headline-lg-mobile--font-weight: 600;
+  --text-headline-lg-mobile--font-weight: 700;
   --text-body-md: 16px;
   --text-body-md--line-height: 24px;
   --text-body-md--letter-spacing: 0em;
-  --text-body-md--font-weight: 400;
+  --text-body-md--font-weight: 500;
 }
 
 
@@ -402,12 +394,144 @@ body {
   box-shadow: 0 0 0 1px rgba(232, 168, 124, 0.5), 0 0 24px rgba(255, 107, 74, 0.15);
 }
 
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px) scale(0.95); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+
+@keyframes slide-in {
+  from { 
+    opacity: 0; 
+    transform: translateX(-20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateX(0); 
+  }
+}
+
+@keyframes slide-down {
+  from { 
+    opacity: 0; 
+    transform: translateY(-10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 200ms ease-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 250ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animate-slide-in {
+  animation: slide-in 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animate-slide-down {
+  animation: slide-down 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
   .animate-marquee-reverse,
   .animate-auth-ticker,
-  .animate-auth-ticker-reverse {
+  .animate-auth-ticker-reverse,
+  .animate-quick-marquee {
     animation: none;
   }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }
+
+/* Premium Page View Transitions */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: 260ms cubic-bezier(0.22, 1, 0.36, 1) both page-fade-out;
+}
+
+::view-transition-new(root) {
+  animation: 420ms cubic-bezier(0.22, 1, 0.36, 1) both page-fade-in;
+}
+
+@keyframes page-fade-out {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8px);
+    filter: blur(3px);
+  }
+}
+
+@keyframes page-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+}
+
+/* Explicit spacing utilities for legacy tokens */
+@utility p-xs { padding: 4px; }
+@utility px-xs { padding-left: 4px; padding-right: 4px; }
+@utility py-xs { padding-top: 4px; padding-bottom: 4px; }
+@utility gap-xs { gap: 4px; }
+@utility mt-xs { margin-top: 4px; }
+@utility mb-xs { margin-bottom: 4px; }
+
+@utility p-sm { padding: 8px; }
+@utility px-sm { padding-left: 8px; padding-right: 8px; }
+@utility py-sm { padding-top: 8px; padding-bottom: 8px; }
+@utility gap-sm { gap: 8px; }
+@utility mt-sm { margin-top: 8px; }
+@utility mb-sm { margin-bottom: 8px; }
+@utility pb-sm { padding-bottom: 8px; }
+
+@utility p-md { padding: 16px; }
+@utility px-md { padding-left: 16px; padding-right: 16px; }
+@utility py-md { padding-top: 16px; padding-bottom: 16px; }
+@utility gap-md { gap: 16px; }
+@utility mb-md { margin-bottom: 16px; }
+
+@utility p-lg { padding: 24px; }
+@utility px-lg { padding-left: 24px; padding-right: 24px; }
+@utility py-lg { padding-top: 24px; padding-bottom: 24px; }
+
+@utility p-xl { padding: 32px; }
+@utility px-xl { padding-left: 32px; padding-right: 32px; }
+@utility py-xl { padding-top: 32px; padding-bottom: 32px; }
+
+
 

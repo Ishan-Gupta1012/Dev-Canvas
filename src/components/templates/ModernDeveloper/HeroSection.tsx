@@ -49,7 +49,7 @@ export const HeroSection: React.FC<Props> = ({ data }) => {
         {/* Huge Name/Tagline with Gradient */}
         <div className="relative w-full max-w-[1050px] mx-auto">
           <div className="absolute -inset-4 bg-[#ccff00]/10 blur-[100px] rounded-full z-0 pointer-events-none" />
-          <h1 className="relative z-10 font-display text-4xl sm:text-6xl md:text-7xl lg:text-[80px] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-[#ccff00]/60 to-white bg-[length:200%_auto] animate-text-shimmer mb-10 sm:mb-12 text-center leading-none uppercase drop-shadow-2xl">
+          <h1 className="relative z-10 font-serif text-4xl sm:text-6xl md:text-7xl lg:text-[80px] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-[#ccff00]/60 to-white bg-[length:200%_auto] animate-text-shimmer mb-10 sm:mb-12 text-center leading-none uppercase drop-shadow-2xl">
             {data.tagline}
           </h1>
         </div>

@@ -59,7 +59,7 @@ export const ContactSection: React.FC<Props> = ({ data, socials }) => {
         
         {/* Large Header */}
         <div className="mb-32 border-b border-[#222] pb-12 animate-fade-in-up text-center md:text-left">
-          <h2 className="text-4xl md:text-6xl lg:text-8xl font-display font-extrabold tracking-tight leading-[1.1]">
+          <h2 className="text-4xl md:text-6xl lg:text-8xl font-serif font-extrabold tracking-tight leading-[1.1]">
             Let&apos;s build <br className="hidden md:block" />
             <span className="text-[#ccff00]">
               extraordinary.
@@ -73,7 +73,7 @@ export const ContactSection: React.FC<Props> = ({ data, socials }) => {
           {/* Left Column: Contact Info Card */}
           <div className="md:col-span-1 bg-[#111] border border-[#222] rounded-[40px] p-8 md:p-12 h-full flex flex-col justify-between animate-fade-in-up" style={{ animationDelay: '100ms' }}>
             <div>
-              <h2 className="text-2xl font-display font-bold tracking-tight mb-6">
+              <h2 className="text-2xl font-serif font-bold tracking-tight mb-6">
                 Contact Info
               </h2>
               <p className="text-gray-400 text-base md:text-lg mb-12 leading-relaxed border-l-4 border-[#ccff00] pl-4 py-1">
@@ -126,7 +126,7 @@ export const ContactSection: React.FC<Props> = ({ data, socials }) => {
 
           {/* Right Column: Contact Form */}
           <div className="md:col-span-2 bg-[#111] border border-[#222] rounded-[40px] p-8 md:p-12 h-full animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-            <h2 className="text-2xl font-display font-bold tracking-tight mb-8">
+            <h2 className="text-2xl font-serif font-bold tracking-tight mb-8">
               Send a Message
             </h2>
 

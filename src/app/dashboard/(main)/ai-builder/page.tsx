@@ -3,8 +3,29 @@
 import React, { useState, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
-import { Terminal, ArrowRight, FileText, Component, Cpu, Activity, Server, Hexagon, Check, ScanLine, Network, Trash2 } from 'lucide-react';
 import { PortfolioData, Project, Achievement } from '@/types/portfolio';
+import { 
+  Terminal, 
+  ArrowRight, 
+  FileText, 
+  Component, 
+  Cpu, 
+  Activity, 
+  Server, 
+  Hexagon, 
+  Check, 
+  ScanLine, 
+  Network, 
+  Trash2, 
+  UploadCloud, 
+
+  FileUp, 
+  ShieldCheck, 
+  Zap, 
+  SlidersHorizontal,
+  ChevronRight,
+  ArrowLeft
+} from 'lucide-react';
 
 const generateId = () => Date.now().toString() + Math.random().toString(36).substring(2, 6);
 
@@ -220,7 +241,7 @@ export default function AIBuilderPage() {
   };
 
   return (
-    <div className="flex flex-col flex-1 p-6 md:p-12 w-full max-w-[1400px] mx-auto font-sans relative text-on-surface bg-surface-container-lowest min-h-full">
+    <div className="flex flex-col flex-1 p-6 md:p-10 w-full max-w-[1400px] mx-auto font-sans relative text-on-surface min-h-full">
       <style>{`
         @keyframes scanline {
           0% { transform: translateY(-100%); opacity: 0; }
@@ -260,18 +281,33 @@ export default function AIBuilderPage() {
         }
       `}</style>
 
-      {/* Header */}
-      <div className="mb-12 border-b border-outline-variant/30 pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 relative z-10 w-full">
-        <div className="flex-1 min-w-0 w-full">
-          <h1 className="text-4xl md:text-5xl font-display font-bold tracking-tight mb-3">Synthesis Engine</h1>
-          <p className="text-on-surface-variant font-mono text-xs uppercase tracking-wider opacity-70 w-full">
-            // Neural ingestion interface. Parsing raw telemetry into optimized architecture.
-          </p>
+      {/* Sleek Utility Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-outline/10 relative z-10 w-full">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="font-mono text-xs uppercase tracking-wider text-on-surface-variant font-medium">
+              Step {step} of 3
+            </span>
+          </div>
+          <span className="text-outline/30">•</span>
+          <span className="font-mono text-xs uppercase tracking-wider text-on-surface-variant/60">
+            {step === 1 ? 'Upload Resume' : step === 2 ? 'Select Template' : 'AI Site Generation'}
+          </span>
         </div>
-        <div className="flex items-center gap-4 opacity-50 shrink-0">
-          <Terminal size={24} className="text-on-surface-variant" />
-          <Server size={24} className="text-on-surface-variant" />
-          <ScanLine size={24} className="text-on-surface-variant" />
+
+        <div className="flex items-center gap-2">
+          {step > 1 && (
+            <button
+              onClick={handleBack}
+              className="px-3.5 py-1.5 rounded-lg border border-outline/20 font-mono text-xs uppercase tracking-wider text-on-surface hover:text-primary hover:border-primary/40 transition-colors"
+            >
+              Back
+            </button>
+          )}
+          <span className="font-mono text-[11px] uppercase tracking-widest text-on-surface-variant/40">
+            Automated Pipeline
+          </span>
         </div>
       </div>
 
@@ -295,11 +331,11 @@ export default function AIBuilderPage() {
             const isPast = step > s.num;
             
             return (
-              <div key={s.num} className={`relative z-10 flex gap-4 p-4 rounded-lg transition-all duration-300 ${isActive ? 'bg-surface-container-highest border border-outline shadow-sm' : isPast ? 'opacity-70' : 'opacity-40'}`}>
+              <div key={s.num} className={`relative z-10 flex gap-4 p-4 rounded-lg transition-all duration-300 ${isActive ? 'bg-background/40 backdrop-blur-xl border border-outline/10 shadow-sm' : isPast ? 'opacity-70' : 'opacity-40'}`}>
                 <div className={`w-8 h-8 rounded-sm flex items-center justify-center border font-mono text-xs font-bold transition-colors ${
                   isActive ? 'bg-primary text-on-primary border-primary shadow-sm' : 
-                  isPast ? 'bg-surface-container border-primary text-primary' : 
-                  'bg-surface-container border-outline text-on-surface-variant'
+                  isPast ? 'bg-background/40 backdrop-blur-xl border-primary text-primary' : 
+                  'bg-background/30 backdrop-blur-xl border-outline text-on-surface-variant'
                 }`}>
                   {isPast ? <Check size={14} /> : `0${s.num}`}
                 </div>
@@ -314,7 +350,7 @@ export default function AIBuilderPage() {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 w-full bg-surface-container border border-outline/30 rounded-xl p-8 relative overflow-hidden shadow-lg">
+        <div className="flex-1 w-full p-8 relative overflow-hidden">
           
           {/* Subtle Grid Background */}
           <div className="absolute inset-0 bg-[linear-gradient(rgba(100,100,100,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(100,100,100,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none opacity-50" />
@@ -322,102 +358,113 @@ export default function AIBuilderPage() {
           {step === 1 && (
             <div className="relative z-10 animate-fade-in-up w-full flex flex-col">
               <div className="flex items-center gap-3 mb-8">
-                <Network className="text-primary" size={24} />
-                <h2 className="text-2xl font-display font-bold tracking-tight uppercase">Module 01: Upload Resume</h2>
+                <Network className="text-primary" size={20} />
+                <h2 className="text-xl font-mono uppercase tracking-wider font-bold text-on-surface">MODULE 01: UPLOAD RESUME</h2>
               </div>
               
               {hasResume ? (
                 <div className="w-full flex flex-col items-center justify-center">
-                  <div className="w-[90%] md:w-[500px] shrink-0 p-8 bg-surface-container-high border border-outline-variant rounded-lg shadow-sm relative overflow-hidden group">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-emerald-500/50" />
-                    
-                    <div className="flex items-start justify-between mb-8">
+                  <div className="w-full max-w-xl p-8 bg-surface-container-low/70 border border-outline/15 rounded-2xl relative overflow-hidden shadow-sm backdrop-blur-xl">
+                    <div className="flex items-start justify-between gap-4 mb-6">
                       <div className="flex items-center gap-4">
-                        <div className="p-3 bg-emerald-500/10 rounded-sm border border-emerald-500/20">
-                          <FileText className="text-emerald-600 dark:text-emerald-400" size={24} />
+                        <div className="w-12 h-12 bg-primary/10 rounded-xl border border-primary/20 flex items-center justify-center shrink-0">
+                          <FileText className="text-primary" size={24} />
                         </div>
                         <div>
                           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                          <div className="font-mono text-base text-emerald-600 dark:text-emerald-400 font-bold mb-1">{(user?.resumeData as any)?.personal?.name ? String((user.resumeData as any).personal.name).toUpperCase() : 'RESUME.PDF'}</div>
-                          <div className="font-mono text-xs text-on-surface-variant tracking-widest">[ STATUS: UPLOADED SUCCESSFULLY ]</div>
+                          <h3 className="font-serif text-lg font-bold text-on-surface">
+                            {(user?.resumeData as any)?.personal?.name ? String((user.resumeData as any).personal.name) : 'Resume Document'}
+                          </h3>
+                          <div className="flex items-center gap-2 mt-0.5">
+                            <span className="inline-flex items-center gap-1 text-[11px] font-mono uppercase tracking-wider text-emerald-600 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                              <Check size={11} /> Ready For Portfolio
+                            </span>
+                          </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <button 
-                          onClick={handleRemoveResume} 
-                          title="Remove Resume"
-                          className="p-2 text-on-surface-variant hover:text-red-500 hover:bg-red-500/10 rounded-full transition-colors"
-                        >
-                          <Trash2 size={20} />
-                        </button>
-                        <Check className="text-emerald-500" size={24} />
-                      </div>
+                      <button 
+                        onClick={handleRemoveResume} 
+                        title="Remove uploaded resume"
+                        className="p-2 text-on-surface-variant/50 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
+                      >
+                        <Trash2 size={18} />
+                      </button>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 mb-8">
-                      <div className="p-4 bg-surface-container-highest rounded-md border border-outline-variant/50">
-                        <div className="font-mono text-[10px] text-on-surface-variant mb-2 uppercase tracking-widest">Data Extracted</div>
+                    <div className="grid grid-cols-2 gap-3 mb-6">
+                      <div className="p-3.5 bg-background rounded-xl border border-outline/10">
+                        <div className="font-mono text-[10px] text-on-surface-variant/60 uppercase tracking-wider mb-1">Extracted Sections</div>
                         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                        <div className="font-mono text-sm font-bold">{Object.keys(user?.resumeData as any || {}).length} Sections Found</div>
+                        <div className="font-mono text-sm font-bold text-on-surface">{Object.keys(user?.resumeData as any || {}).length} Identified</div>
                       </div>
-                      <div className="p-4 bg-surface-container-highest rounded-md border border-outline-variant/50">
-                        <div className="font-mono text-[10px] text-on-surface-variant mb-2 uppercase tracking-widest">Parsing Quality</div>
-                        <div className="font-mono text-sm font-bold text-emerald-600 dark:text-emerald-400">Excellent</div>
+                      <div className="p-3.5 bg-background rounded-xl border border-outline/10">
+                        <div className="font-mono text-[10px] text-on-surface-variant/60 uppercase tracking-wider mb-1">Profile Health</div>
+                        <div className="font-mono text-sm font-bold text-emerald-600">Parsed & Valid</div>
                       </div>
                     </div>
 
-                    <div className="flex gap-4 w-full">
+                    <div className="flex flex-col sm:flex-row gap-3 w-full">
                       <button 
                         onClick={() => fileInputRef.current?.click()}
-                        className="flex-1 py-4 text-xs font-mono uppercase tracking-widest border border-outline-variant rounded-sm hover:bg-surface-container transition-colors text-on-surface font-bold whitespace-nowrap"
+                        className="flex-1 py-3 px-4 text-xs font-mono uppercase tracking-wider border border-outline/20 rounded-xl hover:border-primary/40 hover:text-primary transition-colors text-on-surface font-semibold bg-background"
                       >
-                        Upload Different Resume
+                        Replace Resume
                       </button>
                       <button 
                         onClick={handleNext}
-                        className="flex-1 bg-primary text-on-primary py-4 rounded-sm font-mono text-xs uppercase tracking-widest font-bold hover:bg-primary/90 transition-colors shadow-md whitespace-nowrap"
+                        className="flex-1 bg-primary text-on-primary py-3 px-4 rounded-xl font-mono text-xs uppercase tracking-wider font-bold hover:bg-primary/90 transition-all shadow-md shadow-primary/20 flex items-center justify-center gap-2"
                       >
-                        Choose Template
+                        <span>Continue to Design</span>
+                        <ArrowRight size={14} />
                       </button>
                     </div>
                   </div>
-                  
-                  {isUploading && (
-                    <div className="mt-8 flex items-center gap-3 text-emerald-600 dark:text-emerald-400 font-mono text-xs uppercase tracking-widest font-bold">
-                      <Activity size={18} className="animate-pulse" /> Scanning new telemetry...
-                    </div>
-                  )}
-                  {uploadError && <p className="mt-8 text-red-500 font-mono text-xs uppercase font-bold">{uploadError}</p>}
                 </div>
               ) : (
-                <div className="w-full flex flex-col items-center justify-center py-8">
+                <div className="w-full flex flex-col items-center justify-center py-6">
+                  {/* Clean Technical Container from Screenshot 2 & 3 */}
                   <div 
-                    className={`w-[90%] md:w-[500px] min-h-[300px] p-8 md:p-12 bg-surface-container-lowest border-2 border-dashed rounded-lg flex flex-col items-center justify-center transition-all cursor-pointer relative overflow-hidden ${
-                      isUploading ? 'border-emerald-500/50' : 'border-outline hover:border-primary/50 hover:bg-surface-container-high'
+                    className={`w-full max-w-2xl min-h-[380px] p-8 md:p-14 bg-surface-container-low/40 backdrop-blur-xl border-2 border-dashed rounded-xl flex flex-col items-center justify-center transition-all cursor-pointer relative overflow-hidden group shadow-xs ${
+                      isUploading 
+                        ? 'border-emerald-500/50 bg-emerald-500/[0.03]' 
+                        : 'border-outline/25 hover:border-primary/60 hover:bg-surface-container-low/70'
                     }`}
                     onClick={() => !isUploading && fileInputRef.current?.click()}
                   >
                     {isUploading ? (
-                      <>
-                        <div className="absolute inset-0 scanner-line z-0" />
-                        <Activity size={48} className="text-emerald-500 mb-6 relative z-10 animate-pulse" />
-                        <div className="font-mono text-sm text-emerald-600 dark:text-emerald-400 font-bold mb-2 uppercase relative z-10 tracking-widest text-center">Ingesting Telemetry (Resume)...</div>
-                        <div className="font-mono text-xs text-on-surface-variant text-center uppercase tracking-widest relative z-10">Parsing semantic nodes and mapping vectors</div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="w-20 h-20 bg-surface-container rounded-lg flex items-center justify-center mb-6 border border-outline/30 shadow-sm shrink-0">
-                          <ScanLine size={32} className="text-on-surface-variant" />
+                      <div className="flex flex-col items-center justify-center text-center py-8 z-10 animate-fade-in">
+                        {/* Green Pulse Wave Indicator from Screenshot 3 */}
+                        <Activity size={44} className="text-emerald-500 mb-6 animate-pulse" />
+                        <div className="font-mono text-sm md:text-base text-emerald-500 font-bold mb-2 uppercase tracking-[0.18em]">
+                          INGESTING TELEMETRY (RESUME)...
                         </div>
-                        <div className="font-mono text-base md:text-lg text-on-surface font-bold mb-3 uppercase tracking-wider text-center whitespace-nowrap">Select Raw Data Source (Resume)</div>
-                        <div className="font-mono text-xs text-on-surface-variant text-center mb-8 uppercase tracking-widest max-w-[300px] leading-relaxed">Upload career telemetry (PDF Resume required)</div>
-                        <button className="px-8 py-3 bg-surface-container-high border border-primary/30 text-primary rounded-sm font-mono text-xs uppercase tracking-widest font-bold hover:bg-primary/10 transition-colors shrink-0">
-                          Browse System
-                        </button>
-                      </>
+                        <div className="font-mono text-xs text-on-surface-variant/70 text-center uppercase tracking-widest max-w-sm">
+                          PARSING SEMANTIC NODES AND MAPPING VECTORS
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center text-center z-10">
+                        {/* Scanning Box Icon from Screenshot 2 */}
+                        <div className="w-16 h-16 bg-background/80 rounded-xl border border-outline/20 flex items-center justify-center mb-6 shadow-xs group-hover:scale-105 group-hover:border-primary/40 transition-all">
+                          <ScanLine size={30} className="text-on-surface" />
+                        </div>
+
+                        {/* Exact Header and Subtitle from Screenshot 2 */}
+                        <h3 className="font-mono text-base md:text-lg font-bold text-on-surface mb-2 uppercase tracking-wider">
+                          SELECT RAW DATA SOURCE (RESUME)
+                        </h3>
+                        <p className="font-mono text-xs text-on-surface-variant/70 uppercase tracking-widest max-w-sm mb-8 leading-relaxed">
+                          UPLOAD CAREER TELEMETRY (PDF RESUME REQUIRED)
+                        </p>
+
+                        {/* Clean BROWSE SYSTEM Button */}
+                        <div className="px-7 py-2.5 bg-background border border-outline/25 rounded-md font-mono text-xs uppercase tracking-widest font-bold text-on-surface group-hover:border-primary/60 group-hover:text-primary transition-all shadow-xs">
+                          BROWSE SYSTEM
+                        </div>
+                      </div>
                     )}
                   </div>
-                  {uploadError && <p className="mt-6 text-red-500 font-mono text-xs uppercase font-bold text-center">{uploadError}</p>}
+                  {uploadError && <p className="mt-4 text-red-500 font-mono text-xs uppercase font-bold text-center">{uploadError}</p>}
                 </div>
               )}
               
@@ -428,15 +475,15 @@ export default function AIBuilderPage() {
           {step === 2 && (
             <div className="relative z-10 animate-fade-in-up w-full flex flex-col">
               <div className="flex items-center gap-3 mb-8">
-                <Component className="text-primary" size={24} />
-                <h2 className="text-2xl font-display font-bold tracking-tight uppercase">Module 02: Architecture Selection</h2>
+                <Component className="text-primary" size={22} />
+                <h2 className="text-2xl font-serif font-bold tracking-tight">Select Template Design</h2>
               </div>
               
               <div className="flex flex-col lg:flex-row gap-6 mb-12 min-h-[450px]">
                 {/* Left: Preview Monitor (60%) */}
-                <div className="lg:w-3/5 relative rounded-lg border border-outline/50 bg-surface-container overflow-hidden shadow-inner flex flex-col">
+                <div className="lg:w-3/5 relative rounded-lg border border-outline/10 bg-background/30 backdrop-blur-xl overflow-hidden flex flex-col">
                   {/* Monitor Header */}
-                  <div className="h-8 bg-surface-container-highest border-b border-outline/30 flex items-center px-4 gap-2 shrink-0">
+                  <div className="h-8 bg-background/40 backdrop-blur-xl border-b border-outline/10 flex items-center px-4 gap-2 shrink-0">
                     <div className="w-2 h-2 rounded-full bg-red-500/50" />
                     <div className="w-2 h-2 rounded-full bg-yellow-500/50" />
                     <div className="w-2 h-2 rounded-full bg-emerald-500/50" />
@@ -446,7 +493,7 @@ export default function AIBuilderPage() {
                   </div>
                   
                   {/* Monitor Display */}
-                  <div className="relative flex-1 bg-surface-container-lowest p-4 md:p-8 flex items-center justify-center overflow-hidden">
+                  <div className="relative flex-1 bg-background/20 backdrop-blur-xl p-4 md:p-8 flex items-center justify-center overflow-hidden">
                     {/* Corner Brackets */}
                     <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-primary/40" />
                     <div className="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2 border-primary/40" />
@@ -460,7 +507,7 @@ export default function AIBuilderPage() {
                     <div className="absolute inset-0 scanner-line mix-blend-screen pointer-events-none z-20" />
                     
                     {/* Image Container */}
-                    <div className="relative w-full aspect-[16/10] rounded-sm overflow-hidden shadow-2xl border border-outline/20 ring-1 ring-white/5 z-10 bg-surface-container">
+                    <div className="relative w-full aspect-[16/10] rounded-sm overflow-hidden shadow-xl border border-outline/10 ring-1 ring-white/5 z-10 bg-background/30 backdrop-blur-xl">
                        {/* eslint-disable-next-line @next/next/no-img-element */}
                        <img 
                          key={selectedTemplate} 
@@ -498,13 +545,13 @@ export default function AIBuilderPage() {
                         key={tpl.id}
                         onClick={() => setSelectedTemplate(tpl.id)}
                         className={`cursor-pointer rounded-lg border transition-all duration-300 overflow-hidden ${
-                          isSelected ? 'bg-surface-container-highest border-primary shadow-[0_0_15px_rgba(16,185,129,0.15)] ring-1 ring-primary/30' : 'bg-surface-container-lowest border-outline hover:border-primary/50'
+                          isSelected ? 'bg-background/40 backdrop-blur-xl border-primary shadow-[0_0_15px_rgba(16,185,129,0.15)] ring-1 ring-primary/30' : 'bg-background/20 backdrop-blur-xl border-outline hover:border-primary/50'
                         }`}
                       >
                         {/* Header / Clickable area */}
                         <div className="p-5 flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${isSelected ? 'border-primary bg-primary/20' : 'border-outline-variant'}`}>
+                            <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${isSelected ? 'border-primary bg-primary/20' : 'border-outline-variant bg-background/30 backdrop-blur-xl'}`}>
                               {isSelected && <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />}
                             </div>
                             <h3 className={`font-mono text-sm font-bold tracking-widest uppercase ${isSelected ? 'text-primary' : 'text-on-surface'}`}>{tpl.name}</h3>
@@ -552,76 +599,125 @@ export default function AIBuilderPage() {
           )}
 
           {step === 3 && (
-            <div className="relative z-10 animate-fade-in-up w-full h-full flex flex-col items-center justify-center text-center py-12">
+            <div className="relative z-10 animate-fade-in-up w-full h-full flex flex-col items-center justify-center text-center py-6">
               
               {isEnhancing ? (
-                <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto">
-                  <div className="relative w-48 h-48 mb-12 flex items-center justify-center">
-                    {/* Core Rings */}
-                    <div className="absolute inset-0 border border-primary/30 rounded-full core-ring-1" />
-                    <div className="absolute inset-2 border-2 border-dashed border-primary/50 rounded-full core-ring-2" />
-                    <div className="absolute inset-8 border border-primary/40 rounded-full core-ring-1 opacity-70" />
-                    
-                    {/* Glowing Core */}
-                    <div className="absolute inset-16 bg-primary rounded-full blur-xl opacity-20 animate-pulse" />
-                    <div className="relative z-10 bg-surface-container-highest border border-primary/50 w-16 h-16 rounded-full flex items-center justify-center shadow-lg">
-                      <Cpu size={28} className="text-primary animate-pulse" />
-                    </div>
-                    
-                    {/* Scanning Line overlay */}
-                    <div className="absolute inset-0 overflow-hidden rounded-full">
-                       <div className="absolute inset-0 scanner-line" />
+                <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto py-8">
+                  <div className="relative w-28 h-28 mb-8 flex items-center justify-center">
+                    <div className="absolute inset-0 border-2 border-primary/20 rounded-full animate-ping opacity-30" />
+                    <div className="absolute inset-2 border-2 border-primary/40 border-t-primary rounded-full animate-spin" />
+                    <div className="relative z-10 bg-surface-container-low border border-primary/30 w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg">
+                      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary animate-pulse">
+                        <rect x="3" y="3" width="13" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.8"/>
+                        <rect x="12" y="12" width="13" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.8"/>
+                        <line x1="9" y1="9" x2="19" y2="19" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+                      </svg>
                     </div>
                   </div>
                   
-                  <div className="font-mono text-lg text-primary font-bold uppercase tracking-[0.2em] mb-6">Neural Synthesis Active</div>
-                  <div className="w-full bg-surface-container-highest border border-outline-variant p-5 rounded-sm text-left h-36 overflow-hidden relative shadow-inner">
-                     <div className="absolute inset-0 bg-gradient-to-b from-transparent to-surface-container-highest z-10 pointer-events-none" />
-                     <div className="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-bold leading-loose uppercase animate-fade-in-up">
-                       &gt; Extracting semantic nodes...<br/>
-                       &gt; Aligning vector syntax...<br/>
-                       &gt; Optimizing descriptive metrics...<br/>
-                       &gt; Structuring matrix layouts...<br/>
-                       &gt; Injecting robust vocabulary arrays...<br/>
-                       &gt; Compiling final architecture...
-                     </div>
+                  <h3 className="font-serif text-2xl font-bold text-on-surface mb-2">Enhancing Your Portfolio</h3>
+                  <p className="font-mono text-xs text-on-surface-variant/70 uppercase tracking-wider mb-6">
+                    Polishing project descriptions, action verbs & layouts...
+                  </p>
+
+                  <div className="w-full bg-surface-container-low/80 border border-outline/15 p-4 rounded-xl text-left font-mono text-[11px] text-primary/90 leading-relaxed shadow-sm">
+                    <div className="flex items-center gap-2 text-emerald-600 mb-2 font-bold uppercase tracking-wider">
+                      <Activity size={12} className="animate-spin" /> Live Processing
+                    </div>
+                    <p className="opacity-80">• Refining project impact bullet points</p>
+                    <p className="opacity-80">• Formatting typography hierarchy</p>
+                    <p className="opacity-80">• Assembling responsive showcase</p>
                   </div>
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center w-[90%] md:w-[500px] mx-auto">
-                  <div className="w-24 h-24 relative flex items-center justify-center mb-8 shrink-0">
-                    <div className="absolute inset-0 bg-primary/10 border border-primary/30 rounded-full animate-pulse" />
-                    <Cpu size={36} className="text-primary relative z-10" />
+                <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto">
+                  {/* Icon Header */}
+                  <div className="w-16 h-16 rounded-2xl bg-surface-container-low border border-outline/15 flex items-center justify-center mb-6 shadow-sm">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
+                      <rect x="3" y="3" width="13" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.8"/>
+                      <rect x="12" y="12" width="13" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.8"/>
+                      <line x1="9" y1="9" x2="19" y2="19" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+                    </svg>
                   </div>
                   
-                  <h2 className="text-2xl md:text-3xl font-display font-bold tracking-tight uppercase mb-4 text-center whitespace-nowrap">Module 03: Content Generation</h2>
-                  <p className="text-on-surface-variant font-mono text-xs leading-relaxed uppercase tracking-widest max-w-[450px] mb-12 text-center">
-                    Your data is ready. We can use AI to automatically enhance, rewrite, and optimize your resume into a high-impact narrative. Alternatively, you can skip the AI and use your exact raw text.
+                  <h2 className="text-2xl md:text-3xl font-serif font-bold tracking-tight text-on-surface mb-3">
+                    Choose Content Strategy
+                  </h2>
+                  <p className="text-on-surface-variant/70 text-sm max-w-md mb-8 leading-relaxed">
+                    Decide how you'd like your resume content prepared for your live portfolio website.
                   </p>
                   
-                  <div className="flex flex-col w-full gap-4 shrink-0">
-                    <button 
+                  {/* Two Strategy Options */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mb-8 text-left">
+                    {/* Option 1: AI Enhanced (Recommended) */}
+                    <div 
                       onClick={handleGenerate}
-                      className="w-full min-w-[250px] bg-primary text-on-primary py-4 rounded-sm font-mono text-sm uppercase tracking-widest font-bold flex items-center justify-center gap-3 hover:bg-primary/90 transition-all shadow-md relative overflow-hidden group whitespace-nowrap"
+                      className="group cursor-pointer p-6 rounded-2xl border-2 border-primary/60 bg-primary/[0.03] hover:bg-primary/[0.07] hover:border-primary transition-all duration-200 relative flex flex-col justify-between shadow-xs hover:shadow-md"
                     >
-                      <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
-                      <Cpu size={20} className="relative z-10 shrink-0" /> 
-                      <span className="relative z-10">Generate with AI (Recommended)</span>
-                    </button>
-                    <button 
+                      <div className="absolute top-4 right-4">
+                        <span className="px-2 py-0.5 rounded-full bg-primary text-on-primary font-mono text-[9px] font-bold uppercase tracking-widest">
+                          Recommended
+                        </span>
+                      </div>
+
+                      <div>
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4">
+                          <Zap size={20} />
+                        </div>
+                        <h4 className="font-serif text-lg font-bold text-on-surface mb-1.5 flex items-center gap-1.5">
+                          <span>AI Enhanced</span>
+                        </h4>
+                        <p className="text-xs text-on-surface-variant/70 leading-relaxed">
+                          Rewrites bullet points with strong action verbs, highlights technical impact, and makes descriptions sound punchy.
+                        </p>
+                      </div>
+
+                      <div className="mt-6 pt-4 border-t border-primary/15 flex items-center justify-between">
+                        <span className="font-mono text-xs uppercase tracking-wider text-primary font-bold group-hover:underline">
+                          Generate & Launch
+                        </span>
+                        <ArrowRight size={14} className="text-primary group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+
+                    {/* Option 2: Exact Raw Text */}
+                    <div 
                       onClick={handleSkip}
-                      className="w-full bg-surface-container-high border border-outline text-on-surface py-4 rounded-sm font-mono text-xs uppercase tracking-widest font-bold hover:bg-surface-container-highest hover:border-outline-variant transition-all whitespace-nowrap"
+                      className="group cursor-pointer p-6 rounded-2xl border border-outline/20 bg-surface-container-low/40 hover:bg-surface-container-low hover:border-outline/40 transition-all duration-200 flex flex-col justify-between shadow-xs hover:shadow-md"
                     >
-                      Skip AI & Use Raw Text
-                    </button>
-                    <button onClick={handleBack} className="mt-6 text-xs font-mono uppercase tracking-widest font-bold text-on-surface-variant hover:text-on-surface transition-colors whitespace-nowrap shrink-0">
-                      [ Return to Architecture ]
-                    </button>
+                      <div>
+                        <div className="w-10 h-10 rounded-xl bg-background border border-outline/15 text-on-surface flex items-center justify-center mb-4">
+                          <SlidersHorizontal size={18} />
+                        </div>
+                        <h4 className="font-serif text-lg font-bold text-on-surface mb-1.5">
+                          Original Content
+                        </h4>
+                        <p className="text-xs text-on-surface-variant/70 leading-relaxed">
+                          Uses your exact resume wording without modifications. Perfect if you already have finely tuned copy.
+                        </p>
+                      </div>
+
+                      <div className="mt-6 pt-4 border-t border-outline/10 flex items-center justify-between">
+                        <span className="font-mono text-xs uppercase tracking-wider text-on-surface-variant font-semibold group-hover:text-on-surface">
+                          Use Exact Text
+                        </span>
+                        <ArrowRight size={14} className="text-on-surface-variant group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
                   </div>
+
+                  {/* Return Navigation */}
+                  <button 
+                    onClick={handleBack} 
+                    className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-on-surface-variant/70 hover:text-primary transition-colors py-2 px-4 rounded-lg"
+                  >
+                    <ArrowLeft size={13} />
+                    <span>Back to Template Selection</span>
+                  </button>
                   
                   {errorMsg && (
-                    <div className="mt-8 p-4 border border-red-500/30 bg-red-500/10 text-red-600 font-mono text-sm uppercase font-bold rounded-sm w-full">
-                      [ERROR]: {errorMsg}
+                    <div className="mt-6 p-4 border border-red-500/20 bg-red-500/10 text-red-600 font-mono text-xs uppercase font-bold rounded-xl w-full text-center">
+                      {errorMsg}
                     </div>
                   )}
                 </div>

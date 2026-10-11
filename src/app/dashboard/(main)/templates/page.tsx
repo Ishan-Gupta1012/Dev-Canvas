@@ -34,24 +34,31 @@ export default function TemplatesPage() {
   return (
     <main className="flex-1 p-6 md:p-10 max-w-7xl mx-auto w-full select-none text-on-background">
 
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10 pb-6 border-b border-outline/15">
-        <div>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-on-background/40 mb-1">Workspace / Templates</p>
-          <h1 className="font-serif text-3xl md:text-4xl font-bold">Templates Library</h1>
-          <p className="text-sm text-on-background/60 mt-1">Select a layout and build your public developer portfolio.</p>
+      {/* Sleek Utility Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-outline/10">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="font-mono text-xs uppercase tracking-wider text-on-background/80 font-medium">
+              {templates.length} Curated Layouts
+            </span>
+          </div>
+          <span className="text-outline/30">•</span>
+          <span className="font-mono text-xs uppercase tracking-wider text-on-background/50">
+            Production Ready
+          </span>
         </div>
 
         {/* Category tabs */}
-        <div className="flex gap-1 p-1 bg-on-background/5 rounded-md border border-outline/15 font-mono text-xs uppercase shrink-0">
+        <div className="flex items-center gap-1 p-1 bg-surface-container-low/70 rounded-xl border border-outline/15 font-mono text-xs uppercase shrink-0">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-3 py-1.5 rounded-sm tracking-widest transition-all duration-200 font-semibold ${
+              className={`px-3.5 py-1.5 rounded-lg tracking-wider transition-all duration-200 font-bold ${
                 activeCategory === cat
-                  ? 'bg-on-background text-background shadow-sm'
-                  : 'text-on-background/50 hover:text-on-background'
+                  ? 'bg-primary text-on-primary shadow-xs'
+                  : 'text-on-background/60 hover:text-on-background'
               }`}
             >
               {cat}

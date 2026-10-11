@@ -1,20 +1,82 @@
 'use client';
 // Trigger Tailwind rebuild
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { initialPortfolioData, PortfolioData, Achievement, Project, SocialLink } from '@/types/portfolio';
 import ModernDeveloperTemplate from '@/components/templates/ModernDeveloper';
 import DeveloperProTemplate from '@/components/templates/DeveloperPro';
 import Link from 'next/link';
-import { ArrowLeft, Save, Plus, Trash2, User, Briefcase, Code, Mail, Edit3, X, Zap, GitBranch, Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft, Save, Plus, Trash2, User, Briefcase, Code, Mail, Edit3, X, Zap, GitBranch, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { createClient } from '@/utils/supabase/client';
 
+const STORAGE_KEY = 'portfolio_builder_draft';
+const STORAGE_KEY_TEMPLATE = 'portfolio_builder_template';
+
 export default function BuilderPage() {
+  const router = useRouter();
   const [data, setData] = useState<PortfolioData>(initialPortfolioData);
   const [isPreviewFullscreen] = useState(false);
   const [activeTab, setActiveTab] = useState<'hero' | 'projects' | 'achievements' | 'skills' | 'contact'>('hero');
   const [selectedTemplate, setSelectedTemplate] = useState<string>('software-engineer');
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [savedPortfolioId, setSavedPortfolioId] = useState<string | null>(null);
+  const [editingPortfolioId, setEditingPortfolioId] = useState<string | null>(null);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [lastAutoSaved, setLastAutoSaved] = useState<Date | null>(null);
+  const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isInitializedRef = useRef(false);
+
+  // Auto-save to localStorage
+  const autoSave = useCallback((portfolioData: PortfolioData, template: string) => {
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
+    }
+    autoSaveTimeoutRef.current = setTimeout(() => {
+      try {
+        const draft = {
+          data: portfolioData,
+          template,
+          timestamp: Date.now(),
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
+        localStorage.setItem(STORAGE_KEY_TEMPLATE, template);
+        setLastAutoSaved(new Date());
+        setHasUnsavedChanges(true);
+      } catch (e) {
+        console.error('Auto-save failed:', e);
+      }
+    }, 1000); // Debounce 1 second
+  }, []);
+
+  // Load draft from localStorage
+  const loadDraft = useCallback(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      const storedTemplate = localStorage.getItem(STORAGE_KEY_TEMPLATE);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        // Check if draft is less than 7 days old
+        if (parsed.timestamp && Date.now() - parsed.timestamp < 7 * 24 * 60 * 60 * 1000) {
+          return { data: parsed.data, template: parsed.template || storedTemplate };
+        }
+      }
+    } catch (e) {
+      console.error('Failed to load draft:', e);
+    }
+    return null;
+  }, []);
+
+  // Clear draft from localStorage
+  const clearDraft = useCallback(() => {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_KEY_TEMPLATE);
+    setHasUnsavedChanges(false);
+    setLastAutoSaved(null);
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -24,18 +86,57 @@ export default function BuilderPage() {
         setTimeout(() => setSelectedTemplate(temp), 0);
       }
       
-      const storedDraft = sessionStorage.getItem('portfolio_draft_data');
-      if (storedDraft) {
-        try {
-          const parsed = JSON.parse(storedDraft);
-          // eslint-disable-next-line react-hooks/set-state-in-effect
-          setData(parsed);
-        } catch (e) {
-          console.error('Failed to parse portfolio_draft_data', e);
+      const portfolioId = params.get('portfolio');
+      if (portfolioId) {
+        setEditingPortfolioId(portfolioId);
+        loadExistingPortfolio(portfolioId);
+      } else if (!isInitializedRef.current) {
+        // Only load draft on initial load, not when navigating back
+        const draft = loadDraft();
+        if (draft) {
+          // Check if draft has meaningful content (not just initial empty data)
+          const hasContent = Object.keys(draft.data.hero || {}).some(k => draft.data.hero?.[k as keyof typeof draft.data.hero]) ||
+            (draft.data.achievements?.length ?? 0) > 0 ||
+            (draft.data.projects?.length ?? 0) > 0 ||
+            (draft.data.skills?.length ?? 0) > 0;
+          
+          if (hasContent) {
+            // Automatically restore draft without prompting
+            setData(draft.data);
+            setSelectedTemplate(draft.template);
+            setHasUnsavedChanges(true);
+          }
         }
+        isInitializedRef.current = true;
       }
     }
-  }, []);
+  }, [loadDraft]);
+
+  // Auto-save whenever data or template changes
+  useEffect(() => {
+    if (isInitializedRef.current) {
+      autoSave(data, selectedTemplate);
+    }
+  }, [data, selectedTemplate, autoSave]);
+
+  const loadExistingPortfolio = async (portfolioId: string) => {
+    try {
+      const response = await fetch(`/api/portfolio/save/${portfolioId}`);
+      const result = await response.json();
+      
+      if (response.ok && result.portfolio) {
+        setData(result.portfolio.data);
+        setSelectedTemplate(result.portfolio.template_name);
+        setSavedPortfolioId(result.portfolio.id);
+        // Clear any old draft since we loaded from server
+        clearDraft();
+      } else {
+        console.error('Failed to load portfolio:', result.error);
+      }
+    } catch (err) {
+      console.error('Error loading portfolio:', err);
+    }
+  };
 
   const { user } = useAuth();
   const [isConnectingGithub, setIsConnectingGithub] = useState(false);
@@ -85,6 +186,61 @@ export default function BuilderPage() {
         redirectTo: window.location.href,
       }
     });
+  };
+
+const handleSavePortfolio = async () => {
+    if (!user) {
+      setSaveStatus('error');
+      setSaveError('Please log in to save your portfolio');
+      return;
+    }
+
+    setIsSaving(true);
+    setSaveStatus('idle');
+    setSaveError(null);
+
+    try {
+      const url = editingPortfolioId 
+        ? `/api/portfolio/save/${editingPortfolioId}`
+        : '/api/portfolio/save';
+      const method = editingPortfolioId ? 'PUT' : 'POST';
+      
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          portfolioData: data,
+          templateName: selectedTemplate,
+          title: data.hero?.name || 'Untitled Portfolio',
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to save portfolio');
+      }
+
+      setSavedPortfolioId(result.portfolio?.id || editingPortfolioId);
+      setSaveStatus('success');
+      // Clear draft after successful server save
+      clearDraft();
+      
+      // Redirect to portfolios after short success flash
+      setTimeout(() => {
+        router.push('/dashboard/portfolios');
+      }, 1500);
+    } catch (err) {
+      console.error('Save error:', err);
+      setSaveStatus('error');
+      setSaveError(err instanceof Error ? err.message : 'Failed to save portfolio');
+      
+      setTimeout(() => {
+        setSaveStatus('idle');
+      }, 5000);
+    } finally {
+      setIsSaving(false);
+    }
   };
   
   // Resizing and Dragging State
@@ -330,8 +486,22 @@ export default function BuilderPage() {
                 <button onClick={() => setIsCollapsed(true)} className="p-2 hover:bg-white/10 text-white/50 hover:text-white rounded-full transition-colors" title="Hide Editor">
                   <X size={20} />
                 </button>
-                <button className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
-                  <Save size={16} /> Save
+                <button 
+                  onClick={handleSavePortfolio}
+                  disabled={isSaving}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-colors shadow-lg ${
+                    saveStatus === 'success' 
+                      ? 'bg-emerald-600 text-white shadow-emerald-600/20' 
+                      : saveStatus === 'error'
+                        ? 'bg-red-600 text-white shadow-red-600/20'
+                        : 'bg-primary text-white hover:bg-primary/90 shadow-primary/20'
+                  }`}
+                  title={saveStatus === 'success' ? 'Saved!' : saveStatus === 'error' ? 'Save failed' : 'Save portfolio'}
+                >
+                  {saveStatus === 'success' && <CheckCircle size={16} />}
+                  {saveStatus === 'error' && <AlertCircle size={16} />}
+                  {(isSaving || saveStatus === 'idle') && <Save size={16} />}
+                  {isSaving ? 'Saving...' : saveStatus === 'success' ? 'Saved!' : 'Save'}
                 </button>
               </div>
             </div>

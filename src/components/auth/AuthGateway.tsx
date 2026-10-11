@@ -334,7 +334,7 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
       </main>
 
       <footer className="relative z-10 hidden lg:flex w-full max-w-[1440px] mx-auto px-5 sm:px-10 pb-5 flex items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-[0.15em] text-[#3E1510]/50">
-        <span>© 2026 DevCanvas // PaaS</span>
+        <span>© 2026 DevCanvas</span>
         <span>Clearance required</span>
       </footer>
 

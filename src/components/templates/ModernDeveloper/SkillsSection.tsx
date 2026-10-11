@@ -41,7 +41,7 @@ export const SkillsSection: React.FC<Props> = ({ data }) => {
       
       <div className="text-center mb-12 relative z-10">
         <p className="text-gray-500 text-xs font-semibold tracking-widest uppercase mb-4">Built With Precision</p>
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-extrabold tracking-tight text-white uppercase">
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-extrabold tracking-tight text-white uppercase">
           STACK <span className="text-[#ccff00] italic">MASTERY</span>
         </h2>
       </div>

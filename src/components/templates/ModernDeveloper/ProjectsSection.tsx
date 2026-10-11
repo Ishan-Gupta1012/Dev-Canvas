@@ -17,7 +17,7 @@ export const ProjectsSection: React.FC<Props> = ({ data }) => {
         
         {/* Header */}
         <div className="flex flex-col items-center justify-center mb-32">
-          <h2 className="font-display text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6">
+          <h2 className="font-serif text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6">
             Selected Works
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-transparent via-[#ccff00] to-transparent rounded-full shadow-[0_0_15px_#ccff00]" />
@@ -61,7 +61,7 @@ export const ProjectsSection: React.FC<Props> = ({ data }) => {
 
                 {/* Text Side */}
                 <div className="w-full lg:w-1/2 flex flex-col justify-center">
-                  <h3 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-white mb-6">
+                  <h3 className="font-serif text-4xl md:text-5xl font-bold tracking-tight text-white mb-6">
                     {project.name || 'Untitled Project'}
                   </h3>
                   

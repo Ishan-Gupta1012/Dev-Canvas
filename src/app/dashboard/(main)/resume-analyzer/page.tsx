@@ -88,7 +88,7 @@ export default function ResumeAnalyzerPage() {
       {/* Header */}
       <div className="mb-xl">
         <p className="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Workspace / Resume Analyzer</p>
-        <h1 className="font-display-sm text-2xl font-bold text-on-surface mb-2">Resume Analyzer</h1>
+        <h1 className="font-serif text-2xl font-bold text-on-surface mb-2">Resume Analyzer</h1>
         <p className="text-on-surface-variant text-sm">Upload your resume to get an ATS compatibility score, keyword insights, and actionable suggestions.</p>
       </div>
 
@@ -182,7 +182,7 @@ export default function ResumeAnalyzerPage() {
             {/* Keywords */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-lg">
               <div className="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm">
-                <h3 className="font-headline-md text-headline-md mb-md flex items-center gap-sm">
+                <h3 className="font-serif text-lg font-bold mb-4 flex items-center gap-2">
                   <CheckCircle2 className="text-tertiary" size={18} />
                   Matched Keywords
                 </h3>
@@ -193,7 +193,7 @@ export default function ResumeAnalyzerPage() {
                 </div>
               </div>
               <div className="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm">
-                <h3 className="font-headline-md text-headline-md mb-md flex items-center gap-sm">
+                <h3 className="font-serif text-lg font-bold mb-4 flex items-center gap-2">
                   <AlertCircle className="text-amber-600" size={18} />
                   Missing Keywords
                 </h3>
@@ -208,7 +208,7 @@ export default function ResumeAnalyzerPage() {
             {/* Strengths / Weaknesses / Suggestions */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-lg">
               <div className="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm">
-                <h3 className="font-headline-md text-headline-md mb-md flex items-center gap-sm text-tertiary">
+                <h3 className="font-serif text-lg font-bold mb-4 flex items-center gap-2 text-tertiary">
                   <CheckCircle2 size={18} />
                   Strengths
                 </h3>
@@ -222,7 +222,7 @@ export default function ResumeAnalyzerPage() {
                 </ul>
               </div>
               <div className="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm">
-                <h3 className="font-headline-md text-headline-md mb-md flex items-center gap-sm text-amber-700">
+                <h3 className="font-serif text-lg font-bold mb-4 flex items-center gap-2 text-amber-700">
                   <AlertCircle size={18} />
                   Weaknesses
                 </h3>
@@ -236,7 +236,7 @@ export default function ResumeAnalyzerPage() {
                 </ul>
               </div>
               <div className="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm">
-                <h3 className="font-headline-md text-headline-md mb-md flex items-center gap-sm text-primary">
+                <h3 className="font-serif text-lg font-bold mb-4 flex items-center gap-2 text-primary">
                   <Lightbulb size={18} />
                   Suggestions
                 </h3>

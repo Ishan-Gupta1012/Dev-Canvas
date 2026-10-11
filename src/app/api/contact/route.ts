@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
           </table>
           
           <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px; font-size: 11px; color: #888; text-align: center; font-family: monospace;">
-            Submitted from PaaS Application • ${new Date().toLocaleString()}
+            Submitted from DevCanvas Application • ${new Date().toLocaleString()}
           </div>
         </div>
       `,

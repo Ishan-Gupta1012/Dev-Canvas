@@ -9,13 +9,13 @@ import { useAuth } from '@/context/AuthContext';
 import DashboardAuthGuard from '@/components/auth/DashboardAuthGuard';
 import { cn } from '@/components/dashboard/ui';
 import {
-  Bell,
   ChevronDown,
   UserCircle,
   LogOut,
   Menu,
   X
 } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 type NavItem = {
   name: string;
@@ -26,23 +26,23 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { name: 'Dashboard', href: '/dashboard', exact: true },
-  { name: 'Templates', href: '/dashboard/templates' },
-  { name: 'Auto Builder', href: '/dashboard/ai-builder' },
   {
     name: 'Resume',
     dropdown: [
-      { name: 'Upload / Parse', href: '/dashboard/resume' },
+      // { name: 'Upload / Parse', href: '/dashboard/resume' }, // Hidden - kept in code
       { name: 'Resume Builder', href: '/dashboard/resume-builder' },
       { name: 'Analyzer', href: '/dashboard/resume-analyzer' }
     ]
   },
+  { name: 'Templates', href: '/dashboard/templates' },
+  { name: 'Auto Builder', href: '/dashboard/ai-builder' },
+  { name: 'My Portfolios', href: '/dashboard/portfolios' },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, logout, clearNotifications } = useAuth();
   const pathname = usePathname();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState(false);
@@ -52,31 +52,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return () => cancelAnimationFrame(frame);
   }, []);
 
-  const unreadCount = user?.notifications?.filter((n) => n.unread).length ?? 0;
-  const recentNotifications = (user?.notifications ?? [])
-    .slice()
-    .sort((a, b) => (a.unread === b.unread ? 0 : a.unread ? -1 : 1));
-
-  const isActive = (item: NavItem) => {
+const isActive = (item: NavItem) => {
     if (item.href) return item.exact ? pathname === item.href : pathname.startsWith(item.href);
     if (item.dropdown) return item.dropdown.some(d => pathname.startsWith(d.href));
     return false;
   };
 
   return (
-     <div
-       className="bg-background text-on-surface font-sans selection:bg-primary-container selection:text-on-primary-container select-none min-h-screen flex flex-col transition-opacity duration-500 ease-out motion-reduce:transition-none"
-       style={{ opacity: isMounted ? 1 : 0 }}
-     >
-      <DashboardAuthGuard />
+       <div
+         className="bg-background text-on-surface font-sans selection:bg-primary-container selection:text-on-primary-container select-none min-h-screen flex flex-col transition-opacity duration-500 ease-out motion-reduce:transition-none"
+         style={{ opacity: isMounted ? 1 : 0 }}
+       >
+        <DashboardAuthGuard />
       {/* Top Navbar */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[rgba(246,238,216,0.72)] backdrop-blur-xl border-b border-[rgba(139,115,85,0.18)] shadow-[0_4px_20px_rgba(21,24,29,0.04)] text-on-surface">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/15 backdrop-blur-2xl text-on-background shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between relative">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="border border-primary w-7 h-7 rounded-sm flex items-center justify-center font-serif text-sm font-semibold transition-all group-hover:bg-primary group-hover:text-on-primary">
-              P
-            </div>
-            <span className="font-serif font-semibold text-lg tracking-tight text-primary">PAAS</span>
+          <Link href="/dashboard" className="flex items-center gap-2 group">
+            <span className="font-serif font-semibold text-lg tracking-tight text-primary">DevCanvas</span>
           </Link>
 
           {/* Desktop Nav - Centered */}
@@ -129,83 +121,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   key={item.name}
                   href={item.href!}
                   className={cn(
-                    'transition-colors hover:text-primary py-4',
-                    isActive(item) ? 'text-primary font-semibold underline underline-offset-4 decoration-primary' : 'text-on-surface-variant'
+                    'relative px-3 py-1.5 rounded-sm transition-colors duration-200',
+                    isActive(item) ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'
                   )}
                 >
+                  {isActive(item) && (
+                    <motion.span
+                      layoutId="dashboard-nav-active-pill"
+                      className="absolute inset-0 rounded-sm bg-primary/10 border border-primary/20 -z-10"
+                      transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                    />
+                  )}
                   {item.name}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right Actions */}
-           <div className="flex items-center gap-4">
-            {/* Notifications */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-                className="relative p-2 text-on-surface-variant hover:text-primary transition-colors rounded-lg"
-              >
-                <Bell size={18} />
-                {unreadCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
-                  </span>
-                )}
-              </button>
+{/* Right Actions */}
+            <div className="flex items-center gap-4">
+              {/* Theme Toggle */}
+              <ThemeToggle />
 
-              <AnimatePresence>
-                {isNotificationsOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute right-0 top-full mt-2 w-72 bg-surface border border-outline-variant rounded-xl shadow-sm z-[100]"
-                  >
-                    <div className="p-3 border-b border-outline/10 flex items-center justify-between">
-                      <p className="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant">
-                        Notifications
-                      </p>
-                      {unreadCount > 0 && (
-                        <button
-                          onClick={() => {
-                            clearNotifications();
-                            setIsNotificationsOpen(false);
-                          }}
-                          className="text-[10px] font-mono uppercase tracking-widest text-on-surface-variant hover:text-primary"
-                        >
-                          Mark read
-                        </button>
-                      )}
-                    </div>
-                    <div className="max-h-80 overflow-y-auto">
-                      {recentNotifications.length === 0 ? (
-                        <p className="p-4 text-xs text-on-surface-variant text-center">No notifications.</p>
-                      ) : (
-                        recentNotifications.map((n) => (
-                          <div key={n.id} className="p-3 hover:bg-secondary-container transition-colors border-b last:border-0 border-outline/5">
-                            <div className="flex gap-2">
-                              <span className={cn('mt-1 h-1.5 w-1.5 shrink-0 rounded-full', n.unread ? 'bg-primary' : 'bg-transparent')} />
-                              <div className="flex-1">
-                                <p className="text-xs font-bold text-on-surface">{n.title}</p>
-                                <p className="mt-0.5 text-xs text-on-surface-variant">{n.description}</p>
-                                <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-on-surface-variant/40">{n.time}</p>
-                              </div>
-                            </div>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            <div className="h-4 w-px bg-outline/20" />
+              <div className="h-4 w-px bg-outline/20" />
 
             {/* Profile Dropdown */}
             <div className="relative">
@@ -278,7 +216,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         {/* Mobile Nav */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-outline/15 bg-background w-full px-6 py-6 flex flex-col gap-4 font-mono text-sm uppercase tracking-wider">
+          <div className="md:hidden bg-background/60 backdrop-blur-2xl w-full px-6 py-6 flex flex-col gap-4 font-mono text-sm uppercase tracking-wider">
             {navItems.map(item => {
               if (item.dropdown) {
                 return (
@@ -323,17 +261,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <footer className="mt-auto border-t border-outline/15 bg-background py-8">
         <div className="max-w-7xl mx-auto px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 opacity-60">
-            <div className="border border-primary w-5 h-5 rounded-sm flex items-center justify-center font-serif text-[10px] font-semibold">
-              P
-            </div>
-            <span className="font-serif font-semibold text-sm tracking-tight text-on-background">PAAS</span>
+            <span className="font-serif font-semibold text-sm tracking-tight text-on-background">DevCanvas</span>
           </div>
           <div className="flex items-center gap-6">
             <Link href="/about" className="font-mono text-xs uppercase tracking-widest text-on-background/60 hover:text-primary transition-colors">
               About
             </Link>
             <p className="font-mono text-[10px] uppercase tracking-widest text-on-background/40">
-              © {new Date().getFullYear()} PAAS. All rights reserved.
+              © {new Date().getFullYear()} DevCanvas. All rights reserved.
             </p>
           </div>
         </div>
