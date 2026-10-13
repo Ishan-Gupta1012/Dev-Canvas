@@ -178,9 +178,9 @@ export default function OpeningOverlay({
           transition={{ duration: 1.0, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tight text-white mb-6 max-w-4xl"
         >
-          Your Resume. Your Story.{' '}
+          Your Journey. Your Craft.{' '}
           <span className="italic font-light text-neutral-400 text-stroke">
-            Your Portfolio.
+            Your Canvas.
           </span>
         </motion.h1>
 
@@ -193,7 +193,7 @@ export default function OpeningOverlay({
         >
           <div className="md:col-span-7">
             <p className="border-l border-amber-500/60 pl-4 py-1 text-neutral-300/90 font-light">
-              Turn your resume into a professional portfolio website. We parse your skills, education, projects, and achievements so you can showcase your work without building everything from scratch.
+              Turn your resume into a portfolio that feels unmistakably yours. Your skills, projects, and milestones, thoughtfully brought together in one beautiful space.
             </p>
           </div>
           <div className="md:col-span-5 flex flex-col justify-end font-mono text-[10px] sm:text-[11px] text-neutral-400 tracking-wider">

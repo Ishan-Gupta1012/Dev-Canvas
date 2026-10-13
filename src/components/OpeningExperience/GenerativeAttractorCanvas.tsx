@@ -232,10 +232,10 @@ export default function GenerativeAttractorCanvas({ className = '', mode = 'land
             pitch: 0.25,
           }
         : {
-            cx: 0.5 * width,
-            cy: 0.54 * height,
-            scl: Math.min(width, height) / 44,
-            yaw: 0,
+            cx: isMobile ? 0.5 * width : 0.22 * width,
+            cy: 0.50 * height,
+            scl: Math.min(width, height) / 48,
+            yaw: -0.15,
             pitch: 0,
           };
 

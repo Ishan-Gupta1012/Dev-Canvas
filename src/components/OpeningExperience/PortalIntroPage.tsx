@@ -10,12 +10,12 @@ interface PortalIntroPageProps {
   onEnterMainSite: () => void;
 }
 
-const BULLETS = [
-  'Automated resume information extraction',
-  'Structured showcase for projects and skills',
-  'Highlights education, internships and achievements',
-  'Less manual work creating a portfolio',
-  'Ready to share with recruiters and teams',
+const FEATURES = [
+  'Your resume, intelligently transformed',
+  'Your projects and skills, beautifully presented',
+  'Your achievements, thoughtfully organized',
+  'Your portfolio, ready to share',
+  'Your story, presented your way',
 ];
 
 const COLUMNS = [
@@ -81,11 +81,11 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
         <div className="flex items-center justify-between w-full pointer-events-auto max-w-[1440px] mx-auto">
           {/* Logo / Brandmark */}
           <div className="w-[455px] max-lg:w-[299px] max-md:w-[217px] max-sm:w-auto shrink-0">
-            <a href="#hero" onClick={smoothScrollTo('hero')} className="inline-flex items-center gap-2 min-h-[44px] group cursor-pointer rounded-xs focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#7C3F2F]">
+            <a href="#hero" onClick={smoothScrollTo('hero')} className="inline-flex items-center gap-2.5 min-h-[44px] group cursor-pointer rounded-xs focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#7C3F2F]">
               <span className="font-mono text-sm sm:text-base font-bold tracking-[0.25em] text-[#0A0402] group-hover:text-[#56241A] transition-colors">
                 DEVCANVAS
               </span>
-              <span className="font-mono text-[9px] text-[#7C3F2F] border border-[#7C3F2F]/40 bg-[#7C3F2F]/10 px-1.5 py-0.2 rounded-xs uppercase hidden sm:inline">
+              <span className="font-mono text-[11px] text-[#7C3F2F] border border-[#7C3F2F]/40 bg-[#7C3F2F]/10 px-2 py-0.5 rounded-xs uppercase tracking-wider hidden sm:inline">
                 RESUME → PORTFOLIO BUILDER
               </span>
             </a>
@@ -94,10 +94,10 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
           {/* Direct Enter Site CTA */}
           <button
             onClick={onEnterMainSite}
-            className="relative overflow-hidden inline-flex items-center gap-[6px] min-h-[44px] px-4 rounded-xs border border-[#3E1510] bg-[#56241A] hover:bg-[#7C3F2F] hover:shadow-lg hover:-translate-y-px active:translate-y-0 text-[#FFFFFF] transition-all duration-200 cursor-pointer group shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7C3F2F]"
+            className="relative overflow-hidden inline-flex items-center gap-[6px] min-h-[44px] px-5 py-2.5 rounded-xs border border-[#3E1510] bg-[#56241A] hover:bg-[#7C3F2F] hover:shadow-lg hover:-translate-y-px active:translate-y-0 text-[#FFFFFF] transition-all duration-200 cursor-pointer group shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7C3F2F]"
             aria-label="Create My Portfolio"
           >
-            <span className="font-mono font-bold text-[11px] uppercase tracking-wider">
+            <span className="font-mono font-bold text-[13px] uppercase tracking-wider">
               CREATE MY PORTFOLIO
             </span>
             <span className="group-hover:translate-x-0.5 transition-transform duration-200 text-sm">
@@ -117,43 +117,71 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
         {/* SECTION 1: HERO */}
         <section
           id="hero"
-          className="relative min-h-[820px] max-lg:min-h-[768px] max-md:min-h-[950px] max-sm:min-h-[730px] w-full px-[40px] max-sm:px-[20px] pt-[30px] max-md:pb-[40px] max-sm:pb-[60px] flex flex-col justify-between max-w-[1440px] mx-auto"
+          className="relative min-h-screen w-full px-[40px] max-sm:px-[20px] pt-[90px] pb-[50px] flex flex-col justify-center max-w-[1440px] mx-auto"
         >
-          <div className="h-[40px] shrink-0" />
-
-          {/* Bottom Area: Scroll indicator on Left, Giant Title on Right */}
-          <div className="flex items-end justify-between shrink-0 w-full mb-8">
-            {/* Scroll Indicator with Hairline */}
-            <motion.div
-              style={reduceMotion ? undefined : { opacity: scrollHintFade }}
-              className="flex gap-[10px] items-center shrink-0 max-md:hidden"
-            >
-              <div className="w-[1px] h-10 bg-[#7C3F2F]/50 animate-pulse" />
-              <p className="font-mono text-[12px] tracking-[-0.36px] uppercase text-[#3E1510]/70 leading-[1.2] whitespace-pre w-[135px]">
-                See How It Works <br />
-                Scroll down
-              </p>
-            </motion.div>
-
-            {/* Giant Title & Lead Paragraph */}
+          {/* Main Hero Layout: Attractor on Left, Typography Cluster on Right */}
+          <div className="w-full flex items-center justify-end my-auto py-12">
+            {/* Unified Art-Directed Typographic Lockup */}
             <motion.div
               style={heroMotionStyle}
-              className="flex flex-col gap-[48px] items-end w-[820px] max-lg:w-[580px] max-md:w-full max-md:items-start shrink-0"
+              className="w-full lg:w-[680px] xl:w-[760px] flex flex-col items-center text-center max-lg:items-center max-lg:text-center z-10"
             >
-              <div className="w-full text-right max-md:text-left">
-                <h1 className="font-serif font-medium text-[clamp(3.25rem,11vw,10rem)] leading-[0.82] tracking-[-0.035em] text-[#0A0402] break-words">
-                  DevCanvas
-                </h1>
-                <div className="font-serif italic text-4xl sm:text-6xl text-[#7C3F2F] mt-4">
-                  Your Resume. Your Story. Your Portfolio.
-                </div>
+              {/* Refined Eyebrow */}
+              <div className="flex items-center gap-2 mb-4 font-mono text-[12px] tracking-[0.22em] uppercase text-[#7C3F2F] font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#7C3F2F] animate-pulse" />
+                <span>RESUME-TO-PORTFOLIO ARCHITECTURE</span>
               </div>
 
-              <p className="font-mono text-[16px] leading-[1.3] uppercase text-[#3E1510] w-[440px] max-md:w-auto text-right max-md:text-left">
-                Turn your resume into a professional portfolio website. Let your skills, projects, education, and achievements speak for themselves.
+              {/* Main Heading — 64-76px guideline */}
+              <h1 className="font-serif font-medium text-[clamp(3.25rem,5.5vw,4.5rem)] leading-[0.95] tracking-[-0.035em] text-[#0A0402] whitespace-nowrap">
+                DevCanvas
+              </h1>
+
+              {/* Subheading — 22-26px guideline */}
+              <div className="font-serif italic font-normal text-[clamp(1.25rem,1.8vw,1.6rem)] leading-[1.3] tracking-[-0.015em] text-[#7C3F2F] mt-3.5 sm:mt-4 whitespace-normal sm:whitespace-nowrap">
+                Your Journey. Your Craft. Your Canvas.
+              </div>
+
+              {/* Delicate Editorial Accent Divider */}
+              <div className="w-16 h-[1.5px] bg-[#7C3F2F]/35 my-5 sm:my-6" />
+
+              {/* Balanced Description Paragraph — 16-18px guideline */}
+              <p className="font-sans text-[16px] sm:text-[17px] leading-[1.65] font-normal text-[#34281D]/85 max-w-[550px] tracking-[-0.01em]">
+                Turn your resume into a portfolio that feels unmistakably yours. Your skills, projects, and milestones, thoughtfully brought together in one beautiful space.
               </p>
+
+              {/* Quick Action Buttons */}
+              <div className="mt-8 flex items-center gap-4 flex-wrap justify-center">
+                <button
+                  onClick={onEnterMainSite}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xs border border-[#3E1510] bg-[#56241A] hover:bg-[#7C3F2F] text-[#FFFFFF] font-mono font-bold text-[13px] uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-md hover:shadow-lg hover:-translate-y-px active:translate-y-0"
+                  aria-label="Create My Portfolio"
+                >
+                  <span>CREATE MY PORTFOLIO</span>
+                  <span className="text-xs">→</span>
+                </button>
+                <a
+                  href="#statement"
+                  onClick={smoothScrollTo('statement')}
+                  className="font-mono text-[13px] uppercase tracking-wider text-[#7C3F2F] hover:text-[#56241A] transition-colors py-2.5 px-3.5 border border-[#7C3F2F]/30 hover:border-[#56241A] rounded-xs font-semibold"
+                >
+                  EXPLORE THE WORKFLOW ↓
+                </a>
+              </div>
             </motion.div>
           </div>
+
+          {/* Floating Scroll Indicator in Lower Left Corner */}
+          <motion.div
+            style={reduceMotion ? undefined : { opacity: scrollHintFade }}
+            className="absolute bottom-8 left-[40px] max-sm:left-[20px] flex items-center gap-3.5 max-md:hidden"
+          >
+            <div className="w-[1px] h-9 bg-[#7C3F2F]/60 animate-pulse" />
+            <p className="font-mono text-[12px] tracking-[0.2em] uppercase text-[#3E1510]/75 leading-[1.4]">
+              See How It Works <br />
+              <span className="text-[#7C3F2F] font-semibold">Scroll Down</span>
+            </p>
+          </motion.div>
         </section>
 
         {/* SECTION 2: STATEMENT (#statement) - 🟤 Deep Brown (#3E1510) Architectural Card */}
@@ -163,15 +191,15 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
         >
           <GhostNumeral numeral="01" className="text-[220px] max-lg:text-[160px] max-sm:text-[110px] -top-6 right-[24px]" />
           <Reveal className="w-[760px] max-lg:w-[517px] max-sm:w-full">
-            <div className="bg-[#3E1510] border border-[#270F05] p-14 max-sm:p-8 rounded-xs shadow-2xl flex flex-col gap-[36px] items-start w-full">
+            <div className="bg-[#3E1510] border border-[#270F05] p-14 max-sm:p-8 rounded-xs shadow-2xl flex flex-col gap-[32px] items-start w-full">
               <Eyebrow label="[01 // THE PURPOSE]" dark className="w-full" />
-              <div className="font-serif text-[clamp(2rem,4vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-[#FFFFFF] w-full">
-                <div className="mb-[24px]">
-                  <h2>Stop spending days building your portfolio website from scratch.</h2>
-                </div>
-                <div className="text-[#CCC0B5] italic">
-                  <p>Upload your resume, and turn your experience into a structured, professional portfolio that proves your capabilities.</p>
-                </div>
+              <div className="flex flex-col gap-[16px] w-full">
+                <h2 className="font-serif font-medium text-[clamp(2.25rem,3.8vw,3.25rem)] leading-[1.08] tracking-[-0.025em] text-[#FFFFFF]">
+                  Stop spending days building your portfolio website from scratch.
+                </h2>
+                <p className="font-serif italic font-normal text-[clamp(1.25rem,1.8vw,1.6rem)] leading-[1.3] tracking-[-0.015em] text-[#CCC0B5] mt-2">
+                  Upload your resume, and turn your experience into a structured, professional portfolio that proves your capabilities.
+                </p>
               </div>
             </div>
           </Reveal>
@@ -180,46 +208,57 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
         {/* SECTION 3: ABOUT & MOTIVE (#about) */}
         <section
           id="about"
-          className="relative min-h-[800px] max-md:min-h-[1024px] max-sm:min-h-[812px] w-full flex flex-col items-start justify-center max-md:justify-end px-[40px] max-sm:px-[20px] py-[140px] max-md:pb-[60px] max-w-[1440px] mx-auto"
+          className="relative min-h-[850px] max-md:min-h-auto w-full flex flex-col items-start justify-center px-[40px] max-sm:px-[20px] py-[140px] max-md:py-[90px] max-w-[1440px] mx-auto overflow-hidden"
         >
           <GhostNumeral numeral="02" className="text-[220px] max-lg:text-[160px] max-sm:text-[110px] top-10 left-[24px]" />
-          <div className="flex flex-col gap-[48px] items-start w-[640px] max-md:w-full">
+          <div className="relative z-10 flex flex-col items-start max-w-[720px] w-full">
+            {/* 1. Main Heading — 44-56px guideline */}
             <Reveal>
-              <Eyebrow label="[02 // BUILT FOR STUDENTS & ASPIRING TALENT]" className="w-full" />
+              <h2 className="font-serif font-medium text-[clamp(2.25rem,3.8vw,3.25rem)] leading-[1.08] tracking-[-0.025em] text-[#0A0402]">
+                Your resume, reimagined as a website.
+              </h2>
             </Reveal>
-            <Reveal delay={0.08}>
-              <div className="font-serif text-[clamp(2.25rem,4.5vw,3.75rem)] leading-[0.95] tracking-[-0.03em] text-[#0A0402]">
-                <div>
-                  <h2>Your resume turned into a website.</h2>
-                </div>
-                <div className="text-[#56241A] italic mt-3">
-                  <p>Structured, verified, and shareable.</p>
-                </div>
+
+            {/* 2. Subheading — 22-26px guideline */}
+            <Reveal delay={0.06}>
+              <div className="font-serif italic font-normal text-[clamp(1.25rem,1.8vw,1.6rem)] leading-[1.3] tracking-[-0.015em] text-[#7C3F2F] mt-3.5 sm:mt-4">
+                Built from your journey. Designed to make you stand out.
               </div>
             </Reveal>
 
-            <div className="max-md:flex max-md:flex-row max-md:gap-[30px] max-sm:flex-col max-sm:gap-[24px]">
-              <Reveal delay={0.14} className="font-mono text-[13px] leading-[1.6] uppercase text-[#0A0402] max-md:flex-1">
-                <p className="mb-[16px]">
-                  DevCanvas is a resume-to-portfolio builder created for college students, fresh graduates, and aspiring professionals who want to showcase their skills online without building from zero.
-                </p>
-                <p className="text-[#3E1510]/80">
-                  Simply provide your resume. Our platform parses your details, structures your education, experience, and projects, and helps you launch an impactful personal portfolio website.
-                </p>
-              </Reveal>
+            {/* 3. Small Introductory Label — 12-14px guideline */}
+            <Reveal delay={0.1}>
+              <div className="mt-8 sm:mt-10 mb-3.5 flex items-center gap-2.5">
+                <span className="w-1.5 h-1.5 rotate-45 bg-[#7C3F2F]" />
+                <span className="font-mono text-[12px] tracking-[0.22em] uppercase text-[#7C3F2F] font-semibold">
+                  YOUR EXPERIENCE DESERVES MORE THAN A DOCUMENT.
+                </span>
+              </div>
+            </Reveal>
 
-              {/* Bullet Marker & List */}
-              <Reveal delay={0.2} className="pl-[60px] max-md:pl-0 max-md:flex-1 max-sm:pl-0 max-sm:flex-none mt-[32px] max-md:mt-0 border-l border-[#CCC0B5]">
-                <ul className="font-mono text-[12px] leading-[1.6] uppercase text-[#3E1510] space-y-3">
-                  {BULLETS.map((b) => (
-                    <li key={b} className="flex items-start gap-3">
-                      <span aria-hidden="true" className="mt-[5px] w-[7px] h-[7px] rotate-45 bg-[#7C3F2F]/70 shrink-0" />
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
-              </Reveal>
-            </div>
+            {/* 4. Description Paragraph — 16-18px guideline */}
+            <Reveal delay={0.14}>
+              <p className="font-sans text-[16px] sm:text-[17px] leading-[1.65] font-normal text-[#34281D]/90 max-w-[620px] tracking-[-0.01em]">
+                DevCanvas transforms your resume into a polished, personalized portfolio website — bringing your education, projects, skills, and achievements together in one place.
+              </p>
+            </Reveal>
+
+            {/* 5. Feature List — 15-17px guideline */}
+            <Reveal delay={0.18}>
+              <ul className="mt-7 sm:mt-8 space-y-3.5 sm:space-y-4">
+                {FEATURES.map((feature) => (
+                  <li key={feature} className="flex items-center gap-3.5 group">
+                    <span
+                      aria-hidden="true"
+                      className="w-[6px] h-[6px] rotate-45 bg-[#7C3F2F] shrink-0 transition-transform duration-200 group-hover:scale-125"
+                    />
+                    <span className="font-sans text-[15px] sm:text-[16px] leading-[1.45] text-[#270F05] font-medium tracking-[-0.01em]">
+                      {feature}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
           </div>
         </section>
 
@@ -240,14 +279,14 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
                   <Eyebrow label="[04 // CORE ADVANTAGES]" dark />
                 </Reveal>
               </div>
-              <div className="flex flex-col gap-[24px] w-[725px] max-lg:w-[517px] max-md:w-full shrink-0">
+              <div className="flex flex-col gap-[20px] w-[725px] max-lg:w-[517px] max-md:w-full shrink-0">
                 <Reveal delay={0.08}>
-                  <h2 className="font-serif text-[clamp(2rem,3.5vw,3.25rem)] leading-[1.05] tracking-[-0.02em] text-[#FFFFFF]">
+                  <h2 className="font-serif font-medium text-[clamp(2.25rem,3.8vw,3.25rem)] leading-[1.08] tracking-[-0.025em] text-[#FFFFFF]">
                     Stand out to recruiters with a portfolio that highlights what matters.
                   </h2>
                 </Reveal>
                 <Reveal delay={0.14}>
-                  <p className="text-[#CCC0B5] text-2xl max-sm:text-xl font-normal font-sans">
+                  <p className="font-serif italic font-normal text-[clamp(1.25rem,1.8vw,1.6rem)] leading-[1.3] tracking-[-0.015em] text-[#CCC0B5]">
                     Turn raw resume bullets into clear, structured sections that showcase your true potential.
                   </p>
                 </Reveal>
@@ -258,16 +297,16 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
             <div className="flex gap-[32px] max-md:flex-col">
               {COLUMNS.map((col, i) => (
                 <Reveal key={col.title} delay={i * 0.1} className="flex-1">
-                  <div className="h-full bg-[#270F05] border border-[#3E1510] p-10 rounded-xs flex flex-col gap-[32px] shadow-lg transition-all duration-300 hover:-translate-y-1.5 hover:border-[#7C3F2F]/60 hover:shadow-2xl">
+                  <div className="h-full bg-[#270F05] border border-[#3E1510] p-10 rounded-xs flex flex-col gap-[28px] shadow-lg transition-all duration-300 hover:-translate-y-1.5 hover:border-[#7C3F2F]/60 hover:shadow-2xl">
                     <div className="flex flex-wrap justify-between gap-x-4 font-mono text-[12px] leading-[1.2] uppercase text-[#CCC0B5] border-b border-[#3E1510] pb-3">
                       <span className="text-[#A0674F] font-semibold">{col.index}</span>
                       <span className="text-[#7C3F2F] font-bold">{col.tag}</span>
                     </div>
                     <div className="flex flex-col gap-[16px]">
-                      <h3 className="font-serif text-[40px] max-lg:text-[32px] leading-none tracking-[-1.2px] text-[#FFFFFF]">
+                      <h3 className="font-serif font-medium text-[clamp(1.75rem,2.2vw,2.15rem)] leading-tight tracking-[-0.02em] text-[#FFFFFF]">
                         {col.title}
                       </h3>
-                      <div className="flex flex-col gap-[12px] font-mono text-[12px] leading-[1.5] uppercase text-[#EEEBE7]/80">
+                      <div className="flex flex-col gap-[12px] font-sans text-[14px] sm:text-[15px] leading-[1.6] text-[#EEEBE7]/85">
                         {col.lines.map((line) => (
                           <p key={line.slice(0, 24)}>{line}</p>
                         ))}
@@ -286,25 +325,31 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
           className="relative border-b border-[#CCC0B5] px-[40px] max-sm:px-[20px] py-[180px] max-md:py-[100px] max-w-[1440px] mx-auto overflow-hidden"
         >
           <GhostNumeral numeral="05" className="text-[220px] max-lg:text-[160px] max-sm:text-[110px] -top-4 right-[24px]" />
-          <div className="font-serif text-[clamp(2rem,4vw,3.25rem)] leading-[1.08] tracking-[-0.02em] text-[#0A0402] flex-1 max-w-5xl">
+          <div className="flex-1 max-w-5xl">
             <Reveal>
-              <div className="font-mono text-[14px] text-[#56241A] font-bold uppercase tracking-widest mb-8">
+              <div className="font-mono text-[12px] text-[#56241A] font-bold uppercase tracking-[0.2em] mb-8">
                 [05 // OUR PHILOSOPHY]
               </div>
             </Reveal>
             <Reveal delay={0.06}>
-              <div className="mb-[28px]">
-                <h2>Your portfolio should reflect the hard work<br />you put into your projects and education.</h2>
+              <div className="mb-[24px]">
+                <h2 className="font-serif font-medium text-[clamp(2.25rem,3.8vw,3.25rem)] leading-[1.08] tracking-[-0.025em] text-[#0A0402]">
+                  Your portfolio should reflect the hard work<br />you put into your projects and education.
+                </h2>
               </div>
             </Reveal>
             <Reveal delay={0.12}>
-              <div className="mb-[28px] text-[#7C3F2F]">
-                <p>No tedious boilerplate setup.<br />No building everything from scratch.</p>
+              <div className="mb-[20px]">
+                <p className="font-serif italic font-normal text-[clamp(1.25rem,1.8vw,1.6rem)] leading-[1.35] tracking-[-0.015em] text-[#7C3F2F]">
+                  No tedious boilerplate setup. No building everything from scratch.
+                </p>
               </div>
             </Reveal>
             <Reveal delay={0.18}>
-              <div className="text-[#56241A] font-semibold">
-                <p>Just a clear, structured website that lets your achievements speak for themselves.</p>
+              <div>
+                <p className="font-sans text-[16px] sm:text-[17px] leading-[1.65] font-normal text-[#56241A] max-w-2xl">
+                  Just a clear, structured website that lets your achievements speak for themselves.
+                </p>
               </div>
             </Reveal>
           </div>
@@ -320,7 +365,7 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
             <Reveal>
               <div>
                 <div className="w-[12px] h-[12px] bg-[#56241A] rounded-full mb-6 animate-pulse" />
-                <div className="font-mono text-[12px] uppercase text-[#A0674F] tracking-widest font-medium">
+                <div className="font-mono text-[12px] uppercase text-[#A0674F] tracking-[0.2em] font-medium">
                   RESUME-TO-PORTFOLIO BUILDER // STUDENTS &amp; DEVELOPERS
                 </div>
               </div>
@@ -328,19 +373,19 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
 
             {/* Right Interactive Gateway Card in 🟤 Dark Chocolate Brown (#34281D) */}
             <Reveal delay={0.1} className="w-[723px] max-lg:w-[517px] max-md:w-full">
-              <div className="bg-[#34281D] border border-[#3E1510] p-10 rounded-xs flex flex-col gap-[40px] max-sm:gap-[24px] w-full shadow-2xl">
+              <div className="bg-[#34281D] border border-[#3E1510] p-10 rounded-xs flex flex-col gap-[36px] max-sm:gap-[24px] w-full shadow-2xl">
                 <div>
-                  <h2 className="font-serif font-medium text-[clamp(3.5rem,10vw,7.5rem)] leading-[0.79] tracking-[-0.04em] text-[#FFFFFF] break-words">
+                  <h2 className="font-serif font-medium text-[clamp(2.75rem,5.5vw,4.5rem)] leading-[0.95] tracking-[-0.035em] text-[#FFFFFF] break-words">
                     DevCanvas
                   </h2>
                 </div>
 
-                <div className="flex flex-col gap-[24px] w-[585px] max-lg:w-full">
-                  <div className="font-mono text-[12px] leading-[1.4] uppercase text-[#EEEBE7]">
-                    <p className="mb-[12px]">
+                <div className="flex flex-col gap-[20px] w-[585px] max-lg:w-full">
+                  <div className="flex flex-col gap-[10px]">
+                    <p className="font-sans text-[15px] sm:text-[16px] leading-[1.6] text-[#EEEBE7]/90">
                       Turn your resume into a professional portfolio website in minutes. Extract your skills, projects, and education into a clean, shareable showcase.
                     </p>
-                    <p className="text-[#A0674F] font-semibold">
+                    <p className="font-mono text-[12px] uppercase tracking-wider text-[#A0674F] font-semibold">
                       Start building your portfolio today:
                     </p>
                   </div>
@@ -348,7 +393,7 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
                   {/* Earthy Burgundy Action Button */}
                   <button
                     onClick={onEnterMainSite}
-                    className="relative overflow-hidden inline-flex items-center gap-[8px] h-[52px] px-8 bg-[#56241A] hover:bg-[#7C3F2F] hover:shadow-xl hover:-translate-y-px active:translate-y-0 text-[#FFFFFF] border border-[#3E1510] font-mono font-bold text-[13px] uppercase tracking-[0.2em] transition-all duration-300 group self-start cursor-pointer rounded-xs shadow-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A0674F]"
+                    className="relative overflow-hidden inline-flex items-center gap-[8px] h-[52px] px-8 bg-[#56241A] hover:bg-[#7C3F2F] hover:shadow-xl hover:-translate-y-px active:translate-y-0 text-[#FFFFFF] border border-[#3E1510] font-mono font-bold text-[13px] uppercase tracking-[0.18em] transition-all duration-300 group self-start cursor-pointer rounded-xs shadow-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A0674F]"
                     aria-label="Create My Portfolio"
                   >
                     <span className="flex items-center gap-[6px]">
@@ -364,7 +409,7 @@ export default function PortalIntroPage({ onEnterMainSite }: PortalIntroPageProp
           </div>
 
           {/* Bottom Line */}
-          <div className="max-w-[1440px] mx-auto w-full flex items-center justify-between font-mono text-[12px] tracking-[-0.36px] uppercase leading-[1.2] text-[#CCC0B5]/70 max-md:mt-[100px] max-sm:mt-[80px] border-t border-[#3E1510] pt-6">
+          <div className="max-w-[1440px] mx-auto w-full flex items-center justify-between font-mono text-[12px] tracking-[0.05em] uppercase leading-[1.4] text-[#CCC0B5]/70 max-md:mt-[100px] max-sm:mt-[80px] border-t border-[#3E1510] pt-6 flex-wrap gap-4">
             <p>© 2026 DevCanvas. All rights reserved.</p>
             <p>Designed for students, fresh graduates, and aspiring professionals</p>
           </div>
