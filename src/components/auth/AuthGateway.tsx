@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import GenerativeAttractorCanvas from '@/components/OpeningExperience/GenerativeAttractorCanvas';
 import { skipIntroOnNextLanding } from '@/lib/intro-entry';
-import { ArrowLeft, Loader2, Mail, Lock } from 'lucide-react';
+import { ArrowLeft, Loader2, Mail, Lock, RotateCcw } from 'lucide-react';
 
 export type AuthMode = 'signin' | 'signup';
 
@@ -39,7 +39,7 @@ const PROVIDERS: { id: Provider; label: string; mark: React.ReactNode }[] = [
 ];
 
 export default function AuthGateway({ mode }: { mode: AuthMode }) {
-  const { user, login, signInWithPassword, signUp, isLoading } = useAuth();
+  const { user, login, signInWithPassword, signUp, resendConfirmationEmail, isLoading } = useAuth();
   const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -49,6 +49,7 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
+  const [emailNotConfirmed, setEmailNotConfirmed] = useState(false);
   const isLeavingRef = useRef(false);
 
   useEffect(() => {
@@ -101,13 +102,15 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
     setMessage(null);
     setHasSubmitted(true);
     setIsSubmitting(true);
+    setEmailNotConfirmed(false);
 
     try {
       if (isSignUp) {
         await signUp(email.trim(), password, name.trim());
+        // If we get here without error, user is signed in and will be redirected
         setMessage({
           tone: 'sent',
-          text: 'Account created. Check your email to confirm it, then sign in.',
+          text: 'Account created! Redirecting to dashboard...',
         });
       } else {
         await signInWithPassword(email.trim(), password);
@@ -117,15 +120,50 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
     } catch (error) {
       setIsSubmitting(false);
       const reason = error instanceof Error ? error.message : '';
+      
+      console.error('AuthGateway caught error:', error, 'reason:', reason);
+      
+      // Check for account already exists error
+      if (reason.startsWith('ACCOUNT_EXISTS:')) {
+        const userMessage = reason.split('ACCOUNT_EXISTS:')[1];
+        setMessage({ tone: 'error', text: userMessage });
+      }
+      // Check for email not confirmed error
+      else if (reason.startsWith('EMAIL_NOT_CONFIRMED:')) {
+        setEmailNotConfirmed(true);
+        const userMessage = reason.split('EMAIL_NOT_CONFIRMED:')[1];
+        setMessage({ tone: 'error', text: userMessage });
+      } else {
+        setMessage({
+          tone: 'error',
+          text: isSignUp
+            ? `Signup failed: ${reason || 'Unknown error'}`
+            : 'That email and password did not match an account. Check them and try again.',
+        });
+      }
+    }
+  };
+
+  const handleResendConfirmation = async () => {
+    setMessage(null);
+    setIsSubmitting(true);
+    try {
+      await resendConfirmationEmail(email.trim());
+      setMessage({
+        tone: 'sent',
+        text: 'Confirmation email sent! Check your inbox and click the link to verify your account.',
+      });
+    } catch (error) {
+      const reason = error instanceof Error ? error.message : '';
       setMessage({
         tone: 'error',
-        text: isSignUp
-          ? 'That account was not created. If the address is already in use, sign in instead.'
-          : 'That email and password did not match an account. Check them and try again.',
+        text: 'Failed to send confirmation email. Please try again.',
       });
       if (reason) {
-        console.error('Auth request failed:', reason);
+        console.error('Resend confirmation failed:', reason);
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -291,6 +329,27 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
                 'Sign in'
               )}
             </button>
+
+            {!isSignUp && emailNotConfirmed && (
+              <button
+                type="button"
+                onClick={handleResendConfirmation}
+                disabled={isSubmitting}
+                className="h-12 w-full inline-flex items-center justify-center gap-2 bg-[#EEEBE7] hover:bg-[#E0DDD5] disabled:bg-[#E0DDD5]/50 text-[#3E1510] border border-[#CCC0B5] font-mono text-[12px] uppercase tracking-[0.2em] transition-colors duration-200 cursor-pointer disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
+                    Sending
+                  </>
+                ) : (
+                  <>
+                    <RotateCcw className="w-4 h-4" aria-hidden="true" />
+                    Resend confirmation email
+                  </>
+                )}
+              </button>
+            )}
           </form>
 
           <div className="flex items-center gap-4" aria-hidden="true">

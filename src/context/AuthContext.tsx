@@ -87,6 +87,7 @@ interface AuthContextType {
   login: (provider: 'google' | 'github' | 'linkedin' | 'email', email?: string, name?: string) => Promise<void>;
   signInWithPassword: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, name?: string) => Promise<void>;
+  resendConfirmationEmail: (email: string) => Promise<void>;
   logout: () => void;
   updateProfile: (newProfile: StudentProfile) => void;
   markNotificationRead: (id: string) => void;
@@ -338,6 +339,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (error || !data.user) {
         setIsLoading(false);
+        // Provide more specific error messages
+        if (error?.message.includes('Email not confirmed') || error?.message.includes('email not confirmed')) {
+          throw new Error('EMAIL_NOT_CONFIRMED:Please confirm your email address before signing in. Check your inbox for the confirmation link.');
+        }
         throw error ?? new Error('Invalid login credentials.');
       }
 
@@ -378,14 +383,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         setIsLoading(false);
-        throw error;
+        // Check for "User already registered" error
+        const errorMessage = error.message || JSON.stringify(error) || 'Unknown error';
+        console.error('SignUp error:', error);
+        if (errorMessage.includes('User already registered') || errorMessage.includes('already registered') || errorMessage.includes('duplicate') || errorMessage.includes('Duplicate')) {
+          throw new Error('ACCOUNT_EXISTS:An account with this email already exists. Please sign in instead.');
+        }
+        throw new Error(errorMessage);
       }
 
-      // A confirmed signup returns a session; one that still needs email confirmation does not
-      if (data.user && data.session) {
-        const profile = applySupabaseSession(data.user);
-        setUser(profile);
-        document.cookie = 'student_auth=true; path=/; SameSite=Lax';
+      // Signup successful - try to sign in immediately (works if email confirmation is disabled in Supabase)
+      if (data.user) {
+        const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (!signInError && signInData.user) {
+          const profile = applySupabaseSession(signInData.user);
+          setUser(profile);
+          document.cookie = 'student_auth=true; path=/; SameSite=Lax';
+          setIsLoading(false);
+          return;
+        }
+
+        // If sign in fails due to email not confirmed, user needs to confirm email
+        if (signInError) {
+          const signInErrorMessage = signInError.message || JSON.stringify(signInError) || '';
+          if (signInErrorMessage.includes('Email not confirmed') || signInErrorMessage.includes('email not confirmed')) {
+            setIsLoading(false);
+            throw new Error('EMAIL_NOT_CONFIRMED:Account created but email confirmation is required. Please check your email and click the confirmation link, or contact support to disable email confirmation.');
+          }
+          throw new Error(signInErrorMessage);
+        }
       }
 
       setIsLoading(false);
@@ -398,6 +428,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(finalProfile);
     localStorage.setItem('student_user', JSON.stringify(finalProfile));
     document.cookie = 'student_auth=true; path=/; SameSite=Lax';
+    setIsLoading(false);
+  };
+
+  const resendConfirmationEmail = async (email: string): Promise<void> => {
+    setIsLoading(true);
+
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) {
+        setIsLoading(false);
+        throw error;
+      }
+
+      setIsLoading(false);
+      return;
+    }
+
     setIsLoading(false);
   };
 
@@ -455,7 +510,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider       value={{ user, isLoading, login, signInWithPassword, signUp, logout, updateProfile, markNotificationRead, clearNotifications }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isLoading,
+        login,
+        signInWithPassword,
+        signUp,
+        resendConfirmationEmail,
+        logout,
+        updateProfile,
+        markNotificationRead,
+        clearNotifications,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
