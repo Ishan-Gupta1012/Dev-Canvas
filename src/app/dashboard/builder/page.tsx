@@ -13,6 +13,8 @@ import { createClient } from '@/utils/supabase/client';
 
 const STORAGE_KEY = 'portfolio_builder_draft';
 const STORAGE_KEY_TEMPLATE = 'portfolio_builder_template';
+// AI Builder session storage key (for data passed from AI Builder flow)
+const AI_BUILDER_STORAGE_KEY = 'portfolio_draft_data';
 
 export default function BuilderPage() {
   const router = useRouter();
@@ -52,16 +54,33 @@ export default function BuilderPage() {
     }, 1000); // Debounce 1 second
   }, []);
 
-  // Load draft from localStorage
+  // Load draft from localStorage (and sessionStorage for AI Builder flow)
   const loadDraft = useCallback(() => {
     try {
+      // First check sessionStorage for AI Builder flow data
+      const aiBuilderStored = sessionStorage.getItem(AI_BUILDER_STORAGE_KEY);
+      if (aiBuilderStored) {
+        const parsed = JSON.parse(aiBuilderStored);
+        // Clear it after reading so it doesn't persist on refresh
+        sessionStorage.removeItem(AI_BUILDER_STORAGE_KEY);
+        // AI Builder stores raw PortfolioData, not wrapped in {data, template}
+        return { data: parsed, template: null };
+      }
+
+      // Fallback to localStorage for regular builder drafts
       const stored = localStorage.getItem(STORAGE_KEY);
       const storedTemplate = localStorage.getItem(STORAGE_KEY_TEMPLATE);
       if (stored) {
         const parsed = JSON.parse(stored);
         // Check if draft is less than 7 days old
         if (parsed.timestamp && Date.now() - parsed.timestamp < 7 * 24 * 60 * 60 * 1000) {
-          return { data: parsed.data, template: parsed.template || storedTemplate };
+          // Handle both old format (raw data) and new format ({data, template})
+          if (parsed.data) {
+            return { data: parsed.data, template: parsed.template || storedTemplate };
+          } else {
+            // Old format - raw portfolio data
+            return { data: parsed, template: storedTemplate };
+          }
         }
       }
     } catch (e) {
@@ -103,7 +122,10 @@ export default function BuilderPage() {
           if (hasContent) {
             // Automatically restore draft without prompting
             setData(draft.data);
-            setSelectedTemplate(draft.template);
+            // Use template from URL param if provided, otherwise from draft
+            if (!temp && draft.template) {
+              setSelectedTemplate(draft.template);
+            }
             setHasUnsavedChanges(true);
           }
         }

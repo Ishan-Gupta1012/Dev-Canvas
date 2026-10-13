@@ -86,7 +86,7 @@ export default function Home() {
   }, [handleEnterMainSite]);
 
   return (
-    <div className="relative bg-background text-on-background min-h-screen flex flex-col custom-cursor font-sans">
+    <div className="relative text-on-background min-h-screen flex flex-col custom-cursor font-sans">
       {showPreloader === true && <RechromaPreloader />}
 
       <div

@@ -183,14 +183,6 @@ const isActive = (item: NavItem) => {
                         <UserCircle size={14} /> Profile
                       </Link>
                     </div>
-                    <div className="py-1 border-t border-outline/10">
-                      <Link
-                        href="/dashboard/settings"
-                        className="flex items-center gap-2 px-4 py-2 text-on-surface-variant hover:text-primary transition-colors font-mono text-xs uppercase tracking-widest"
-                      >
-                        <UserCircle size={14} /> Settings
-                      </Link>
-                    </div>
                     <div className="border-t border-outline/10 py-1">
                       <button
                         onClick={logout}

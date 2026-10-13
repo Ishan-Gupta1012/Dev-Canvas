@@ -98,13 +98,19 @@ export default function AIBuilderPage() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mapResumeToPortfolio = (resume: any): PortfolioData => {
+    // Get first job title for hero title
+    const firstJobTitle = resume?.experience?.[0]?.jobTitle || '';
+    // Build tagline from first project or use default
+    const firstProjectDesc = resume?.projects?.[0]?.description || '';
+    const tagline = firstProjectDesc ? firstProjectDesc.substring(0, 80) + '...' : 'Building scalable digital experiences.';
+    
     const hero = {
       name: resume?.personal?.name || 'Developer',
       location: resume?.personal?.location || '',
       logoText: resume?.personal?.name || 'Developer',
-      title: resume?.personal?.title || '',
-      tagline: resume?.summary ? resume.summary.substring(0, 80) + '...' : 'Building scalable digital experiences.',
-      bio: resume?.summary || '',
+      title: firstJobTitle,
+      tagline: tagline,
+      bio: firstProjectDesc || `${resume?.personal?.name || 'A developer'} with experience in ${resume?.skills?.languages?.[0] || 'software development'}.`,
       avatarUrl: user?.personalInfo?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=fallback',
       resumeUrl: '',
       socials: [] as { platform: 'github' | 'linkedin'; url: string }[],
@@ -130,24 +136,24 @@ export default function AIBuilderPage() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const projects: Project[] = (resume?.projects || []).map((p: any) => ({
       id: generateId(),
-      name: p.name || 'Untitled Project',
+      name: p.projectName || p.name || 'Untitled Project',
       description: p.description || '',
       highlights: p.bullets || [],
-      techStack: p.technologies || [],
+      techStack: p.techStack || p.technologies || [],
       images: [],
-      githubUrl: p.link || '',
-      liveUrl: '',
-      demoVideoUrl: ''
+      githubUrl: p.githubRepository || p.link || '',
+      liveUrl: p.liveUrl || p.deploymentUrl || '',
+      demoVideoUrl: p.demoLink || ''
     }));
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const achievements: Achievement[] = (resume?.experience || []).map((e: any) => ({
       id: generateId(),
       type: 'job',
-      title: e.jobTitle || e.role || e.title || e.position || '',
-      organization: e.company || e.organization || e.employer || '',
-      startDate: e.startDate || (e.duration || e.date)?.split('-')[0]?.trim() || '',
-      endDate: e.endDate || (e.duration || e.date)?.split('-')[1]?.trim() || '',
+      title: e.jobTitle || '',
+      organization: e.company || '',
+      startDate: e.startDate || '',
+      endDate: e.endDate || e.currentJob ? 'Present' : '',
       description: [e.description, ...(e.bullets || [])].filter(Boolean).join('\n')
     }));
 

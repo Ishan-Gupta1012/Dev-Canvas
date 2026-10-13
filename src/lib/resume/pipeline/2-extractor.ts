@@ -11,6 +11,8 @@ class PdfJsEngine implements ExtractionEngine {
       const page = await pdfDoc.getPage(pageNum);
       const textContent = await page.getTextContent();
       
+      console.log(`[Extractor] Page ${pageNum}: ${textContent.items.length} text items`);
+      
       for (const item of textContent.items) {
         if (!('str' in item)) continue;
         
@@ -29,6 +31,7 @@ class PdfJsEngine implements ExtractionEngine {
         });
       }
     }
+    console.log(`[Extractor] Total text items extracted: ${allTextItems.length}`);
     return allTextItems;
   }
 }
@@ -84,8 +87,10 @@ export async function extractTextWithLayout(pdfDoc: PdfDocument, buffer: Buffer)
   let textItems = await primaryEngine.parse(pdfDoc, buffer);
   
   const hasText = textItems.some(t => t.str.trim().length > 0);
+  console.log(`[Extractor] Has text content: ${hasText}`);
   
   if (!hasText) {
+    console.log('[Extractor] No text found, trying OCR fallback...');
     const ocrEngine = new TesseractOcrEngine();
     textItems = await ocrEngine.parse(pdfDoc, buffer);
   }

@@ -5,7 +5,9 @@ import { PdfDocument } from './types';
 // In Next.js Server Components / API routes, the fake worker dynamic import fails.
 // We explicitly set the workerSrc to the resolved path.
 if (typeof window === 'undefined') {
-  pdfjs.GlobalWorkerOptions.workerSrc = path.join(process.cwd(), 'node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs');
+  const workerPath = path.join(process.cwd(), 'node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs');
+  pdfjs.GlobalWorkerOptions.workerSrc = workerPath;
+  console.log('[PDF Loader] Worker path:', workerPath);
 }
 
 export async function loadPdf(buffer: Buffer): Promise<PdfDocument> {
@@ -21,6 +23,12 @@ export async function loadPdf(buffer: Buffer): Promise<PdfDocument> {
     standardFontDataUrl
   });
   
-  const pdfDocument = await loadingTask.promise;
-  return pdfDocument as unknown as PdfDocument;
+  try {
+    const pdfDocument = await loadingTask.promise;
+    console.log('[PDF Loader] PDF loaded successfully, pages:', pdfDocument.numPages);
+    return pdfDocument as unknown as PdfDocument;
+  } catch (err) {
+    console.error('[PDF Loader] Failed to load PDF:', err);
+    throw new Error(`Failed to load PDF: ${err instanceof Error ? err.message : 'Unknown error'}`);
+  }
 }

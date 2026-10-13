@@ -176,8 +176,11 @@ export default function GenerativeAttractorCanvas({ className = '', mode = 'land
 
     resize();
 
-    // Track scroll position passively (landing mode only)
+    // Track scroll position passively (landing mode only).
+    // smoothY is an exponentially damped follower: content scrolls 1:1
+    // while the pattern trails silkily behind, killing scroll jitter.
     let scrollY = window.scrollY;
+    let smoothY = scrollY;
     const handleScroll = () => {
       if (mode === 'static') return;
       scrollY = window.scrollY;
@@ -198,6 +201,8 @@ export default function GenerativeAttractorCanvas({ className = '', mode = 'land
         animationFrameId = requestAnimationFrame(render);
         return;
       }
+      smoothY += (scrollY - smoothY) * 0.09;
+      if (Math.abs(scrollY - smoothY) < 0.05) smoothY = scrollY;
 
       const width = canvasWidth;
       const height = canvasHeight;
@@ -208,7 +213,7 @@ export default function GenerativeAttractorCanvas({ className = '', mode = 'land
 
       // --- 4. HERMITE SMOOTHSTEP SCROLL PROGRESSION ---
       const calcProg = (topOffset: number) => {
-        const t = Math.max(0, Math.min(1, (windowHeight - (topOffset - scrollY)) / windowHeight));
+        const t = Math.max(0, Math.min(1, (windowHeight - (topOffset - smoothY)) / windowHeight));
         return t * t * (3 - 2 * t);
       };
 
