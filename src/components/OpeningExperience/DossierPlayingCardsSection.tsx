@@ -50,20 +50,20 @@ export default function DossierPlayingCardsSection() {
           {/* Section Header with Telemetry & Flip Indicator */}
           <div className="flex justify-between items-baseline border-b border-[#CCC0B5] pb-4">
             <div className="flex items-center gap-3">
-              <h2 className="font-mono text-[12px] leading-none uppercase font-bold tracking-[0.2em] text-[#56241A]">
+              <h2 className="font-mono text-label uppercase font-bold text-[#56241A]">
                 [03 // HOW IT WORKS]
               </h2>
-              <span className="font-mono text-[11px] text-[#A0674F] border border-[#A0674F]/40 bg-[#A0674F]/10 px-2 py-0.5 rounded-xs uppercase tracking-wider hidden sm:inline">
+              <span className="font-mono text-caption text-[#A0674F] border border-[#A0674F]/40 bg-[#A0674F]/10 px-2 py-0.5 rounded-xs uppercase hidden sm:inline">
                 SCROLL-CONTROLLED 3D CARDS
               </span>
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1.5 font-mono text-[12px] text-[#7C3F2F] uppercase hidden md:flex tracking-wide">
+              <div className="flex items-center gap-1.5 font-mono text-caption text-[#7C3F2F] uppercase hidden md:flex">
                 <span>FLIP SEQUENCE:</span>
                 <span className="text-[#56241A] font-bold">STEP 01 → 02 → 03</span>
               </div>
-              <span className="font-mono text-[12px] uppercase text-[#7C3F2F] font-medium tracking-wide">
+              <span className="font-mono text-caption uppercase text-[#7C3F2F] font-medium">
                 FROM RESUME TO COMPLETE PORTFOLIO
               </span>
             </div>
@@ -96,9 +96,9 @@ export default function DossierPlayingCardsSection() {
                 >
                   <div className="w-full h-full border border-[#A0674F]/30 p-5 rounded-xs flex flex-col justify-between bg-[#270F05]/90">
                     {/* Top Pips */}
-                    <div className="flex justify-between items-center font-mono text-[11px] uppercase tracking-wider text-[#A0674F]">
+                    <div className="flex justify-between items-center font-mono text-caption uppercase text-[#A0674F]">
                       <span className="font-bold border border-[#A0674F]/40 px-1.5 py-0.5 rounded-xs">[01]</span>
-                      <span className="text-xs text-[#7C3F2F]">✦</span>
+                      <span className="text-caption text-[#7C3F2F]">✦</span>
                     </div>
 
                     {/* Central Seal & Monogram */}
@@ -106,21 +106,21 @@ export default function DossierPlayingCardsSection() {
                       <div className="w-16 h-16 rounded-full border border-[#56241A] bg-[#34281D] flex items-center justify-center shadow-lg">
                         <span className="font-serif italic text-2xl text-[#A0674F]">U</span>
                       </div>
-                      <div className="font-mono text-[12px] tracking-[0.25em] uppercase text-[#EEEBE7] font-bold">
+                      <div className="font-mono text-label uppercase text-[#EEEBE7] font-bold">
                         STEP 01 // UPLOAD
                       </div>
-                      <div className="font-mono text-[10px] tracking-widest uppercase text-[#CCC0B5]/60">
+                      <div className="font-mono text-caption uppercase text-[#CCC0B5]/60">
                         DEVCANVAS // WORKFLOW 01
                       </div>
                       <div className="w-12 h-[1px] bg-[#A0674F]/40 my-1" />
-                      <div className="font-mono text-[11px] uppercase tracking-wider text-[#7C3F2F] font-semibold">
+                      <div className="font-mono text-caption uppercase text-[#7C3F2F] font-semibold">
                         STATUS: READY FOR PARSING
                       </div>
                     </div>
 
                     {/* Bottom Pips */}
-                    <div className="flex justify-between items-center font-mono text-[11px] uppercase tracking-wider text-[#A0674F]">
-                      <span className="text-xs text-[#7C3F2F]">✦</span>
+                    <div className="flex justify-between items-center font-mono text-caption uppercase text-[#A0674F]">
+                      <span className="text-caption text-[#7C3F2F]">✦</span>
                       <span className="font-bold border border-[#A0674F]/40 px-1.5 py-0.5 rounded-xs">[01]</span>
                     </div>
                   </div>
@@ -136,15 +136,15 @@ export default function DossierPlayingCardsSection() {
                   }}
                 >
                   <div>
-                    <div className="flex justify-between font-mono text-[12px] tracking-[-0.36px] uppercase border-b border-[#3E1510] pb-3 mb-4">
+                    <div className="flex justify-between font-mono text-label uppercase border-b border-[#3E1510] pb-3 mb-4">
                       <span className="font-bold text-[#CCC0B5]">STEP 01</span>
                       <span className="text-[#A0674F] font-semibold">[UPLOAD]</span>
                     </div>
-                    <h3 className="font-serif font-medium text-[clamp(1.75rem,2.2vw,2.15rem)] leading-tight tracking-[-0.02em] py-2 text-[#FFFFFF]">
+                    <h3 className="font-serif font-medium text-heading-md py-2 text-[#FFFFFF]">
                       Upload Your Resume
                     </h3>
                   </div>
-                  <div className="flex flex-col gap-[12px] font-sans text-[14px] sm:text-[15px] leading-[1.6] text-[#EEEBE7]/85 border-t border-[#3E1510] pt-4">
+                  <div className="flex flex-col gap-[12px] font-sans text-body text-[#EEEBE7]/85 border-t border-[#3E1510] pt-4">
                     <p>
                       Start with the resume you already have. No need to manually enter every detail from scratch.
                     </p>
@@ -180,9 +180,9 @@ export default function DossierPlayingCardsSection() {
                 >
                   <div className="w-full h-full border border-[#7C3F2F]/35 p-5 rounded-xs flex flex-col justify-between bg-[#34281D]/90">
                     {/* Top Pips */}
-                    <div className="flex justify-between items-center font-mono text-[11px] uppercase tracking-wider text-[#7C3F2F]">
+                    <div className="flex justify-between items-center font-mono text-caption uppercase text-[#7C3F2F]">
                       <span className="font-bold border border-[#7C3F2F]/40 px-1.5 py-0.5 rounded-xs">[02]</span>
-                      <span className="text-xs text-[#A0674F]">✦</span>
+                      <span className="text-caption text-[#A0674F]">✦</span>
                     </div>
 
                     {/* Central Seal & Monogram */}
@@ -190,21 +190,21 @@ export default function DossierPlayingCardsSection() {
                       <div className="w-16 h-16 rounded-full border border-[#7C3F2F] bg-[#270F05] flex items-center justify-center shadow-lg">
                         <span className="font-serif italic text-2xl text-[#7C3F2F]">E</span>
                       </div>
-                      <div className="font-mono text-[12px] tracking-[0.25em] uppercase text-[#EEEBE7] font-bold">
+                      <div className="font-mono text-label uppercase text-[#EEEBE7] font-bold">
                         STEP 02 // EXTRACT
                       </div>
-                      <div className="font-mono text-[10px] tracking-widest uppercase text-[#CCC0B5]/60">
+                      <div className="font-mono text-caption uppercase text-[#CCC0B5]/60">
                         DEVCANVAS // WORKFLOW 02
                       </div>
                       <div className="w-12 h-[1px] bg-[#7C3F2F]/40 my-1" />
-                      <div className="font-mono text-[11px] uppercase tracking-wider text-[#A0674F] font-semibold">
+                      <div className="font-mono text-caption uppercase text-[#A0674F] font-semibold">
                         STATUS: PROFILE ORGANIZED
                       </div>
                     </div>
 
                     {/* Bottom Pips */}
-                    <div className="flex justify-between items-center font-mono text-[11px] uppercase tracking-wider text-[#7C3F2F]">
-                      <span className="text-xs text-[#A0674F]">✦</span>
+                    <div className="flex justify-between items-center font-mono text-caption uppercase text-[#7C3F2F]">
+                      <span className="text-caption text-[#A0674F]">✦</span>
                       <span className="font-bold border border-[#7C3F2F]/40 px-1.5 py-0.5 rounded-xs">[02]</span>
                     </div>
                   </div>
@@ -220,15 +220,15 @@ export default function DossierPlayingCardsSection() {
                   }}
                 >
                   <div>
-                    <div className="flex justify-between font-mono text-[12px] tracking-[-0.36px] uppercase border-b border-[#270F05] pb-3 mb-4">
+                    <div className="flex justify-between font-mono text-label uppercase border-b border-[#270F05] pb-3 mb-4">
                       <span className="font-bold text-[#CCC0B5]">STEP 02</span>
                       <span className="text-[#7C3F2F] font-semibold">[EXTRACT]</span>
                     </div>
-                    <h3 className="font-serif font-medium text-[clamp(1.75rem,2.2vw,2.15rem)] leading-tight tracking-[-0.02em] py-2 text-[#FFFFFF]">
+                    <h3 className="font-serif font-medium text-heading-md py-2 text-[#FFFFFF]">
                       Extract Your Information
                     </h3>
                   </div>
-                  <div className="flex flex-col gap-[12px] font-sans text-[14px] sm:text-[15px] leading-[1.6] text-[#EEEBE7]/85 border-t border-[#270F05] pt-4">
+                  <div className="flex flex-col gap-[12px] font-sans text-body text-[#EEEBE7]/85 border-t border-[#270F05] pt-4">
                     <p>
                       The platform parses your resume and organizes available information into clean, structured sections.
                     </p>
@@ -264,9 +264,9 @@ export default function DossierPlayingCardsSection() {
                 >
                   <div className="w-full h-full border border-[#56241A]/45 p-5 rounded-xs flex flex-col justify-between bg-[#3E1510]/90">
                     {/* Top Pips */}
-                    <div className="flex justify-between items-center font-mono text-[11px] uppercase tracking-wider text-[#A0674F]">
+                    <div className="flex justify-between items-center font-mono text-caption uppercase text-[#A0674F]">
                       <span className="font-bold border border-[#A0674F]/40 px-1.5 py-0.5 rounded-xs">[03]</span>
-                      <span className="text-xs text-[#7C3F2F]">✦</span>
+                      <span className="text-caption text-[#7C3F2F]">✦</span>
                     </div>
 
                     {/* Central Seal & Monogram */}
@@ -274,21 +274,21 @@ export default function DossierPlayingCardsSection() {
                       <div className="w-16 h-16 rounded-full border border-[#A0674F] bg-[#270F05] flex items-center justify-center shadow-lg">
                         <span className="font-serif italic text-2xl text-[#A0674F]">S</span>
                       </div>
-                      <div className="font-mono text-[12px] tracking-[0.25em] uppercase text-[#EEEBE7] font-bold">
+                      <div className="font-mono text-label uppercase text-[#EEEBE7] font-bold">
                         STEP 03 // SHOWCASE
                       </div>
-                      <div className="font-mono text-[10px] tracking-widest uppercase text-[#CCC0B5]/60">
+                      <div className="font-mono text-caption uppercase text-[#CCC0B5]/60">
                         DEVCANVAS // WORKFLOW 03
                       </div>
                       <div className="w-12 h-[1px] bg-[#A0674F]/40 my-1" />
-                      <div className="font-mono text-[11px] uppercase tracking-wider text-[#56241A] font-bold">
+                      <div className="font-mono text-caption uppercase text-[#56241A] font-bold">
                         STATUS: READY TO SHARE
                       </div>
                     </div>
 
                     {/* Bottom Pips */}
-                    <div className="flex justify-between items-center font-mono text-[11px] uppercase tracking-wider text-[#A0674F]">
-                      <span className="text-xs text-[#7C3F2F]">✦</span>
+                    <div className="flex justify-between items-center font-mono text-caption uppercase text-[#A0674F]">
+                      <span className="text-caption text-[#7C3F2F]">✦</span>
                       <span className="font-bold border border-[#A0674F]/40 px-1.5 py-0.5 rounded-xs">[03]</span>
                     </div>
                   </div>
@@ -304,15 +304,15 @@ export default function DossierPlayingCardsSection() {
                   }}
                 >
                   <div>
-                    <div className="flex justify-between font-mono text-[12px] tracking-[-0.36px] uppercase border-b border-[#3E1510] pb-3 mb-4">
+                    <div className="flex justify-between font-mono text-label uppercase border-b border-[#3E1510] pb-3 mb-4">
                       <span className="font-bold text-[#CCC0B5]">STEP 03 &amp; 04</span>
                       <span className="text-[#A0674F] font-semibold">[SHOWCASE]</span>
                     </div>
-                    <h3 className="font-serif font-medium text-[clamp(1.75rem,2.2vw,2.15rem)] leading-tight tracking-[-0.02em] py-2 text-[#FFFFFF]">
+                    <h3 className="font-serif font-medium text-heading-md py-2 text-[#FFFFFF]">
                       Build &amp; Showcase
                     </h3>
                   </div>
-                  <div className="flex flex-col gap-[12px] font-sans text-[14px] sm:text-[15px] leading-[1.6] text-[#EEEBE7]/85 border-t border-[#3E1510] pt-4">
+                  <div className="flex flex-col gap-[12px] font-sans text-body text-[#EEEBE7]/85 border-t border-[#3E1510] pt-4">
                     <p>
                       Use the extracted information to create a structured portfolio that presents your profile clearly.
                     </p>
@@ -327,7 +327,7 @@ export default function DossierPlayingCardsSection() {
           </div>
 
           {/* Bottom Flip Progress Tracker Bar */}
-          <div className="flex items-center justify-between font-mono text-[12px] uppercase tracking-wider text-[#CCC0B5] pt-2">
+          <div className="flex items-center justify-between font-mono text-caption uppercase text-[#CCC0B5] pt-2">
             <div className="flex items-center gap-3">
               <span className="w-1.5 h-1.5 rounded-full bg-[#56241A] animate-pulse" />
               <span>SCROLL DOWN TO FLIP WORKFLOW STEPS</span>

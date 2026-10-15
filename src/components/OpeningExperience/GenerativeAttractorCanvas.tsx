@@ -217,7 +217,7 @@ export default function GenerativeAttractorCanvas({ className = '', mode = 'land
         return t * t * (3 - 2 * t);
       };
 
-      const pStatement = mode === 'static' ? 0 : calcProg(statementTop);
+      const pStatement = (mode === 'static' || prefersReducedMotion) ? 0 : calcProg(statementTop);
       const pAbout = mode === 'static' ? 0 : calcProg(aboutTop);
       const pArchive = mode === 'static' ? 0 : calcProg(archiveTop);
       const pManifesto = mode === 'static' ? 0 : calcProg(manifestoTop);
@@ -239,12 +239,13 @@ export default function GenerativeAttractorCanvas({ className = '', mode = 'land
             pitch: 0,
           };
 
+      // Statement Section: Rotate slowly (max 8° / 0.1396 rad) and shift vertically by up to 20px
       const kf1 = {
-        cx: 0.33 * width,
-        cy: 0.68 * height,
-        scl: Math.min(width, height) / 65,
-        yaw: 1.25,
-        pitch: 0.5,
+        cx: isMobile ? 0.5 * width : 0.22 * width,
+        cy: 0.50 * height + 20,
+        scl: Math.min(width, height) / 48,
+        yaw: -0.15 + (8 * Math.PI / 180),
+        pitch: 0,
       };
 
       const kf2 = {
@@ -297,14 +298,13 @@ export default function GenerativeAttractorCanvas({ className = '', mode = 'land
       const finalYaw = s23yaw + pManifesto * (kf4.yaw - s23yaw);
       const finalPitch = s23pitch + pManifesto * (kf4.pitch - s23pitch);
 
-      // Breathing scale modulation between sections
+      // Breathing scale modulation between sections (smooth continuous scaling)
       const totalScale =
         finalScl *
-        (1 - 2.2 * pStatement * (1 - pStatement)) *
         (1 - 2 * pAbout * (1 - pAbout)) *
         (1 - 2 * pArchive * (1 - pArchive)) *
         (1 - 2 * pManifesto * (1 - pManifesto)) *
-        (1 + 0.45 * pStatement + 0.2 * pAbout + 0.2 * pArchive + 0.2 * pManifesto);
+        (1 + 0.2 * pAbout + 0.2 * pArchive + 0.2 * pManifesto);
 
       let targetCenterX = isMobile ? 0.5 * width : finalCx;
       let targetCenterY = isMobile ? 0.5 * height : finalCy;

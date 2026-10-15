@@ -52,7 +52,7 @@ export function Eyebrow({
   const text = dark ? 'text-[#A0674F]' : 'text-[#7C3F2F]';
   return (
     <div className={`flex items-center gap-4 ${className}`}>
-      <p className={`font-mono text-[12px] leading-none uppercase font-bold tracking-[0.2em] whitespace-nowrap ${text}`}>
+      <p className={`font-mono text-label uppercase font-bold whitespace-nowrap ${text}`}>
         {label}
       </p>
       {reduce ? (
