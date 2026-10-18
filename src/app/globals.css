@@ -630,3 +630,30 @@ body {
   line-height: var(--text-button--line-height);
   letter-spacing: var(--text-button--letter-spacing);
 }
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body:has(#resume-preview-document) * {
+    visibility: hidden;
+  }
+
+  body:has(#resume-preview-document) #resume-preview-document,
+  body:has(#resume-preview-document) #resume-preview-document * {
+    visibility: visible;
+  }
+
+  body:has(#resume-preview-document) #resume-preview-document {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: #FFFFFF !important;
+    color: #0A0402 !important;
+  }
+}
+
