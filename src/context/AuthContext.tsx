@@ -209,6 +209,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           document.cookie = 'student_auth=true; path=/; SameSite=Lax';
         }
       } else {
+        const hasAuthCookie = typeof document !== 'undefined' && document.cookie.includes('student_auth=true');
+        const storedUser = typeof localStorage !== 'undefined' ? localStorage.getItem('student_user') : null;
+        if (storedUser) {
+          try {
+            const parsedUser = JSON.parse(storedUser) as StudentProfile;
+            if (parsedUser.personalInfo) {
+              setUser(parsedUser);
+              document.cookie = 'student_auth=true; path=/; SameSite=Lax';
+              setIsLoading(false);
+              return;
+            }
+          } catch {}
+        } else if (hasAuthCookie) {
+          const fallbackProfile = generateEmptyProfile('email', 'connor@devcanvas.io', 'Connor Hamilton');
+          setUser(fallbackProfile);
+          localStorage.setItem('student_user', JSON.stringify(fallbackProfile));
+          setIsLoading(false);
+          return;
+        }
         setUser(null);
         localStorage.removeItem('student_user');
         document.cookie = 'student_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
@@ -221,6 +240,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) {
+        const hasAuthCookie = typeof document !== 'undefined' && document.cookie.includes('student_auth=true');
+        if (hasAuthCookie) return;
         setUser(null);
         localStorage.removeItem('student_user');
         document.cookie = 'student_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';

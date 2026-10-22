@@ -30,7 +30,7 @@ const navItems: NavItem[] = [
     name: 'Resume',
     dropdown: [
       // { name: 'Upload / Parse', href: '/dashboard/resume' }, // Hidden - kept in code
-      { name: 'Resume Builder', href: '/dashboard/resume-builder' },
+      { name: 'Resume Maker', href: '/dashboard/resume-builder' },
       { name: 'Analyzer', href: '/dashboard/resume-analyzer' }
     ]
   },
