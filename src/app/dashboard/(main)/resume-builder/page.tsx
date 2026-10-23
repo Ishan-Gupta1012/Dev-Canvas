@@ -79,6 +79,40 @@ const formatUrl = (raw: string) => {
   return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
 };
 
+export const getPlatformLabel = (key: string, url: string = ''): string => {
+  const normalizedKey = key.toLowerCase().trim();
+  if (labelMap[normalizedKey]) {
+    return labelMap[normalizedKey];
+  }
+  const cleanUrl = (url || '').toLowerCase().trim();
+  if (cleanUrl.includes('github.com')) return 'GitHub';
+  if (cleanUrl.includes('linkedin.com')) return 'LinkedIn';
+  if (cleanUrl.includes('leetcode.com')) return 'LeetCode';
+  if (cleanUrl.includes('twitter.com') || cleanUrl.includes('x.com')) return 'Twitter / X';
+  if (cleanUrl.includes('behance.net')) return 'Behance';
+  if (cleanUrl.includes('dribbble.com')) return 'Dribbble';
+  if (cleanUrl.includes('medium.com')) return 'Medium';
+  if (cleanUrl.includes('dev.to')) return 'Dev.to';
+  if (cleanUrl.includes('kaggle.com')) return 'Kaggle';
+  if (cleanUrl.includes('gitlab.com')) return 'GitLab';
+  if (cleanUrl.includes('codepen.io')) return 'CodePen';
+  if (cleanUrl.includes('stackoverflow.com')) return 'Stack Overflow';
+  if (cleanUrl.includes('youtube.com')) return 'YouTube';
+  if (/portfolio|website|site|personal/i.test(normalizedKey)) return 'Portfolio';
+
+  try {
+    const formatted = formatUrl(cleanUrl);
+    const host = new URL(formatted).hostname.replace(/^www\./, '');
+    const parts = host.split('.');
+    if (parts.length >= 2) {
+      const name = parts[0];
+      return name.charAt(0).toUpperCase() + name.slice(1);
+    }
+  } catch {}
+
+  return key.charAt(0).toUpperCase() + key.slice(1);
+};
+
 // Helper: Crops an image to a perfect circle with optional border on off-screen canvas
 export const makeCircularImage = async (imageSrc: string): Promise<string> => {
   return new Promise((resolve) => {
@@ -518,6 +552,336 @@ export default function ResumeBuilderPage() {
 
       const pageWidth = 210;
       const pageHeight = 297;
+
+      if (selectedTemplate === 'blue-minimalist') {
+        // ====================================================
+        // TEMPLATE 1: BROWN EDITORIAL SERIF CV (SINGLE COLUMN)
+        // ====================================================
+        const margin = 14;
+        const contentWidth = pageWidth - margin * 2; // 182mm
+        let y = margin;
+
+        const checkPageBreak = (neededHeight: number) => {
+          if (y + neededHeight > pageHeight - margin) {
+            doc.addPage();
+            drawEditorialBackground();
+            y = margin;
+            return true;
+          }
+          return false;
+        };
+
+        const drawEditorialBackground = () => {
+          // Warm ivory paper background (#FAF6F0)
+          doc.setFillColor(250, 246, 240);
+          doc.rect(0, 0, pageWidth, pageHeight, 'F');
+        };
+
+        drawEditorialBackground();
+
+        // SIDE-BY-SIDE HEADER: Profile photo and name/title side-by-side with proper spacing
+        const hasPhoto = Boolean(personal.photo);
+        const photoDiameter = hasPhoto ? 19 : 0; // mm
+        const photoGap = hasPhoto ? 5.5 : 0; // mm
+        const headerStartY = y;
+        const textStartX = margin + photoDiameter + photoGap;
+        const textWidth = contentWidth - (photoDiameter + photoGap);
+
+        if (hasPhoto && personal.photo) {
+          try {
+            const circularImg = await makeCircularImage(personal.photo);
+            doc.addImage(circularImg, 'PNG', margin, headerStartY, photoDiameter, photoDiameter);
+            doc.setDrawColor(54, 36, 25); // #362419
+            doc.setLineWidth(0.35);
+            doc.circle(margin + photoDiameter / 2, headerStartY + photoDiameter / 2, photoDiameter / 2);
+          } catch (e) {
+            console.warn('PDF photo render error:', e);
+          }
+        }
+
+        // Full Name (Serif typography in warm dark chocolate)
+        const name = (personal.name || 'Your Name').trim();
+        doc.setFont('times', 'bold');
+        doc.setFontSize(20);
+        doc.setTextColor(54, 36, 25); // #362419
+        const nameY = hasPhoto ? headerStartY + 5.5 : headerStartY + 5.5;
+        doc.text(name, textStartX, nameY);
+
+        // Professional Title (Tracked uppercase directly under name)
+        let textCursorY = nameY;
+        if (personal.title?.trim()) {
+          const titleStr = personal.title.trim();
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(8.2);
+          doc.setTextColor(107, 90, 81); // #6B5A51
+          const spacedTitle = titleStr.toUpperCase().split('').join(' ');
+          textCursorY += 4.5;
+          doc.text(spacedTitle, textStartX, textCursorY);
+        }
+
+        // Contact Line (Inline bullet-separated contact info)
+        const contactParts = [personal.email, personal.phone, personal.location]
+          .map((p) => p?.trim())
+          .filter(Boolean);
+        if (contactParts.length > 0) {
+          const separator = '   •   ';
+          const contactLine = contactParts.join(separator);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(7.8);
+          doc.setTextColor(141, 116, 103); // #8D7467
+          textCursorY += 4.2;
+          doc.text(contactLine, textStartX, textCursorY);
+        }
+
+        // Header boundary calculation ensuring zero overlap
+        const sideBySideBottom = hasPhoto
+          ? Math.max(headerStartY + photoDiameter, textCursorY)
+          : textCursorY;
+        y = sideBySideBottom + 2.5;
+
+        // Professional Summary (Elegant editorial paragraph below header row)
+        if (personal.summary?.trim()) {
+          doc.setFont('times', 'normal');
+          doc.setFontSize(8.5);
+          doc.setTextColor(73, 53, 47); // #49352F
+          const summaryLines = doc.splitTextToSize(personal.summary.trim(), contentWidth);
+          checkPageBreak(summaryLines.length * 3.5 + 2);
+          for (const line of summaryLines) {
+            doc.text(line, margin, y);
+            y += 3.5;
+          }
+          y += 1.5;
+        }
+
+        // Header Bottom Divider Rule
+        y += 1;
+        doc.setDrawColor(54, 36, 25); // #362419
+        doc.setLineWidth(0.5);
+        doc.line(margin, y, margin + contentWidth, y);
+        y += 4;
+
+        const renderSectionHeader = (title: string) => {
+          checkPageBreak(12);
+          y += 1.5;
+          doc.setFont('times', 'bold');
+          doc.setFontSize(9.5);
+          doc.setTextColor(54, 36, 25); // #362419
+          const spacedSection = title.toUpperCase().split('').join(' ');
+          doc.text(spacedSection, margin, y);
+          y += 1.5;
+          doc.setDrawColor(54, 36, 25);
+          doc.setLineWidth(0.35);
+          doc.line(margin, y, margin + contentWidth, y);
+          y += 3.8;
+        };
+
+        // Experience
+        const expEntries = experience.filter((e) => e.role?.trim() || e.company?.trim());
+        if (expEntries.length > 0) {
+          renderSectionHeader('Experience');
+          for (const exp of expEntries) {
+            checkPageBreak(13);
+            doc.setFont('times', 'bold');
+            doc.setFontSize(9.5);
+            doc.setTextColor(54, 36, 25);
+            doc.text(exp.role?.trim() || 'Role', margin, y);
+
+            const dateRange = [exp.start?.trim(), exp.end?.trim()].filter(Boolean).join(' – ');
+            if (dateRange) {
+              doc.setFont('helvetica', 'normal');
+              doc.setFontSize(8);
+              const dateWidth = doc.getTextWidth(dateRange);
+              doc.setTextColor(141, 116, 103);
+              doc.text(dateRange, margin + contentWidth - dateWidth, y);
+            }
+            y += 3.8;
+
+            if (exp.company?.trim()) {
+              doc.setFont('helvetica', 'normal');
+              doc.setFontSize(8);
+              doc.setTextColor(107, 90, 81);
+              doc.text(exp.company.trim().toUpperCase(), margin, y);
+              y += 3.6;
+            }
+
+            const validBullets = exp.bullets.filter((b) => b && b.trim());
+            if (validBullets.length > 0) {
+              doc.setFont('times', 'normal');
+              doc.setFontSize(8.5);
+              for (const bullet of validBullets) {
+                const bulletLines = doc.splitTextToSize(bullet.trim(), contentWidth - 5);
+                checkPageBreak(bulletLines.length * 3.4 + 1);
+                doc.setTextColor(54, 36, 25);
+                doc.text('•', margin + 1, y);
+                doc.setTextColor(73, 53, 47);
+                doc.text(bulletLines, margin + 4.5, y);
+                y += bulletLines.length * 3.4 + 0.6;
+              }
+            }
+            y += 1.8;
+          }
+        }
+
+        // Education
+        const eduEntries = education.filter((e) => e.school?.trim());
+        if (eduEntries.length > 0) {
+          renderSectionHeader('Education');
+          for (const edu of eduEntries) {
+            checkPageBreak(10);
+            doc.setFont('times', 'bold');
+            doc.setFontSize(9.5);
+            doc.setTextColor(54, 36, 25);
+            doc.text(edu.school.trim(), margin, y);
+
+            if (edu.gradYear?.trim()) {
+              const gradYearStr = edu.gradYear.trim();
+              doc.setFont('helvetica', 'normal');
+              doc.setFontSize(8);
+              const dateWidth = doc.getTextWidth(gradYearStr);
+              doc.setTextColor(141, 116, 103);
+              doc.text(gradYearStr, margin + contentWidth - dateWidth, y);
+            }
+
+            const details = [
+              edu.degree?.trim(),
+              edu.field?.trim() ? `in ${edu.field.trim()}` : '',
+            ]
+              .filter(Boolean)
+              .join(' • ');
+            if (details) {
+              y += 3.6;
+              doc.setFont('helvetica', 'normal');
+              doc.setFontSize(8);
+              doc.setTextColor(107, 90, 81);
+              doc.text(details, margin, y);
+            }
+            y += 3.8;
+          }
+        }
+
+        // Skills
+        const validSkills = skills.map((s) => s.trim()).filter(Boolean);
+        if (validSkills.length > 0) {
+          renderSectionHeader('Skills');
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(7.8);
+
+          let currentX = margin;
+          const pillHeight = 4.6;
+          const pillPadding = 3;
+          const gapX = 2.2;
+          const gapY = 2.2;
+
+          for (const skill of validSkills) {
+            const textWidth = doc.getTextWidth(skill);
+            const pillWidth = textWidth + pillPadding * 2;
+            if (currentX + pillWidth > margin + contentWidth) {
+              currentX = margin;
+              y += pillHeight + gapY;
+              checkPageBreak(pillHeight + gapY);
+            }
+            doc.setFillColor(242, 236, 228); // #F2ECE4
+            doc.setDrawColor(216, 204, 196); // #D8CCC4
+            doc.setLineWidth(0.2);
+            doc.roundedRect(currentX, y - 3.3, pillWidth, pillHeight, 0.8, 0.8, 'FD');
+            doc.setTextColor(54, 36, 25);
+            doc.text(skill, currentX + pillPadding, y);
+            currentX += pillWidth + gapX;
+          }
+          y += pillHeight + 3.2;
+        }
+
+        // Additional Information
+        for (const sec of customSections) {
+          const validItems = sec.items.filter((item) => item.title?.trim());
+          if (validItems.length > 0) {
+            renderSectionHeader(sec.category.trim() || 'Additional Information');
+            for (const item of validItems) {
+              checkPageBreak(10);
+
+              doc.setFont('times', 'bold');
+              doc.setFontSize(9);
+              doc.setTextColor(54, 36, 25);
+              doc.text(item.title.trim(), margin, y);
+
+              if (item.date?.trim()) {
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(8);
+                const dateStr = item.date.trim();
+                const dateWidth = doc.getTextWidth(dateStr);
+                doc.setTextColor(141, 116, 103);
+                doc.text(dateStr, margin + contentWidth - dateWidth, y);
+              }
+              y += 3.4;
+
+              if (item.subtitle?.trim()) {
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(8);
+                doc.setTextColor(107, 90, 81);
+                doc.text(item.subtitle.trim(), margin, y);
+                y += 3.3;
+              }
+
+              if (item.description?.trim()) {
+                doc.setFont('times', 'normal');
+                doc.setFontSize(8);
+                doc.setTextColor(73, 53, 47);
+                const descLines = doc.splitTextToSize(item.description.trim(), contentWidth);
+                checkPageBreak(descLines.length * 3.3 + 1);
+                doc.text(descLines, margin, y);
+                y += descLines.length * 3.3 + 0.6;
+              }
+              y += 1.8;
+            }
+          }
+        }
+
+        // Links
+        const validLinks = Object.entries(links)
+          .map(([k, v]) => ({
+            key: k,
+            label: getPlatformLabel(k, v),
+            url: formatUrl(v),
+          }))
+          .filter((item) => Boolean(item.url));
+
+        if (validLinks.length > 0) {
+          renderSectionHeader('Links');
+          doc.setFont('times', 'bold');
+          doc.setFontSize(8.5);
+          let currentX = margin;
+          const separator = '   •   ';
+
+          validLinks.forEach((item, idx) => {
+            const labelWidth = doc.getTextWidth(item.label);
+            if (currentX + labelWidth > margin + contentWidth) {
+              currentX = margin;
+              y += 4.5;
+              checkPageBreak(6);
+            }
+            doc.setTextColor(54, 36, 25);
+            doc.textWithLink(item.label, currentX, y, { url: item.url });
+            doc.setDrawColor(54, 36, 25);
+            doc.setLineWidth(0.2);
+            doc.line(currentX, y + 0.5, currentX + labelWidth, y + 0.5);
+            currentX += labelWidth;
+
+            if (idx < validLinks.length - 1) {
+              doc.setFont('helvetica', 'normal');
+              doc.setTextColor(141, 116, 103);
+              const sepWidth = doc.getTextWidth(separator);
+              if (currentX + sepWidth <= margin + contentWidth) {
+                doc.text(separator, currentX, y);
+                currentX += sepWidth;
+              }
+            }
+          });
+          y += 4.5;
+        }
+      } else {
+        // ====================================================
+        // TEMPLATE 2: CANVA TWO-COLUMN MODERN CV (EXACT CANVA REFERENCE)
+        // ====================================================
       // Exact column proportions: 40% left sidebar (84mm), 60% right content (126mm)
       const sidebarW = 84;
       const rightColX = 84;
@@ -754,6 +1118,31 @@ export default function ResumeBuilderPage() {
             leftY += 3.3;
           }
           leftY += 1.5;
+        }
+        leftY += 2;
+      }
+
+      // 5. Links Section (Display only platform name, clickable vector link in PDF)
+      const validLinks = Object.entries(links)
+        .map(([k, v]) => ({
+          key: k,
+          label: getPlatformLabel(k, v),
+          url: formatUrl(v),
+        }))
+        .filter((item) => Boolean(item.url));
+
+      if (validLinks.length > 0) {
+        drawSidebarBoxHeading('Links');
+        for (const item of validLinks) {
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(8);
+          doc.setTextColor(...white);
+          const labelWidth = doc.getTextWidth(item.label);
+          doc.textWithLink(item.label, sidebarContentX, leftY, { url: item.url });
+          doc.setDrawColor(...white);
+          doc.setLineWidth(0.2);
+          doc.line(sidebarContentX, leftY + 0.4, sidebarContentX + labelWidth, leftY + 0.4);
+          leftY += 4.2;
         }
         leftY += 2;
       }
@@ -996,10 +1385,11 @@ export default function ResumeBuilderPage() {
         }
       }
 
+      }
       // Save document
       const cleanFileName = personal.name?.trim()
-        ? `${personal.name.trim().replace(/[^a-zA-Z0-9_-]/g, '_')}_Resume_Canva.pdf`
-        : 'Resume_Canva.pdf';
+        ? `${personal.name.trim().replace(/[^a-zA-Z0-9_-]/g, '_')}_${selectedTemplate === 'blue-minimalist' ? 'Brown_Editorial' : 'Canva_Resume'}.pdf`
+        : `Resume_${selectedTemplate === 'blue-minimalist' ? 'Brown_Editorial' : 'Canva_Modern'}.pdf`;
 
       doc.save(cleanFileName);
     } catch (err) {
@@ -1299,6 +1689,36 @@ export default function ResumeBuilderPage() {
                   </div>
                 </div>
               )}
+
+              {/* 5. Links Section (Platform name only, clickable) */}
+              {Object.values(data.links).some((v) => Boolean(v && v.trim())) && (
+                <div>
+                  <div className="w-full bg-[#49352F] text-[#FFF4F1] px-3.5 py-1.5 font-serif font-bold text-xs uppercase tracking-[0.18em] shadow-2xs mb-2.5">
+                    Links
+                  </div>
+                  <div className="space-y-1.5 text-xs text-[#FFF4F1]">
+                    {Object.entries(data.links)
+                      .filter(([, v]) => Boolean(v && v.trim()))
+                      .map(([key, value]) => {
+                        const label = getPlatformLabel(key, value);
+                        const href = formatUrl(value);
+                        return (
+                          <div key={key}>
+                            <a
+                              href={href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 font-medium text-white hover:text-[#FFF4F1]/80 underline transition-colors"
+                            >
+                              <span>{label}</span>
+                              <ExternalLink size={10} className="opacity-80" />
+                            </a>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* RIGHT CONTENT COLUMN: ~60% width in Warm Blush (#FFF4F1) */}
@@ -1495,9 +1915,205 @@ export default function ResumeBuilderPage() {
     );
   };
 
-  const renderBrownMinimalistContent = renderCanvaResumeTemplate;
+  // ==========================================
+  // TEMPLATE 1: Brown Editorial Serif CV (Classic Single-Column Editorial Layout)
+  // ==========================================
+  const renderBrownEditorialTemplate = (
+    data = { personal, experience, education, skills, customSections, links }
+  ) => (
+    <div className="p-5 sm:p-7 space-y-4 bg-[#FAF6F0] text-[#362419] font-sans shadow-md select-text min-h-full">
+      {/* Header: Profile photo and name/title side-by-side with proper spacing */}
+      <div className="border-b-2 border-[#362419] pb-3 mb-3">
+        <div className="flex flex-row items-center gap-4 sm:gap-5">
+          {data.personal.photo && (
+            <img
+              src={data.personal.photo}
+              alt={data.personal.name || 'Profile photo'}
+              className="w-16 h-16 sm:w-18 sm:h-18 rounded-full object-cover aspect-square border-2 border-[#362419]/30 shadow-xs shrink-0"
+            />
+          )}
+          <div className="flex-1 min-w-0">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#362419] tracking-tight leading-tight truncate">
+              {data.personal.name || 'Your Name'}
+            </h2>
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#6B5A51] font-semibold mt-0.5">
+              {data.personal.title || 'JOB TITLE'}
+            </p>
+            <p className="text-xs font-mono text-[#8D7467] mt-1 flex flex-wrap gap-x-3 gap-y-0.5 items-center">
+              {[data.personal.email, data.personal.phone, data.personal.location]
+                .filter(Boolean)
+                .map((item, idx, arr) => (
+                  <React.Fragment key={idx}>
+                    <span>{item}</span>
+                    {idx < arr.length - 1 && <span className="text-[#362419]/40 font-bold">•</span>}
+                  </React.Fragment>
+                ))}
+            </p>
+          </div>
+        </div>
+        {data.personal.summary && (
+          <p className="text-xs font-serif text-[#49352F] mt-2.5 leading-relaxed text-justify sm:text-left">
+            {data.personal.summary}
+          </p>
+        )}
+      </div>
+
+      {/* Experience */}
+      {data.experience.some((e) => e.role || e.company) && (
+        <div>
+          <h3 className="font-serif text-[11px] uppercase tracking-[0.2em] font-bold text-[#362419] border-b border-[#362419] pb-1 mb-2.5">
+            Experience
+          </h3>
+          <div className="space-y-3">
+            {data.experience.map((exp) => (
+              <div key={exp.id} className="space-y-0.5">
+                <div className="flex items-baseline justify-between gap-3">
+                  <p className="font-serif font-bold text-xs sm:text-sm text-[#362419]">{exp.role || 'Role'}</p>
+                  {(exp.start || exp.end) && (
+                    <span className="text-[11px] font-mono text-[#8D7467] shrink-0">
+                      {exp.start}
+                      {exp.start && exp.end && ' – '}
+                      {exp.end}
+                    </span>
+                  )}
+                </div>
+                <p className="text-[11px] font-sans uppercase tracking-wider text-[#6B5A51] font-medium">{exp.company}</p>
+                {exp.bullets.some((b) => b.trim()) && (
+                  <ul className="mt-1 space-y-0.5 list-disc list-inside text-xs font-serif text-[#49352F] leading-relaxed">
+                    {exp.bullets
+                      .filter((b) => b.trim())
+                      .map((b, i) => (
+                        <li key={i}>{b}</li>
+                      ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Education */}
+      {data.education.some((e) => e.school) && (
+        <div>
+          <h3 className="font-serif text-[11px] uppercase tracking-[0.2em] font-bold text-[#362419] border-b border-[#362419] pb-1 mb-2.5">
+            Education
+          </h3>
+          <div className="space-y-2.5">
+            {data.education.map((edu) => (
+              <div key={edu.id}>
+                <div className="flex items-baseline justify-between gap-3">
+                  <p className="font-serif font-bold text-xs sm:text-sm text-[#362419]">{edu.school}</p>
+                  {edu.gradYear && (
+                    <span className="text-[11px] font-mono text-[#8D7467] shrink-0 text-right">
+                      {edu.gradYear}
+                    </span>
+                  )}
+                </div>
+                {(edu.degree || edu.field) && (
+                  <p className="text-[11px] font-sans text-[#6B5A51] mt-0.5">
+                    {edu.degree}
+                    {edu.field && ` in ${edu.field}`}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Skills */}
+      {data.skills.some((s) => s.trim()) && (
+        <div>
+          <h3 className="font-serif text-[11px] uppercase tracking-[0.2em] font-bold text-[#362419] border-b border-[#362419] pb-1 mb-2">
+            Skills
+          </h3>
+          <div className="flex flex-wrap gap-1.5">
+            {data.skills
+              .filter((s) => s.trim())
+              .map((skill, idx) => (
+                <span
+                  key={idx}
+                  className="px-2 py-0.5 bg-[#F2ECE4] text-[#362419] text-[11px] font-mono rounded border border-[#D8CCC4]"
+                >
+                  {skill}
+                </span>
+              ))}
+          </div>
+        </div>
+      )}
+
+      {/* Additional Information Sections */}
+      {data.customSections.map((sec) => {
+        const itemsWithTitle = sec.items.filter((item) => item.title?.trim());
+        if (itemsWithTitle.length === 0) return null;
+        return (
+          <div key={sec.id}>
+            <h3 className="font-serif text-[11px] uppercase tracking-[0.2em] font-bold text-[#362419] border-b border-[#362419] pb-1 mb-2">
+              {sec.category || 'Additional Information'}
+            </h3>
+            <div className="space-y-2">
+              {itemsWithTitle.map((item) => (
+                <div key={item.id}>
+                  <div className="flex items-baseline justify-between gap-3">
+                    <p className="font-serif font-bold text-xs sm:text-sm text-[#362419]">{item.title}</p>
+                    {item.date && (
+                      <span className="text-[11px] font-mono text-[#8D7467] shrink-0 text-right">
+                        {item.date}
+                      </span>
+                    )}
+                  </div>
+                  {item.subtitle && (
+                    <p className="text-[11px] font-sans uppercase tracking-wider text-[#6B5A51] mt-0.5">
+                      {item.subtitle}
+                    </p>
+                  )}
+                  {item.description && (
+                    <p className="text-xs font-serif text-[#49352F] mt-0.5 leading-relaxed">
+                      {item.description}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+
+      {/* Links */}
+      {Object.values(data.links).some((v) => Boolean(v && v.trim())) && (
+        <div>
+          <h3 className="font-serif text-[11px] uppercase tracking-[0.2em] font-bold text-[#362419] border-b border-[#362419] pb-1 mb-2">
+            Links
+          </h3>
+          <div className="flex flex-wrap items-center gap-4 text-xs font-serif">
+            {Object.entries(data.links)
+              .filter(([, v]) => Boolean(v && v.trim()))
+              .map(([key, value]) => {
+                const label = getPlatformLabel(key, value);
+                const href = formatUrl(value);
+                return (
+                  <a
+                    key={key}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 font-semibold text-[#362419] underline hover:text-[#6B5A51] transition-colors"
+                  >
+                    <span>{label}</span>
+                    <ExternalLink size={11} className="opacity-70" />
+                  </a>
+                );
+              })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  const renderBrownMinimalistContent = renderBrownEditorialTemplate;
   const renderBlackWhiteMinimalistContent = renderCanvaResumeTemplate;
-  const renderBlueMinimalistContent = renderCanvaResumeTemplate;
+  const renderBlueMinimalistContent = renderBrownEditorialTemplate;
   const renderPurpleMinimalistContent = renderCanvaResumeTemplate;
 
   // ==========================================
@@ -2283,13 +2899,13 @@ export default function ResumeBuilderPage() {
             <div className="flex items-start justify-between gap-3 mb-4">
               <div>
                 <span className="text-[10px] font-mono uppercase tracking-widest text-[#362419] font-bold bg-[#FAF6F0] px-2.5 py-0.5 rounded-full border border-[#D8CCC4]">
-                  Canva Design System
+                  Editorial Serif System
                 </span>
                 <h2 className="font-serif text-2xl font-bold text-on-background mt-2">
-                  Brown & Beige Minimalist CV
+                  Brown Editorial Serif CV
                 </h2>
                 <p className="text-xs text-on-background/60 mt-1">
-                  Exact Canva reference: Dark chocolate name banner, dusty rose-brown sidebar, warm ivory background, circular profile photo, and checkmark skills.
+                  Classic single-column editorial layout: Centered executive serif header, crisp horizontal divider rules, warm ivory paper, and 100% ATS readability.
                 </p>
               </div>
               {selectedTemplate === 'blue-minimalist' && (
@@ -2302,10 +2918,9 @@ export default function ResumeBuilderPage() {
             {/* Badges */}
             <div className="flex flex-wrap gap-1.5 mb-5">
               {[
-                'Dark Chocolate & Warm Ivory',
-                'Dusty Rose-Brown Sidebar',
-                'Circular Profile Photo',
-                'Checkmark Skill Badges',
+                'Warm Ivory & Dark Chocolate',
+                'Single-Column Editorial',
+                'Centered Executive Header',
                 'Editorial Serif Typography',
                 '100% ATS-Friendly',
               ].map((badge) => (
@@ -2342,7 +2957,7 @@ export default function ResumeBuilderPage() {
                 : 'bg-primary text-on-primary hover:opacity-95'
             }`}
           >
-            <span>Use Brown & Beige Minimalist Template</span>
+            <span>Use Brown Editorial Template</span>
             <ArrowRight size={15} />
           </button>
         </div>
@@ -2436,40 +3051,40 @@ export default function ResumeBuilderPage() {
             <thead>
               <tr className="border-b border-outline-variant/60 font-mono text-[10px] uppercase tracking-wider text-on-background/60">
                 <th className="py-3 px-4">Feature</th>
-                <th className="py-3 px-4 text-[#362419] font-bold">Brown & Beige Minimalist CV</th>
+                <th className="py-3 px-4 text-[#362419] font-bold">Brown Editorial Serif CV</th>
                 <th className="py-3 px-4 text-[#49352F] font-bold">Canva Two-Column Modern CV</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant/30 text-on-background/80">
               <tr>
-                <td className="py-3 px-4 font-semibold text-on-background">Typography</td>
-                <td className="py-3 px-4">Large Serif Name Banner + Sans-Serif Body & Badges</td>
-                <td className="py-3 px-4">Single-Line Serif Banner + Tracked Uppercase Subtitle</td>
+                <td className="py-3 px-4 font-semibold text-on-background">Layout Structure</td>
+                <td className="py-3 px-4">Single-Column Editorial (Centered Executive Layout)</td>
+                <td className="py-3 px-4">Two-Column (40% Dusty-Brown Sidebar / 60% Content)</td>
               </tr>
               <tr>
-                <td className="py-3 px-4 font-semibold text-on-background">Header Alignment</td>
-                <td className="py-3 px-4">Circular Photo + Full-Width Dark Chocolate Banner</td>
-                <td className="py-3 px-4">Horizontally Aligned 125-135px Circle & Banner</td>
+                <td className="py-3 px-4 font-semibold text-on-background">Header Style</td>
+                <td className="py-3 px-4">Centered Serif Name, Uppercase Tracked Title & Contact Dots</td>
+                <td className="py-3 px-4">Circular Photo beside Dark Chocolate Horizontal Banner</td>
               </tr>
               <tr>
-                <td className="py-3 px-4 font-semibold text-on-background">Sidebar Layout</td>
-                <td className="py-3 px-4">Dusty Rose-Brown with Checkmark (✓) Skill Items</td>
-                <td className="py-3 px-4">40% Width with Boxed Headings & Checkmark (✓) Skills</td>
+                <td className="py-3 px-4 font-semibold text-on-background">Sidebar</td>
+                <td className="py-3 px-4">None (Clean Full-Width Linear Structure)</td>
+                <td className="py-3 px-4">Dusty Rose-Brown (#98796F) with Boxed Headings & Checkmarks (✓)</td>
               </tr>
               <tr>
-                <td className="py-3 px-4 font-semibold text-on-background">Palette & Contrast</td>
-                <td className="py-3 px-4">Dark Chocolate (#49352F), Dusty Rose (#98796F), Warm Blush (#FFF4F1)</td>
-                <td className="py-3 px-4">Dark Chocolate (#49352F), Dusty Rose (#98796F), Warm Blush (#FFF4F1)</td>
+                <td className="py-3 px-4 font-semibold text-on-background">Dividers & Timeline</td>
+                <td className="py-3 px-4">Crisp Dark Chocolate (#362419) Horizontal Rules</td>
+                <td className="py-3 px-4">Continuous Vertical Taupe Line (#CBB8AE) with Circular Dots</td>
               </tr>
               <tr>
-                <td className="py-3 px-4 font-semibold text-on-background">Right Timeline</td>
-                <td className="py-3 px-4">Subtle Taupe (#CBB8AE) line with circular markers</td>
-                <td className="py-3 px-4">Education, Experience, Projects, Certifications</td>
+                <td className="py-3 px-4 font-semibold text-on-background">Palette & Canvas</td>
+                <td className="py-3 px-4">Warm Ivory (#FAF6F0) Canvas + Dark Chocolate (#362419)</td>
+                <td className="py-3 px-4">Dusty Rose (#98796F), Dark Chocolate (#49352F) & Warm Blush (#FFF4F1)</td>
               </tr>
               <tr>
                 <td className="py-3 px-4 font-semibold text-on-background">Recommended For</td>
-                <td className="py-3 px-4">Designers, Creative Tech, Frontend Engineers, Architects</td>
-                <td className="py-3 px-4">Software Engineers, Product Designers, Technical Leaders</td>
+                <td className="py-3 px-4">Executive, Corporate, Traditional Leadership & High-Volume ATS</td>
+                <td className="py-3 px-4">Product Designers, Creative Developers & Modern Tech Roles</td>
               </tr>
             </tbody>
           </table>
@@ -2517,7 +3132,7 @@ export default function ResumeBuilderPage() {
                   }`}
                 />
                 {selectedTemplate === 'blue-minimalist'
-                  ? 'Brown & Beige Minimalist'
+                  ? 'Brown Editorial Serif'
                   : 'Canva Two-Column Modern'}
               </span>
             </div>
@@ -2536,7 +3151,7 @@ export default function ResumeBuilderPage() {
                     : 'text-on-background/60 hover:text-on-background'
                 }`}
               >
-                Brown & Beige
+                Brown Editorial
               </button>
               <button
                 type="button"
@@ -2547,7 +3162,7 @@ export default function ResumeBuilderPage() {
                     : 'text-on-background/60 hover:text-on-background'
                 }`}
               >
-                Canva Modern
+                Canva Two-Column
               </button>
             </div>
 
@@ -2752,7 +3367,7 @@ export default function ResumeBuilderPage() {
                       }
                       className="px-2.5 py-1 rounded-lg border border-outline-variant bg-surface-container-lowest text-[10px] font-mono uppercase tracking-wider font-bold text-on-background hover:border-primary transition-all cursor-pointer shadow-xs"
                     >
-                      Switch to {selectedTemplate === 'blue-minimalist' ? 'Canva Modern' : 'Brown & Beige'}
+                      Switch to {selectedTemplate === 'blue-minimalist' ? 'Canva Two-Column' : 'Brown Editorial'}
                     </button>
                   </div>
                 </div>

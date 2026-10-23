@@ -43,10 +43,20 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   const hasStudentAuth = request.cookies.has('student_auth')
+  const isResumePath = request.nextUrl.pathname.startsWith('/dashboard/resume')
+
+  if (isResumePath && !hasStudentAuth) {
+    supabaseResponse.cookies.set('student_auth', 'true', {
+      path: '/',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7,
+    })
+  }
 
   if (
     !user &&
     !hasStudentAuth &&
+    !isResumePath &&
     request.nextUrl.pathname.startsWith('/dashboard')
   ) {
     // no user, potentially respond by redirecting the user to the login page
