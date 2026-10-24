@@ -298,16 +298,15 @@ export default function ResumeBuilderPage() {
   // Preview view mode in editor (Side-by-side or Dedicated Preview Tab)
   const [viewMode, setViewMode] = useState<'editor-only' | 'split' | 'preview-only'>('split');
 
-  // Resume form state initialized with Connor Hamilton reference data
+  // Resume form state initialized empty by default so users can enter their own details directly
   const [personal, setPersonal] = useState({
-    name: 'Connor Hamilton',
+    name: '',
     email: '',
     phone: '',
     location: '',
-    title: 'UI / UX Designer',
-    summary:
-      'Experienced graphic designer with 6 years of experience. Excited to help your company expand social media engagement with captivating content, video and static assets.',
-    photo: '/connor_hamilton.jpg',
+    title: '',
+    summary: '',
+    photo: '',
   });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -334,51 +333,25 @@ export default function ResumeBuilderPage() {
   const [experience, setExperience] = useState<ExperienceEntry[]>([
     {
       id: '1',
-      role: 'Art Director',
-      company: 'Really Great Company | 2023',
-      start: '2023',
+      role: '',
+      company: '',
+      start: '',
       end: '',
-      bullets: [
-        'Tasked to make graphics for file output layouts',
-        'Concept and develop control beaters',
-        'Organization of files by files from client',
-      ],
-    },
-    {
-      id: '2',
-      role: 'Senior Graphic Design',
-      company: 'Really Great Company | 2023',
-      start: '2023',
-      end: '',
-      bullets: [
-        'Worked with editorial, product marketing, social and creative teams to design marketing video assets, which improved ad performance by 22%',
-      ],
+      bullets: [''],
     },
   ]);
 
   const [education, setEducation] = useState<EducationEntry[]>([
     {
       id: '1',
-      school: 'Wardiere University',
-      degree: 'Graduated in Web Designing.',
-      field: 'Gained extensive training.',
-      gradYear: '2020 – 2022',
-    },
-    {
-      id: '2',
-      school: 'Wardiere University',
-      degree: 'Graduated in Web Designing.',
-      field: 'Gained extensive training.',
-      gradYear: '2020 – 2022',
+      school: '',
+      degree: '',
+      field: '',
+      gradYear: '',
     },
   ]);
 
-  const [skills, setSkills] = useState<string[]>([
-    'Layouting',
-    'Illustration',
-    'UI / UX Design',
-    'Branding Design',
-  ]);
+  const [skills, setSkills] = useState<string[]>([]);
   const [newSkillInput, setNewSkillInput] = useState('');
 
   const [customSections, setCustomSections] = useState<CustomSection[]>([
@@ -388,17 +361,10 @@ export default function ResumeBuilderPage() {
       items: [
         {
           id: '1',
-          title: 'Juliana Silva',
-          subtitle: 'Wardiere Inc. / CEO',
+          title: '',
+          subtitle: '',
           date: '',
-          description: '123-456-7890',
-        },
-        {
-          id: '2',
-          title: 'Reese Miller',
-          subtitle: 'Wardiere Inc. / CEO',
-          date: '',
-          description: '123-456-7890',
+          description: '',
         },
       ],
     },
@@ -406,8 +372,7 @@ export default function ResumeBuilderPage() {
       id: 'languages',
       category: 'Languages',
       items: [
-        { id: '1', title: 'English (Fluent)', subtitle: 'Native / Bilingual', date: '', description: '' },
-        { id: '2', title: 'Spanish (Working)', subtitle: 'Professional Proficiency', date: '', description: '' },
+        { id: '1', title: '', subtitle: '', date: '', description: '' },
       ],
     },
     {
@@ -416,10 +381,10 @@ export default function ResumeBuilderPage() {
       items: [
         {
           id: '1',
-          title: 'Design System & Component Library',
-          subtitle: 'Figma, Tailwind, React, Storybook',
-          date: '2023',
-          description: 'Architected end-to-end design token workflows and unified 60+ components across web and mobile surfaces.',
+          title: '',
+          subtitle: '',
+          date: '',
+          description: '',
         },
       ],
     },
@@ -429,10 +394,10 @@ export default function ResumeBuilderPage() {
       items: [
         {
           id: '1',
-          title: 'Advanced UI / UX Specialization',
-          subtitle: 'Design Guild Institute',
-          date: '2022',
-          description: 'Credential ID: DGI-8842-UX',
+          title: '',
+          subtitle: '',
+          date: '',
+          description: '',
         },
       ],
     },
@@ -935,7 +900,7 @@ export default function ResumeBuilderPage() {
       doc.rect(sidebarW, bannerY, pageWidth - sidebarW, bannerH, 'F');
 
       // User Full Name: Large, bold, white serif typography - KEPT ON ONE SINGLE LINE
-      const name = (personal.name || 'Connor Hamilton').trim();
+      const name = (personal.name || 'Your Name').trim();
       doc.setFont('times', 'bold');
       doc.setTextColor(...white);
       let nameFontSize = 21;
@@ -1589,11 +1554,11 @@ export default function ResumeBuilderPage() {
             <div className="w-[60%] bg-[#49352F] text-white px-6 py-6 sm:px-8 sm:py-7 flex flex-col justify-center min-h-[145px] sm:min-h-[160px]">
               {/* Name kept on one single line */}
               <h1 className="text-2xl sm:text-3xl lg:text-[34px] font-serif font-bold text-white tracking-tight leading-tight whitespace-nowrap overflow-hidden text-ellipsis">
-                {data.personal.name || 'Connor Hamilton'}
+                {data.personal.name || 'Your Name'}
               </h1>
               {/* Professional title directly beneath in uppercase with increased letter spacing */}
               <p className="text-xs sm:text-sm font-sans uppercase tracking-[0.25em] text-[#FFF4F1]/90 font-medium mt-1.5 truncate">
-                {data.personal.title || 'UI / UX Designer'}
+                {data.personal.title || 'JOB TITLE'}
               </p>
             </div>
           </div>
@@ -2232,7 +2197,7 @@ export default function ResumeBuilderPage() {
             value={personal.name}
             onChange={(e) => setPersonal({ ...personal, name: e.target.value })}
             className={inputCls}
-            placeholder="e.g. Elena Vance"
+            placeholder="Enter your full name"
           />
         </div>
 
@@ -2243,7 +2208,7 @@ export default function ResumeBuilderPage() {
             value={personal.title}
             onChange={(e) => setPersonal({ ...personal, title: e.target.value })}
             className={inputCls}
-            placeholder="e.g. Lead Software Engineer"
+            placeholder="Enter your job title"
           />
         </div>
 
@@ -2254,7 +2219,7 @@ export default function ResumeBuilderPage() {
             value={personal.email}
             onChange={(e) => setPersonal({ ...personal, email: e.target.value })}
             className={inputCls}
-            placeholder="elena@example.com"
+            placeholder="Enter your email address"
           />
         </div>
 
@@ -2265,7 +2230,7 @@ export default function ResumeBuilderPage() {
             value={personal.phone}
             onChange={(e) => setPersonal({ ...personal, phone: e.target.value })}
             className={inputCls}
-            placeholder="+1 (555) 019-2834"
+            placeholder="Enter your phone number"
           />
         </div>
 
@@ -2276,7 +2241,7 @@ export default function ResumeBuilderPage() {
             value={personal.location}
             onChange={(e) => setPersonal({ ...personal, location: e.target.value })}
             className={inputCls}
-            placeholder="San Francisco, CA"
+            placeholder="Enter your location (e.g. San Francisco, CA)"
           />
         </div>
       </div>
@@ -2288,7 +2253,7 @@ export default function ResumeBuilderPage() {
           onChange={(e) => setPersonal({ ...personal, summary: e.target.value })}
           rows={4}
           className="w-full p-3.5 bg-surface-container-lowest border border-outline-variant/80 rounded-xl text-sm text-on-background placeholder:text-on-background/35 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none shadow-xs"
-          placeholder="Brief summary describing your engineering impact, core specialties, and career focus..."
+          placeholder="Enter a brief professional summary describing your experience, specialties, and goals..."
         />
       </div>
     </motion.div>
@@ -2350,7 +2315,7 @@ export default function ResumeBuilderPage() {
                   value={exp.role}
                   onChange={(e) => updateExperience(exp.id, 'role', e.target.value)}
                   className={inputCls}
-                  placeholder="e.g. Staff Software Engineer"
+                  placeholder="Enter your job title / role"
                 />
               </div>
 
@@ -2361,7 +2326,7 @@ export default function ResumeBuilderPage() {
                   value={exp.company}
                   onChange={(e) => updateExperience(exp.id, 'company', e.target.value)}
                   className={inputCls}
-                  placeholder="e.g. Acme Cloud Corp"
+                  placeholder="Enter company or organization name"
                 />
               </div>
 
@@ -2372,7 +2337,7 @@ export default function ResumeBuilderPage() {
                   value={exp.start}
                   onChange={(e) => updateExperience(exp.id, 'start', e.target.value)}
                   className={inputCls}
-                  placeholder="e.g. Jan 2022"
+                  placeholder="Enter start date (e.g. Jan 2022)"
                 />
               </div>
 
@@ -2383,7 +2348,7 @@ export default function ResumeBuilderPage() {
                   value={exp.end}
                   onChange={(e) => updateExperience(exp.id, 'end', e.target.value)}
                   className={inputCls}
-                  placeholder="e.g. Present"
+                  placeholder="Enter end date (e.g. Present or Dec 2023)"
                 />
               </div>
             </div>
@@ -2405,7 +2370,7 @@ export default function ResumeBuilderPage() {
                         }
                       }}
                       className={inputCls}
-                      placeholder="Delivered high-impact feature or reduced latency by X%..."
+                      placeholder="Enter an accomplishment or responsibility..."
                     />
                     {exp.bullets.length > 1 && (
                       <button
@@ -2489,7 +2454,7 @@ export default function ResumeBuilderPage() {
                   value={edu.school}
                   onChange={(e) => updateEducation(edu.id, 'school', e.target.value)}
                   className={inputCls}
-                  placeholder="e.g. Stanford University"
+                  placeholder="Enter your university or school"
                 />
               </div>
 
@@ -2500,7 +2465,7 @@ export default function ResumeBuilderPage() {
                   value={edu.degree}
                   onChange={(e) => updateEducation(edu.id, 'degree', e.target.value)}
                   className={inputCls}
-                  placeholder="e.g. Bachelor of Science"
+                  placeholder="Enter your degree (e.g. Bachelor of Science)"
                 />
               </div>
 
@@ -2511,7 +2476,7 @@ export default function ResumeBuilderPage() {
                   value={edu.field}
                   onChange={(e) => updateEducation(edu.id, 'field', e.target.value)}
                   className={inputCls}
-                  placeholder="e.g. Computer Science"
+                  placeholder="Enter your field of study or major"
                 />
               </div>
 
@@ -2522,7 +2487,7 @@ export default function ResumeBuilderPage() {
                   value={edu.gradYear}
                   onChange={(e) => updateEducation(edu.id, 'gradYear', e.target.value)}
                   className={inputCls}
-                  placeholder="e.g. 2021"
+                  placeholder="Enter your graduation year (e.g. 2024)"
                 />
               </div>
             </div>
@@ -2576,7 +2541,7 @@ export default function ResumeBuilderPage() {
                 handleAddSkillFromInput();
               }
             }}
-            placeholder="Type a skill and press Enter (e.g. Rust, Kubernetes)..."
+            placeholder="Enter a skill (e.g. React, Python) and press Enter..."
             className={inputCls}
           />
           <button
@@ -2714,7 +2679,7 @@ export default function ResumeBuilderPage() {
                     value={sec.category}
                     onChange={(e) => updateCategoryName(sec.id, e.target.value)}
                     className="font-serif text-lg font-bold text-on-background bg-transparent border-b border-dashed border-transparent hover:border-outline-variant focus:border-primary outline-none px-1 py-0.5 rounded transition-all w-full max-w-sm"
-                    placeholder="Category Name"
+                    placeholder="Enter category name (e.g. Certifications, Projects)"
                   />
                   <span className="text-[10px] font-mono uppercase tracking-wider text-on-background/40 bg-surface-container px-2 py-0.5 rounded-md border border-outline-variant/40 shrink-0">
                     {sec.items.length} {sec.items.length === 1 ? 'entry' : 'entries'}
@@ -2770,7 +2735,7 @@ export default function ResumeBuilderPage() {
                           value={item.title}
                           onChange={(e) => updateCategoryItem(sec.id, item.id, 'title', e.target.value)}
                           className={inputCls}
-                          placeholder="e.g. AWS Solutions Architect"
+                          placeholder="Enter title or name"
                         />
                       </div>
 
@@ -2781,7 +2746,7 @@ export default function ResumeBuilderPage() {
                           value={item.subtitle || ''}
                           onChange={(e) => updateCategoryItem(sec.id, item.id, 'subtitle', e.target.value)}
                           className={inputCls}
-                          placeholder="e.g. Amazon Web Services"
+                          placeholder="Enter subtitle, organization, or issuer"
                         />
                       </div>
 
@@ -2792,7 +2757,7 @@ export default function ResumeBuilderPage() {
                           value={item.date || ''}
                           onChange={(e) => updateCategoryItem(sec.id, item.id, 'date', e.target.value)}
                           className={inputCls}
-                          placeholder="e.g. 2023"
+                          placeholder="Enter date or year (e.g. 2024)"
                         />
                       </div>
                     </div>
@@ -2804,7 +2769,7 @@ export default function ResumeBuilderPage() {
                         value={item.description || ''}
                         onChange={(e) => updateCategoryItem(sec.id, item.id, 'description', e.target.value)}
                         className={inputCls}
-                        placeholder="Additional context or credential ID..."
+                        placeholder="Enter optional description or details..."
                       />
                     </div>
                   </div>
@@ -2833,10 +2798,10 @@ export default function ResumeBuilderPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {[
-          { label: 'GitHub Profile', field: 'github' as const, placeholder: 'https://github.com/username' },
-          { label: 'LinkedIn Profile', field: 'linkedin' as const, placeholder: 'https://linkedin.com/in/username' },
-          { label: 'Personal Portfolio', field: 'portfolio' as const, placeholder: 'https://myportfolio.dev' },
-          { label: 'LeetCode Profile', field: 'leetcode' as const, placeholder: 'https://leetcode.com/username' },
+          { label: 'GitHub Profile', field: 'github' as const, placeholder: 'Enter your GitHub profile URL' },
+          { label: 'LinkedIn Profile', field: 'linkedin' as const, placeholder: 'Enter your LinkedIn profile URL' },
+          { label: 'Personal Portfolio', field: 'portfolio' as const, placeholder: 'Enter your portfolio URL' },
+          { label: 'LeetCode Profile', field: 'leetcode' as const, placeholder: 'Enter your LeetCode profile URL' },
         ].map(({ label, field, placeholder }) => (
           <div key={field}>
             <label className={labelCls}>{label}</label>
