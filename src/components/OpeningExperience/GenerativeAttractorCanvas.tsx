@@ -5,10 +5,16 @@ import React, { useEffect, useRef } from 'react';
 interface GenerativeAttractorCanvasProps {
   className?: string;
   /** 'landing' scrolls with page sections; 'static' holds a fixed auth-page pose */
-  mode?: 'landing' | 'static';
+  mode?: 'landing' | 'static' | 'hero';
+  /** Colour story: warm earth (default) or brown / copper / silver for the landing */
+  palette?: 'earth' | 'copper';
 }
 
-export default function GenerativeAttractorCanvas({ className = '', mode = 'landing' }: GenerativeAttractorCanvasProps) {
+export default function GenerativeAttractorCanvas({
+  className = '',
+  mode = 'landing',
+  palette = 'earth',
+}: GenerativeAttractorCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef<{ x: number; y: number }>({ x: -9999, y: -9999 });
 
@@ -72,42 +78,37 @@ export default function GenerativeAttractorCanvas({ className = '', mode = 'land
     const projDepth = new Float32Array(numPoints);
 
     // --- 2. PRE-COMPUTE COLOR LOOKUP TABLE ---
-    // Dark Chocolate:   #34281D (52, 40, 29)
-    // Deep Earth Brown: #3E1510 (62, 21, 16)
-    // Earthy Burgundy:  #56241A (86, 36, 26)
-    // Terracotta:       #7C3F2F (124, 63, 47)
-    // Warm Copper:      #A0674F (160, 103, 79)
-    // Warm Off-White:   #EEEBE7 (238, 235, 231)
+    // Earth:   espresso → burgundy → terracotta → copper
+    // Copper:  deep brown → chestnut → copper → sand
+    const STOPS: [number, number, number][] =
+      palette === 'copper'
+        ? [
+            [30, 19, 13], // Espresso      #1E130D
+            [74, 45, 28], // Chestnut      #4A2D1C
+            [122, 58, 30], // Burnt copper  #7A3A1E
+            [178, 92, 50], // Copper        #B25C32
+            [216, 158, 112], // Sand         #D89E70
+          ]
+        : [
+            [52, 40, 29], // Dark chocolate
+            [62, 21, 16], // Deep earth brown
+            [86, 36, 26], // Earthy burgundy
+            [124, 63, 47], // Terracotta
+            [160, 103, 79], // Warm copper
+          ];
+
+    const BOUNDS = [0, 0.25, 0.55, 0.8, 1];
     const COLOR_LUT: string[][] = [];
     for (let z = 0; z < 32; z++) {
       const zNorm = z / 31;
-      let r: number, g: number, b: number;
-
-      if (zNorm < 0.25) {
-        // Dark Chocolate (52, 40, 29) to Deep Earth Brown (62, 21, 16)
-        const t = zNorm / 0.25;
-        r = Math.round(52 + (62 - 52) * t);
-        g = Math.round(40 + (21 - 40) * t);
-        b = Math.round(29 + (16 - 29) * t);
-      } else if (zNorm < 0.55) {
-        // Deep Earth Brown (62, 21, 16) to Earthy Burgundy (86, 36, 26)
-        const t = (zNorm - 0.25) / 0.3;
-        r = Math.round(62 + (86 - 62) * t);
-        g = Math.round(21 + (36 - 21) * t);
-        b = Math.round(16 + (26 - 16) * t);
-      } else if (zNorm < 0.8) {
-        // Earthy Burgundy (86, 36, 26) to Terracotta (124, 63, 47)
-        const t = (zNorm - 0.55) / 0.25;
-        r = Math.round(86 + (124 - 86) * t);
-        g = Math.round(36 + (63 - 36) * t);
-        b = Math.round(26 + (47 - 26) * t);
-      } else {
-        // Terracotta (124, 63, 47) to Warm Copper (160, 103, 79)
-        const t = (zNorm - 0.8) / 0.2;
-        r = Math.round(124 + (160 - 124) * t);
-        g = Math.round(63 + (103 - 63) * t);
-        b = Math.round(47 + (79 - 47) * t);
-      }
+      let seg = 0;
+      while (seg < BOUNDS.length - 2 && zNorm > BOUNDS[seg + 1]) seg++;
+      const t = (zNorm - BOUNDS[seg]) / (BOUNDS[seg + 1] - BOUNDS[seg]);
+      const from = STOPS[seg];
+      const to = STOPS[seg + 1];
+      const r = Math.round(from[0] + (to[0] - from[0]) * t);
+      const g = Math.round(from[1] + (to[1] - from[1]) * t);
+      const b = Math.round(from[2] + (to[2] - from[2]) * t);
 
       COLOR_LUT[z] = [];
       for (let d = 0; d < 16; d++) {
@@ -118,13 +119,23 @@ export default function GenerativeAttractorCanvas({ className = '', mode = 'land
       }
     }
 
-    // Traveling pulses: Terracotta, Earthy Burgundy, Warm Copper, Deep Earth Brown
-    const PULSE_COLORS = [
-      { r: 124, g: 63, b: 47 },  // Terracotta (#7C3F2F)
-      { r: 86, g: 36, b: 26 },   // Earthy Burgundy (#56241A)
-      { r: 160, g: 103, b: 79 }, // Warm Copper (#A0674F)
-      { r: 62, g: 21, b: 16 },   // Deep Earth Brown (#3E1510)
-    ];
+    // Traveling pulses
+    const PULSE_COLORS =
+      palette === 'copper'
+        ? [
+            { r: 74, g: 47, b: 31 }, // Chestnut
+            { r: 196, g: 112, b: 63 }, // Copper
+            { r: 227, g: 161, b: 95 }, // Amber
+            { r: 198, g: 194, b: 189 }, // Silver
+          ]
+        : [
+            { r: 124, g: 63, b: 47 }, // Terracotta
+            { r: 86, g: 36, b: 26 }, // Earthy burgundy
+            { r: 160, g: 103, b: 79 }, // Warm copper
+            { r: 62, g: 21, b: 16 }, // Deep earth brown
+          ];
+
+    const CANVAS_FILL = palette === 'copper' ? '#FAF7F3' : '#EEEBE7';
 
     const PULSE_LUTS = PULSE_COLORS.map(c => 
       [0.2, 0.4, 0.6, 0.75, 0.9, 1.0].map(
@@ -160,7 +171,7 @@ export default function GenerativeAttractorCanvas({ className = '', mode = 'land
     let isCanvasVisible = true;
 
     const measureSections = () => {
-      if (mode === 'static') return;
+      if (mode === 'static' || mode === 'hero') return;
       const elStatement = document.getElementById('statement');
       if (elStatement) statementTop = elStatement.offsetTop;
 
@@ -182,7 +193,7 @@ export default function GenerativeAttractorCanvas({ className = '', mode = 'land
     let scrollY = window.scrollY;
     let smoothY = scrollY;
     const handleScroll = () => {
-      if (mode === 'static') return;
+      if (mode === 'static' || mode === 'hero') return;
       scrollY = window.scrollY;
       if (scrollY > manifestoTop + 1400) {
         isCanvasVisible = false;
@@ -212,15 +223,21 @@ export default function GenerativeAttractorCanvas({ className = '', mode = 'land
       const hasMouse = mouseX > -9000;
 
       // --- 4. HERMITE SMOOTHSTEP SCROLL PROGRESSION ---
-      const calcProg = (topOffset: number) => {
-        const t = Math.max(0, Math.min(1, (windowHeight - (topOffset - smoothY)) / windowHeight));
+      // `span` is the scroll distance over which the section reaches its settled
+      // pose; a shorter span delays the morph until the section is closer to the
+      // top of the viewport.
+      const calcProg = (topOffset: number, span = windowHeight) => {
+        const t = Math.max(0, Math.min(1, (span - (topOffset - smoothY)) / span));
         return t * t * (3 - 2 * t);
       };
 
-      const pStatement = (mode === 'static' || prefersReducedMotion) ? 0 : calcProg(statementTop);
-      const pAbout = mode === 'static' ? 0 : calcProg(aboutTop);
-      const pArchive = mode === 'static' ? 0 : calcProg(archiveTop);
-      const pManifesto = mode === 'static' ? 0 : calcProg(manifestoTop);
+      const pStatement = (mode === 'static' || mode === 'hero' || prefersReducedMotion) ? 0 : calcProg(statementTop);
+      // #about's morph only begins once it reaches the middle of the screen, so
+      // the statement section keeps the closing section's settled pattern while
+      // it is the section being read instead of shrinking into the next pose.
+      const pAbout = (mode === 'static' || mode === 'hero') ? 0 : calcProg(aboutTop, windowHeight * 0.5);
+      const pArchive = (mode === 'static' || mode === 'hero') ? 0 : calcProg(archiveTop);
+      const pManifesto = (mode === 'static' || mode === 'hero') ? 0 : calcProg(manifestoTop);
 
       // --- 5. MULTI-KEYFRAME TRANSFORMATION TARGETS ---
       const kf0 = mode === 'static'
@@ -231,6 +248,14 @@ export default function GenerativeAttractorCanvas({ className = '', mode = 'land
             yaw: 0.35,
             pitch: 0.25,
           }
+        : mode === 'hero'
+        ? {
+            cx: isMobile ? 0.5 * width : 0.72 * width,
+            cy: 0.48 * height,
+            scl: Math.min(width, height) / 46,
+            yaw: -0.2,
+            pitch: 0.08,
+          }
         : {
             cx: isMobile ? 0.5 * width : 0.22 * width,
             cy: 0.50 * height,
@@ -239,13 +264,16 @@ export default function GenerativeAttractorCanvas({ className = '', mode = 'land
             pitch: 0,
           };
 
-      // Statement Section: Rotate slowly (max 8° / 0.1396 rad) and shift vertically by up to 20px
+      // Statement Section: settle into the open twin-lobe silhouette.
+      // Yawing a quarter turn puts the attractor's y–z face toward the viewer,
+      // where the two trajectories close into rounded wings instead of the
+      // edge-on tangle of crossing lines. A small pitch/yaw offset keeps depth.
       const kf1 = {
-        cx: isMobile ? 0.5 * width : 0.22 * width,
-        cy: 0.50 * height + 20,
-        scl: Math.min(width, height) / 48,
-        yaw: -0.15 + (8 * Math.PI / 180),
-        pitch: 0,
+        cx: 0.5 * width,
+        cy: 0.5 * height,
+        scl: Math.min(width, height) / 60,
+        yaw: Math.PI / 2 + 0.1,
+        pitch: 0.05,
       };
 
       const kf2 = {
@@ -265,12 +293,15 @@ export default function GenerativeAttractorCanvas({ className = '', mode = 'land
         pitch: 1.1,
       };
 
+      // Closing #manifesto section reprises the statement's twin-lobe pose so
+      // the page opens and closes on the same silhouette. The scale is divided
+      // by the closing +60% breathing boost so the motif matches the statement.
       const kf4 = {
-        cx: 0.56 * width,
-        cy: 0.52 * height,
-        scl: Math.min(width, height) / 28,
-        yaw: 0.2,
-        pitch: 1.05,
+        cx: 0.5 * width,
+        cy: 0.5 * height,
+        scl: Math.min(width, height) / 96,
+        yaw: Math.PI / 2 + 0.1,
+        pitch: 0.05,
       };
 
       // Progressive continuous interpolation through scroll states
@@ -359,17 +390,18 @@ export default function GenerativeAttractorCanvas({ className = '', mode = 'land
         let screenX = targetCenterX + (rx - rotCenterX) * totalScale * perspFactor;
         let screenY = targetCenterY - (ry * sinPitch + oz * cosPitch - rotCenterW) * totalScale * perspFactor;
 
-        // FAST BOUNDING-BOX CURSOR REPULSION FIELD
+        // FAST BOUNDING-BOX CURSOR REPULSION FIELD (kept tight so the
+        // cursor never flings lines onto nearby content)
         if (checkMouse) {
           const dx = screenX - mouseX;
-          if (dx > -150 && dx < 150) {
+          if (dx > -110 && dx < 110) {
             const dy = screenY - mouseY;
-            if (dy > -150 && dy < 150) {
+            if (dy > -110 && dy < 110) {
               const distSq = dx * dx + dy * dy;
-              if (distSq < 22500 && distSq >= 1) {
+              if (distSq < 12100 && distSq >= 1) {
                 const dist = Math.sqrt(distSq);
-                const factor = 1 - dist / 150;
-                const repulsionForce = 80 * factor * factor;
+                const factor = 1 - dist / 110;
+                const repulsionForce = 50 * factor * factor;
                 screenX += (dx / dist) * repulsionForce;
                 screenY += (dy / dist) * repulsionForce;
               }
@@ -382,14 +414,14 @@ export default function GenerativeAttractorCanvas({ className = '', mode = 'land
         projDepth[i] = depthVal;
       }
 
-      // --- 8. RENDER CANVAS ON WARM OFF-WHITE (#EEEBE7) WITH MULTIPLY BLEND ---
+      // --- 8. RENDER CANVAS ON PAPER WITH MULTIPLY BLEND ---
       ctx.globalCompositeOperation = 'source-over';
-      ctx.fillStyle = '#EEEBE7'; // Warm Off-White primary background
+      ctx.fillStyle = CANVAS_FILL;
       ctx.fillRect(0, 0, width, height);
 
       // 'multiply' creates rich, organic print-like depth on warm paper
       ctx.globalCompositeOperation = 'multiply';
-      ctx.lineWidth = 1.55;
+      ctx.lineWidth = palette === 'copper' ? 1.75 : 1.55;
 
       const step = isMobile ? 2 : 1;
       const BATCH_SIZE = isMobile ? 20 : 32;
@@ -470,7 +502,7 @@ export default function GenerativeAttractorCanvas({ className = '', mode = 'land
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [mode]);
+  }, [mode, palette]);
 
   return (
     <canvas

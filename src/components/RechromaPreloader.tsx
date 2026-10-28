@@ -132,15 +132,15 @@ const WORDMARK_BLOCKS: PixelBlock[] = [
 ];
 
 const CHROMATIC_PALETTE = [
-  '#F3E7D8', // Warm Cream
-  '#E8C39E', // Sand
-  '#D9A066', // Amber
-  '#C97B4A', // Terracotta
-  '#A0674F', // Warm Copper
-  '#7C3F2F', // Burnt Sienna
-  '#56241A', // Earthy Burgundy
-  '#E8C39E', // Sand
-  '#F3E7D8', // Warm Cream
+  '#F8EADF', // Warm Cream
+  '#EBC4A6', // Sand
+  '#D08A5E', // Amber
+  '#C4703F', // Terracotta
+  '#B4552D', // Warm Copper
+  '#6F4A34', // Burnt Sienna
+  '#4A2F1F', // Earthy Burgundy
+  '#EBC4A6', // Sand
+  '#F8EADF', // Warm Cream
 ];
 
 interface AnimatedBlock {
@@ -282,7 +282,7 @@ export default function RechromaPreloader() {
         const age = elapsed - sp.birthTime;
         if (age > sp.lifetime) return false;
         const curAlpha = sp.alpha * (1 - age / sp.lifetime);
-        ctx.fillStyle = `rgba(243, 231, 216, ${curAlpha})`;
+        ctx.fillStyle = `rgba(248, 234, 223, ${curAlpha})`;
         ctx.fillRect(sp.x, sp.y, sp.size, sp.size);
         return true;
       });
@@ -329,7 +329,7 @@ export default function RechromaPreloader() {
             ctx.shadowColor = CHROMATIC_PALETTE[block.base.charIndex % CHROMATIC_PALETTE.length];
             ctx.shadowBlur = 6;
           } else {
-            ctx.fillStyle = '#F3E7D8';
+            ctx.fillStyle = '#F8EADF';
             ctx.shadowColor = 'rgba(232, 195, 158, 0.5)';
             ctx.shadowBlur = 4;
           }
@@ -338,7 +338,7 @@ export default function RechromaPreloader() {
 
           // Crisp inner pixel border
           if (bSize >= 10) {
-            ctx.strokeStyle = 'rgba(62, 21, 16, 0.28)';
+            ctx.strokeStyle = 'rgba(58, 36, 24, 0.28)';
             ctx.lineWidth = 1;
             ctx.strokeRect(bx + 0.5, by + 0.5, bSize - 1, bSize - 1);
           }
@@ -366,7 +366,7 @@ export default function RechromaPreloader() {
   return (
     <div
       onClick={finishPreloader}
-      className="fixed inset-0 z-[9999] bg-[#3E1510] flex flex-col items-center justify-center select-none cursor-pointer"
+      className="fixed inset-0 z-[9999] bg-[#3A2418] flex flex-col items-center justify-center select-none cursor-pointer"
       style={{
         opacity,
         transition: `opacity ${EXIT_MS}ms cubic-bezier(0.4, 0, 0.2, 1)`,
@@ -378,7 +378,7 @@ export default function RechromaPreloader() {
       <div
         className="absolute inset-0 opacity-70 pointer-events-none"
         style={{
-          background: 'radial-gradient(circle at 50% 50%, #56241A 0%, #2A0E08 78%)',
+          background: 'radial-gradient(circle at 50% 50%, #4A2F1F 0%, #19100B 78%)',
         }}
       />
 
@@ -386,8 +386,8 @@ export default function RechromaPreloader() {
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" />
 
       {/* Minimal Status Indicator at Bottom */}
-      <div className="absolute bottom-12 flex items-center gap-2.5 text-[#E8C39E] font-mono text-[11px] tracking-[0.2em] uppercase">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#D9A066] animate-pulse" />
+      <div className="absolute bottom-12 flex items-center gap-2.5 text-[#EBC4A6] font-mono text-[11px] tracking-[0.2em] uppercase">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#D08A5E] animate-pulse" />
         <span>{statusText}</span>
       </div>
     </div>

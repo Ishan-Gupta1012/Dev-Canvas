@@ -86,46 +86,46 @@ export default function InteractivePortfolioShowcase() {
       {/* 1. TOP CONTROL BAR: CATEGORY TABS & LIVE THEME TOGGLE */}
       <div className="flex flex-col gap-4">
         {/* Eyebrow Status Bar */}
-        <div className="flex items-center justify-between border-b border-[#3E1510]/20 pb-3 flex-wrap gap-2">
+        <div className="flex items-center justify-between border-b border-[#3A2418]/20 pb-3 flex-wrap gap-2">
           <div className="flex items-center gap-2.5">
-            <span className="w-2 h-2 rounded-full bg-[#7C3F2F] animate-pulse" />
-            <span className="font-mono text-caption uppercase text-[#7C3F2F] tracking-[0.2em] font-bold">
+            <span className="w-2 h-2 rounded-full bg-[#6F4A34] animate-pulse" />
+            <span className="font-mono text-caption uppercase text-[#6F4A34] tracking-[0.2em] font-bold">
               PORTFOLIO ENGINE // RESUME-TO-WEB TRANSFORMATION
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-[#A0674F]">
+          <div className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-[#B4552D]">
             <span className="hidden sm:inline">PREVIEW STYLE:</span>
-            <div className="flex items-center gap-1 bg-[#CCC0B5]/30 p-0.5 rounded-xs border border-[#3E1510]/15">
+            <div className="flex items-center gap-1 bg-[#C6C2BD]/30 p-0.5 rounded-xs border border-[#3A2418]/15">
               <button
                 onClick={() => setActiveTheme('warm')}
                 className={`px-2 py-0.5 text-[10px] rounded-xs font-semibold transition-all cursor-pointer ${
                   activeTheme === 'warm'
-                    ? 'bg-[#56241A] text-[#FFFFFF] shadow-xs'
-                    : 'text-[#3E1510] hover:text-[#56241A]'
+                    ? 'bg-[#4A2F1F] text-[#FFFFFF] shadow-xs'
+                    : 'text-[#3A2418] hover:text-[#4A2F1F]'
                 }`}
               >
-                WARM
+                MOCHA
               </button>
               <button
                 onClick={() => setActiveTheme('burgundy')}
                 className={`px-2 py-0.5 text-[10px] rounded-xs font-semibold transition-all cursor-pointer ${
                   activeTheme === 'burgundy'
-                    ? 'bg-[#3E1510] text-[#FFFFFF] shadow-xs'
-                    : 'text-[#3E1510] hover:text-[#56241A]'
+                    ? 'bg-[#3A2418] text-[#FFFFFF] shadow-xs'
+                    : 'text-[#3A2418] hover:text-[#4A2F1F]'
                 }`}
               >
-                BURGUNDY
+                ESPRESSO
               </button>
               <button
                 onClick={() => setActiveTheme('editorial')}
                 className={`px-2 py-0.5 text-[10px] rounded-xs font-semibold transition-all cursor-pointer ${
                   activeTheme === 'editorial'
-                    ? 'bg-[#270F05] text-[#FFFFFF] shadow-xs'
-                    : 'text-[#3E1510] hover:text-[#56241A]'
+                    ? 'bg-[#1B120D] text-[#FFFFFF] shadow-xs'
+                    : 'text-[#3A2418] hover:text-[#4A2F1F]'
                 }`}
               >
-                DARK
+                DUSK
               </button>
             </div>
           </div>
@@ -141,19 +141,19 @@ export default function InteractivePortfolioShowcase() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`relative px-3 sm:px-4 py-2.5 rounded-xs font-mono text-caption uppercase tracking-wider text-left transition-all duration-200 cursor-pointer border ${
                   isActive
-                    ? 'bg-[#3E1510] text-[#FFFFFF] border-[#270F05] shadow-md'
-                    : 'bg-[#EEEBE7]/80 text-[#56241A] border-[#3E1510]/20 hover:border-[#7C3F2F] hover:bg-[#CCC0B5]/40'
+                    ? 'bg-[#3A2418] text-[#FFFFFF] border-[#1B120D] shadow-md'
+                    : 'bg-[#FAF7F3]/80 text-[#4A2F1F] border-[#3A2418]/20 hover:border-[#6F4A34] hover:bg-[#C6C2BD]/40'
                 }`}
                 aria-label={`Showcase ${tab.label}`}
               >
                 <div className="flex items-center justify-between">
-                  <span className={isActive ? 'text-[#A0674F]' : 'text-[#7C3F2F]'}>
+                  <span className={isActive ? 'text-[#B4552D]' : 'text-[#6F4A34]'}>
                     {tab.index}
                   </span>
                   {isActive && (
                     <motion.span
                       layoutId="tabActiveIndicator"
-                      className="w-1.5 h-1.5 rounded-full bg-[#A0674F]"
+                      className="w-1.5 h-1.5 rounded-full bg-[#B4552D]"
                       transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                     />
                   )}
@@ -177,17 +177,17 @@ export default function InteractivePortfolioShowcase() {
             className="flex flex-col gap-2"
           >
             <div className="flex items-center gap-2">
-              <span className="font-mono text-[10px] tracking-widest uppercase text-[#7C3F2F] font-semibold bg-[#7C3F2F]/10 px-2 py-0.5 rounded-xs border border-[#7C3F2F]/20">
+              <span className="font-mono text-[10px] tracking-widest uppercase text-[#6F4A34] font-semibold bg-[#6F4A34]/10 px-2 py-0.5 rounded-xs border border-[#6F4A34]/20">
                 {currentTab.sourceLabel}
               </span>
-              <span className="text-[#A0674F] font-mono text-[10px] hidden sm:inline">
+              <span className="text-[#B4552D] font-mono text-[10px] hidden sm:inline">
                 • {currentTab.extractedFrom}
               </span>
             </div>
-            <h2 className="font-serif font-medium text-heading-xl text-[#0A0402] leading-[1.08]">
+            <h2 className="font-serif font-medium text-heading-xl text-[#20150F] leading-[1.08]">
               {currentTab.headline}
             </h2>
-            <p className="font-sans text-body-lg text-[#34281D]/85 max-w-[720px]">
+            <p className="font-sans text-body-lg text-[#352016]/85 max-w-[720px]">
               {currentTab.tagline}
             </p>
           </motion.div>
@@ -211,11 +211,11 @@ export default function InteractivePortfolioShowcase() {
             repeat: Infinity,
             ease: 'easeInOut',
           }}
-          className="absolute -top-3 right-4 sm:right-10 z-30 bg-[#EEEBE7]/95 border border-[#3E1510]/30 shadow-xl px-3.5 py-1.5 rounded-xs backdrop-blur-md flex items-center gap-2 font-mono text-[10px] uppercase text-[#56241A] font-bold"
+          className="absolute -top-3 right-4 sm:right-10 z-30 bg-[#FAF7F3]/95 border border-[#3A2418]/30 shadow-xl px-3.5 py-1.5 rounded-xs backdrop-blur-md flex items-center gap-2 font-mono text-[10px] uppercase text-[#4A2F1F] font-bold"
         >
-          <span className="w-2 h-2 rounded-full bg-[#7C3F2F] animate-ping" />
+          <span className="w-2 h-2 rounded-full bg-[#6F4A34] animate-ping" />
           <span>1-CLICK RESUME IMPORT</span>
-          <span className="text-[#A0674F] border-l border-[#3E1510]/20 pl-2">100% RESPONSIVE</span>
+          <span className="text-[#B4552D] border-l border-[#3A2418]/20 pl-2">100% RESPONSIVE</span>
         </motion.div>
 
         {/* B. PRIMARY DESKTOP BROWSER FRAME */}
@@ -223,27 +223,27 @@ export default function InteractivePortfolioShowcase() {
           layout
           className={`relative z-10 w-full rounded-xs border transition-colors duration-400 overflow-hidden shadow-2xl ${
             activeTheme === 'warm'
-              ? 'bg-[#F9F7F4] border-[#3E1510]/30'
+              ? 'bg-[#FDFCFA] border-[#3A2418]/30'
               : activeTheme === 'burgundy'
-              ? 'bg-[#3E1510] border-[#270F05] text-[#FFFFFF]'
-              : 'bg-[#18110D] border-[#34281D] text-[#FFFFFF]'
+              ? 'bg-[#3A2418] border-[#1B120D] text-[#FFFFFF]'
+              : 'bg-[#20150F] border-[#352016] text-[#FFFFFF]'
           }`}
         >
           {/* Browser Top Navigation Chrome */}
-          <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#3E1510]/20 bg-[#EEEBE7]/50 backdrop-blur-xs">
+          <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#3A2418]/20 bg-[#FAF7F3]/50 backdrop-blur-xs">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#7C3F2F]/70" />
-              <span className="w-2.5 h-2.5 rounded-full bg-[#A0674F]/70" />
-              <span className="w-2.5 h-2.5 rounded-full bg-[#CCC0B5]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#6F4A34]/70" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#B4552D]/70" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#C6C2BD]" />
             </div>
 
             {/* Address Bar Pill */}
-            <div className="flex items-center gap-1.5 px-3 py-0.5 rounded-xs bg-[#FFFFFF]/80 border border-[#3E1510]/15 font-mono text-[10px] text-[#56241A] font-medium shadow-2xs">
-              <span className="text-[#7C3F2F]">🔒</span>
+            <div className="flex items-center gap-1.5 px-3 py-0.5 rounded-xs bg-[#FFFFFF]/80 border border-[#3A2418]/15 font-mono text-[10px] text-[#4A2F1F] font-medium shadow-2xs">
+              <span className="text-[#6F4A34]">🔒</span>
               <span>devcanvas.me/alexander-vance/{activeTab}</span>
             </div>
 
-            <div className="flex items-center gap-1 font-mono text-[10px] uppercase text-[#7C3F2F] font-semibold">
+            <div className="flex items-center gap-1 font-mono text-[10px] uppercase text-[#6F4A34] font-semibold">
               <span className="hidden sm:inline">LIVE SHOWCASE</span>
               <span className="text-button">↗</span>
             </div>
@@ -271,7 +271,7 @@ export default function InteractivePortfolioShowcase() {
                         Selected Technical Projects
                       </h3>
                     </div>
-                    <div className="font-mono text-caption px-2.5 py-1 rounded-xs bg-[#56241A] text-[#FFFFFF] uppercase tracking-wider font-semibold">
+                    <div className="font-mono text-caption px-2.5 py-1 rounded-xs bg-[#4A2F1F] text-[#FFFFFF] uppercase tracking-wider font-semibold">
                       3 OF 8 DEPLOYED
                     </div>
                   </div>
@@ -282,13 +282,13 @@ export default function InteractivePortfolioShowcase() {
                     <div
                       className={`p-4 rounded-xs border transition-all duration-200 group hover:-translate-y-1 ${
                         activeTheme === 'warm'
-                          ? 'bg-[#FFFFFF] border-[#3E1510]/15 shadow-sm hover:shadow-md'
-                          : 'bg-[#270F05] border-[#3E1510] shadow-md'
+                          ? 'bg-[#FFFFFF] border-[#3A2418]/15 shadow-sm hover:shadow-md'
+                          : 'bg-[#1B120D] border-[#3A2418] shadow-md'
                       }`}
                     >
                       <div className="flex items-center justify-between font-mono text-[11px] uppercase mb-2">
-                        <span className="text-[#A0674F] font-bold">01 // CLOUD RUNTIME</span>
-                        <span className="text-[#7C3F2F] font-semibold">12.4K REQ/SEC</span>
+                        <span className="text-[#B4552D] font-bold">01 // CLOUD RUNTIME</span>
+                        <span className="text-[#6F4A34] font-semibold">12.4K REQ/SEC</span>
                       </div>
                       <h4 className="font-serif text-[19px] font-semibold tracking-tight">
                         HyperScale Event Mesh
@@ -297,9 +297,9 @@ export default function InteractivePortfolioShowcase() {
                         Distributed stream orchestrator built with Rust &amp; eBPF. Reduced latency from 45ms to 1.8ms under 100K simulated concurrent clients.
                       </p>
                       <div className="flex items-center gap-1.5 flex-wrap mt-3 pt-2.5 border-t border-current/10 font-mono text-[10px]">
-                        <span className="px-1.5 py-0.5 rounded-xs bg-[#7C3F2F]/15 font-semibold">RUST</span>
-                        <span className="px-1.5 py-0.5 rounded-xs bg-[#7C3F2F]/15 font-semibold">KUBERNETES</span>
-                        <span className="px-1.5 py-0.5 rounded-xs bg-[#7C3F2F]/15 font-semibold">EBPF</span>
+                        <span className="px-1.5 py-0.5 rounded-xs bg-[#6F4A34]/15 font-semibold">RUST</span>
+                        <span className="px-1.5 py-0.5 rounded-xs bg-[#6F4A34]/15 font-semibold">KUBERNETES</span>
+                        <span className="px-1.5 py-0.5 rounded-xs bg-[#6F4A34]/15 font-semibold">EBPF</span>
                       </div>
                     </div>
 
@@ -307,13 +307,13 @@ export default function InteractivePortfolioShowcase() {
                     <div
                       className={`p-4 rounded-xs border transition-all duration-200 group hover:-translate-y-1 ${
                         activeTheme === 'warm'
-                          ? 'bg-[#FFFFFF] border-[#3E1510]/15 shadow-sm hover:shadow-md'
-                          : 'bg-[#270F05] border-[#3E1510] shadow-md'
+                          ? 'bg-[#FFFFFF] border-[#3A2418]/15 shadow-sm hover:shadow-md'
+                          : 'bg-[#1B120D] border-[#3A2418] shadow-md'
                       }`}
                     >
                       <div className="flex items-center justify-between font-mono text-[11px] uppercase mb-2">
-                        <span className="text-[#A0674F] font-bold">02 // WEB PLATFORM</span>
-                        <span className="text-[#7C3F2F] font-semibold">1-CLICK PARSER</span>
+                        <span className="text-[#B4552D] font-bold">02 // WEB PLATFORM</span>
+                        <span className="text-[#6F4A34] font-semibold">1-CLICK PARSER</span>
                       </div>
                       <h4 className="font-serif text-[19px] font-semibold tracking-tight">
                         Neural Document Extractor
@@ -322,9 +322,9 @@ export default function InteractivePortfolioShowcase() {
                         Client-side resume parser and live editorial renderer. Synthesizes PDFs into structured semantic schema with 99.4% accuracy.
                       </p>
                       <div className="flex items-center gap-1.5 flex-wrap mt-3 pt-2.5 border-t border-current/10 font-mono text-[10px]">
-                        <span className="px-1.5 py-0.5 rounded-xs bg-[#7C3F2F]/15 font-semibold">TYPESCRIPT</span>
-                        <span className="px-1.5 py-0.5 rounded-xs bg-[#7C3F2F]/15 font-semibold">NEXT.JS</span>
-                        <span className="px-1.5 py-0.5 rounded-xs bg-[#7C3F2F]/15 font-semibold">TAILWIND</span>
+                        <span className="px-1.5 py-0.5 rounded-xs bg-[#6F4A34]/15 font-semibold">TYPESCRIPT</span>
+                        <span className="px-1.5 py-0.5 rounded-xs bg-[#6F4A34]/15 font-semibold">NEXT.JS</span>
+                        <span className="px-1.5 py-0.5 rounded-xs bg-[#6F4A34]/15 font-semibold">TAILWIND</span>
                       </div>
                     </div>
                   </div>
@@ -349,7 +349,7 @@ export default function InteractivePortfolioShowcase() {
                         Technical Proficiency Matrix
                       </h3>
                     </div>
-                    <div className="font-mono text-caption px-2.5 py-1 rounded-xs bg-[#7C3F2F] text-[#FFFFFF] uppercase tracking-wider font-semibold">
+                    <div className="font-mono text-caption px-2.5 py-1 rounded-xs bg-[#6F4A34] text-[#FFFFFF] uppercase tracking-wider font-semibold">
                       28 STACKS VERIFIED
                     </div>
                   </div>
@@ -359,25 +359,25 @@ export default function InteractivePortfolioShowcase() {
                     <div
                       className={`p-3.5 rounded-xs border ${
                         activeTheme === 'warm'
-                          ? 'bg-[#FFFFFF] border-[#3E1510]/15'
-                          : 'bg-[#270F05] border-[#3E1510]'
+                          ? 'bg-[#FFFFFF] border-[#3A2418]/15'
+                          : 'bg-[#1B120D] border-[#3A2418]'
                       }`}
                     >
-                      <div className="font-mono text-[11px] font-bold text-[#A0674F] uppercase border-b border-current/10 pb-1.5 mb-2.5">
+                      <div className="font-mono text-[11px] font-bold text-[#B4552D] uppercase border-b border-current/10 pb-1.5 mb-2.5">
                         [CORE SYSTEMS]
                       </div>
                       <ul className="space-y-1.5 font-sans text-[12px]">
                         <li className="flex items-center justify-between font-medium">
                           <span>Rust / C++</span>
-                          <span className="font-mono text-[10px] text-[#7C3F2F]">95% PRO</span>
+                          <span className="font-mono text-[10px] text-[#6F4A34]">95% PRO</span>
                         </li>
                         <li className="flex items-center justify-between font-medium">
                           <span>Distributed Cons.</span>
-                          <span className="font-mono text-[10px] text-[#7C3F2F]">RAFT / PAXOS</span>
+                          <span className="font-mono text-[10px] text-[#6F4A34]">RAFT / PAXOS</span>
                         </li>
                         <li className="flex items-center justify-between font-medium">
                           <span>eBPF &amp; Linux Net</span>
-                          <span className="font-mono text-[10px] text-[#7C3F2F]">KERNEL</span>
+                          <span className="font-mono text-[10px] text-[#6F4A34]">KERNEL</span>
                         </li>
                       </ul>
                     </div>
@@ -386,25 +386,25 @@ export default function InteractivePortfolioShowcase() {
                     <div
                       className={`p-3.5 rounded-xs border ${
                         activeTheme === 'warm'
-                          ? 'bg-[#FFFFFF] border-[#3E1510]/15'
-                          : 'bg-[#270F05] border-[#3E1510]'
+                          ? 'bg-[#FFFFFF] border-[#3A2418]/15'
+                          : 'bg-[#1B120D] border-[#3A2418]'
                       }`}
                     >
-                      <div className="font-mono text-[11px] font-bold text-[#A0674F] uppercase border-b border-current/10 pb-1.5 mb-2.5">
+                      <div className="font-mono text-[11px] font-bold text-[#B4552D] uppercase border-b border-current/10 pb-1.5 mb-2.5">
                         [FRONTEND CRAFT]
                       </div>
                       <ul className="space-y-1.5 font-sans text-[12px]">
                         <li className="flex items-center justify-between font-medium">
                           <span>TypeScript &amp; React</span>
-                          <span className="font-mono text-[10px] text-[#7C3F2F]">STAFF LVL</span>
+                          <span className="font-mono text-[10px] text-[#6F4A34]">STAFF LVL</span>
                         </li>
                         <li className="flex items-center justify-between font-medium">
                           <span>Next.js Architecture</span>
-                          <span className="font-mono text-[10px] text-[#7C3F2F]">SSR/RSC</span>
+                          <span className="font-mono text-[10px] text-[#6F4A34]">SSR/RSC</span>
                         </li>
                         <li className="flex items-center justify-between font-medium">
                           <span>WebGL / Shaders</span>
-                          <span className="font-mono text-[10px] text-[#7C3F2F]">GLSL / 3D</span>
+                          <span className="font-mono text-[10px] text-[#6F4A34]">GLSL / 3D</span>
                         </li>
                       </ul>
                     </div>
@@ -413,25 +413,25 @@ export default function InteractivePortfolioShowcase() {
                     <div
                       className={`p-3.5 rounded-xs border ${
                         activeTheme === 'warm'
-                          ? 'bg-[#FFFFFF] border-[#3E1510]/15'
-                          : 'bg-[#270F05] border-[#3E1510]'
+                          ? 'bg-[#FFFFFF] border-[#3A2418]/15'
+                          : 'bg-[#1B120D] border-[#3A2418]'
                       }`}
                     >
-                      <div className="font-mono text-[11px] font-bold text-[#A0674F] uppercase border-b border-current/10 pb-1.5 mb-2.5">
+                      <div className="font-mono text-[11px] font-bold text-[#B4552D] uppercase border-b border-current/10 pb-1.5 mb-2.5">
                         [PLATFORM &amp; DATA]
                       </div>
                       <ul className="space-y-1.5 font-sans text-[12px]">
                         <li className="flex items-center justify-between font-medium">
                           <span>PostgreSQL &amp; Redis</span>
-                          <span className="font-mono text-[10px] text-[#7C3F2F]">OPTIMIZED</span>
+                          <span className="font-mono text-[10px] text-[#6F4A34]">OPTIMIZED</span>
                         </li>
                         <li className="flex items-center justify-between font-medium">
                           <span>Docker &amp; K8s</span>
-                          <span className="font-mono text-[10px] text-[#7C3F2F]">MULTI-REGION</span>
+                          <span className="font-mono text-[10px] text-[#6F4A34]">MULTI-REGION</span>
                         </li>
                         <li className="flex items-center justify-between font-medium">
                           <span>CI/CD Automation</span>
-                          <span className="font-mono text-[10px] text-[#7C3F2F]">ZERO DOWNTIME</span>
+                          <span className="font-mono text-[10px] text-[#6F4A34]">ZERO DOWNTIME</span>
                         </li>
                       </ul>
                     </div>
@@ -457,7 +457,7 @@ export default function InteractivePortfolioShowcase() {
                         Executive Timeline
                       </h3>
                     </div>
-                    <div className="font-mono text-caption px-2.5 py-1 rounded-xs bg-[#56241A] text-[#FFFFFF] uppercase tracking-wider font-semibold">
+                    <div className="font-mono text-caption px-2.5 py-1 rounded-xs bg-[#4A2F1F] text-[#FFFFFF] uppercase tracking-wider font-semibold">
                       5+ YRS EXPERIENCE
                     </div>
                   </div>
@@ -467,15 +467,15 @@ export default function InteractivePortfolioShowcase() {
                     <div
                       className={`p-3.5 rounded-xs border flex flex-col gap-1.5 ${
                         activeTheme === 'warm'
-                          ? 'bg-[#FFFFFF] border-[#3E1510]/15'
-                          : 'bg-[#270F05] border-[#3E1510]'
+                          ? 'bg-[#FFFFFF] border-[#3A2418]/15'
+                          : 'bg-[#1B120D] border-[#3A2418]'
                       }`}
                     >
                       <div className="flex items-center justify-between font-mono text-[11px] flex-wrap gap-2">
-                        <span className="font-bold text-[#56241A] dark:text-[#A0674F]">
+                        <span className="font-bold text-[#4A2F1F] dark:text-[#B4552D]">
                           STAFF SYSTEMS ARCHITECT // CLOUDMESH LABS
                         </span>
-                        <span className="text-[#7C3F2F] font-semibold">2023 — PRESENT</span>
+                        <span className="text-[#6F4A34] font-semibold">2023 — PRESENT</span>
                       </div>
                       <p className="text-[12px] opacity-85 leading-snug">
                         Led platform engineering group of 14 devs. Overhauled event gateway servicing 4.2B daily RPCs, cutting compute overhead by 28% ($420k/yr).
@@ -486,15 +486,15 @@ export default function InteractivePortfolioShowcase() {
                     <div
                       className={`p-3.5 rounded-xs border flex flex-col gap-1.5 ${
                         activeTheme === 'warm'
-                          ? 'bg-[#FFFFFF] border-[#3E1510]/15'
-                          : 'bg-[#270F05] border-[#3E1510]'
+                          ? 'bg-[#FFFFFF] border-[#3A2418]/15'
+                          : 'bg-[#1B120D] border-[#3A2418]'
                       }`}
                     >
                       <div className="flex items-center justify-between font-mono text-[11px] flex-wrap gap-2">
-                        <span className="font-bold text-[#56241A] dark:text-[#A0674F]">
+                        <span className="font-bold text-[#4A2F1F] dark:text-[#B4552D]">
                           SOFTWARE ENGINEER II // DATAROUTE
                         </span>
-                        <span className="text-[#7C3F2F] font-semibold">2021 — 2023</span>
+                        <span className="text-[#6F4A34] font-semibold">2021 — 2023</span>
                       </div>
                       <p className="text-[12px] opacity-85 leading-snug">
                         Engineered fault-tolerant pub/sub ingest broker. Designed zero-copy buffer serializer reducing P99 latency by 32ms.
@@ -522,7 +522,7 @@ export default function InteractivePortfolioShowcase() {
                         Quantified Impact
                       </h3>
                     </div>
-                    <div className="font-mono text-caption px-2.5 py-1 rounded-xs bg-[#7C3F2F] text-[#FFFFFF] uppercase tracking-wider font-semibold">
+                    <div className="font-mono text-caption px-2.5 py-1 rounded-xs bg-[#6F4A34] text-[#FFFFFF] uppercase tracking-wider font-semibold">
                       VERIFIED PROOF
                     </div>
                   </div>
@@ -531,11 +531,11 @@ export default function InteractivePortfolioShowcase() {
                     <div
                       className={`p-4 rounded-xs border flex flex-col gap-1 ${
                         activeTheme === 'warm'
-                          ? 'bg-[#FFFFFF] border-[#3E1510]/15'
-                          : 'bg-[#270F05] border-[#3E1510]'
+                          ? 'bg-[#FFFFFF] border-[#3A2418]/15'
+                          : 'bg-[#1B120D] border-[#3A2418]'
                       }`}
                     >
-                      <div className="font-mono text-heading-lg font-bold text-[#7C3F2F]">
+                      <div className="font-mono text-heading-lg font-bold text-[#6F4A34]">
                         14,800+
                       </div>
                       <div className="font-serif text-[16px] font-semibold">
@@ -549,11 +549,11 @@ export default function InteractivePortfolioShowcase() {
                     <div
                       className={`p-4 rounded-xs border flex flex-col gap-1 ${
                         activeTheme === 'warm'
-                          ? 'bg-[#FFFFFF] border-[#3E1510]/15'
-                          : 'bg-[#270F05] border-[#3E1510]'
+                          ? 'bg-[#FFFFFF] border-[#3A2418]/15'
+                          : 'bg-[#1B120D] border-[#3A2418]'
                       }`}
                     >
-                      <div className="font-mono text-heading-lg font-bold text-[#56241A] dark:text-[#A0674F]">
+                      <div className="font-mono text-heading-lg font-bold text-[#4A2F1F] dark:text-[#B4552D]">
                         1ST PLACE
                       </div>
                       <div className="font-serif text-[16px] font-semibold">
@@ -591,30 +591,30 @@ export default function InteractivePortfolioShowcase() {
             repeat: Infinity,
             ease: 'easeInOut',
           }}
-          className="absolute -bottom-6 -right-2 sm:-right-6 z-20 w-[180px] sm:w-[220px] rounded-sm border-2 border-[#3E1510] bg-[#EEEBE7] shadow-2xl p-2 hidden xs:flex flex-col gap-2 backdrop-blur-md"
+          className="absolute -bottom-6 -right-2 sm:-right-6 z-20 w-[180px] sm:w-[220px] rounded-sm border-2 border-[#3A2418] bg-[#FAF7F3] shadow-2xl p-2 hidden xs:flex flex-col gap-2 backdrop-blur-md"
         >
           {/* Mobile Notch & Speaker */}
-          <div className="w-16 h-1.5 bg-[#3E1510]/40 rounded-full mx-auto" />
+          <div className="w-16 h-1.5 bg-[#3A2418]/40 rounded-full mx-auto" />
 
           {/* Mobile Screen Preview */}
-          <div className="bg-[#FFFFFF] rounded-xs border border-[#3E1510]/15 p-2 flex flex-col gap-1.5 font-sans">
-            <div className="flex items-center justify-between border-b border-[#3E1510]/10 pb-1">
-              <span className="font-serif font-bold text-[11px] text-[#0A0402]">A. Vance</span>
-              <span className="font-mono text-[8px] bg-[#56241A] text-[#FFFFFF] px-1 py-0.2 rounded-xs">
+          <div className="bg-[#FFFFFF] rounded-xs border border-[#3A2418]/15 p-2 flex flex-col gap-1.5 font-sans">
+            <div className="flex items-center justify-between border-b border-[#3A2418]/10 pb-1">
+              <span className="font-serif font-bold text-[11px] text-[#20150F]">A. Vance</span>
+              <span className="font-mono text-[8px] bg-[#4A2F1F] text-[#FFFFFF] px-1 py-0.2 rounded-xs">
                 {activeTab.toUpperCase()}
               </span>
             </div>
-            <div className="text-[9px] text-[#34281D] font-medium leading-tight line-clamp-2">
+            <div className="text-[9px] text-[#352016] font-medium leading-tight line-clamp-2">
               {currentTab.headline}
             </div>
-            <div className="h-1 w-full bg-[#7C3F2F]/20 rounded-full overflow-hidden mt-1">
+            <div className="h-1 w-full bg-[#6F4A34]/20 rounded-full overflow-hidden mt-1">
               <motion.div
-                className="h-full bg-[#7C3F2F]"
+                className="h-full bg-[#6F4A34]"
                 animate={{ width: ['20%', '80%', '100%'] }}
                 transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
               />
             </div>
-            <div className="font-mono text-[8px] text-[#7C3F2F] font-bold text-center">
+            <div className="font-mono text-[8px] text-[#6F4A34] font-bold text-center">
               MOBILE READY
             </div>
           </div>

@@ -402,7 +402,7 @@ export default function GithubDashboard({ username }: Props) {
 
         ) : (
           <div className="bg-white/5 border border-white/10 text-white/50 p-12 rounded-3xl text-center font-medium tracking-wide">
-            Start building. PortfolioOS will automatically track your developer journey.
+            Start building. DevCanvas will automatically track your developer journey.
           </div>
         )}
       </div>

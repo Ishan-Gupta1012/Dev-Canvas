@@ -39,11 +39,11 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${cormorant.variable} ${jetbrains.variable} antialiased scroll-smooth`}
     >
-      <body className="min-h-screen bg-background text-on-background font-sans font-semibold flex flex-col overflow-x-clip">
+      <body className="min-h-screen bg-background text-on-background font-sans antialiased flex flex-col overflow-x-clip">
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
+          enableSystem={false}
           disableTransitionOnChange
         >
           <AuthProvider>

@@ -9,86 +9,139 @@
 }
 
 :root {
-  --th-primary: #56241A;             /* Earthy Burgundy - Primary Accent */
-  --th-primary-hover: #7C3F2F;       /* Terracotta - Secondary Accent / Hover */
-  --th-background: #EEEBE7;          /* Warm Off-White - Light Background */
-  --th-foreground: #0A0402;          /* Near Black - Text on Light */
-  --th-on-background: #0A0402;       /* Near Black */
-  --th-on-primary: #FFFFFF;          /* Pure White */
-  --th-brand-600: #56241A;
-  --th-brand-100: #CCC0B5;           /* Warm Beige */
-  --th-neutral-900: #0A0402;         /* Near Black */
-  --th-neutral-700: #3E1510;         /* Deep Earth Brown */
-  --th-neutral-500: #7C3F2F;         /* Terracotta */
-  --th-neutral-200: #CCC0B5;         /* Warm Beige */
-  --th-neutral-50: #EEEBE7;          /* Warm Off-White */
-  --th-success-500: #3E1510;
-  --th-warning-400: #A0674F;         /* Warm Copper */
-  --th-danger-500: #7C3F2F;          /* Terracotta */
-  --th-muted: #CCC0B5;
-  --th-muted-foreground: #3E1510;
-  --th-error: #56241A;
-  --th-surface-container-low: #EEEBE7;
-  --th-secondary-fixed: #CCC0B5;
-  --th-outline: #3E1510;             /* Deep Earth Brown */
-  --th-inverse-primary: #EEEBE7;
-  --th-primary-container: #56241A;
-  --th-surface-bright: #FFFFFF;      /* Pure White */
-  --th-on-primary-fixed-variant: #0A0402;
-  --th-error-container: #CCC0B5;
-  --th-tertiary-fixed-dim: #A0674F;
-  --th-primary-fixed: #CCC0B5;
-  --th-surface-dim: #CCC0B5;
-  --th-on-surface-variant: #0A0402;
-  --th-outline-variant: #CCC0B5;
-  --th-tertiary-fixed: #A0674F;
-  --th-surface: #FFFFFF;             /* Pure White - Cards */
-  --th-surface-container-lowest: #FFFFFF;
-  --th-on-error: #FFFFFF;
-  --th-on-secondary-fixed-variant: #0A0402;
-  --th-on-secondary-fixed: #0A0402;
-  --th-tertiary: #A0674F;            /* Warm Copper */
-  --th-on-tertiary-container: #FFFFFF;
-  --th-surface-container-high: #CCC0B5;
-  --th-secondary-container: #CCC0B5;
-  --th-primary-fixed-dim: #56241A;
-  --th-inverse-surface: #0A0402;
-  --th-on-secondary-container: #0A0402;
-  --th-on-surface: #0A0402;
-  --th-surface-container-highest: #CCC0B5;
-  --th-on-tertiary-fixed: #0A0402;
-  --th-on-tertiary: #FFFFFF;
-  --th-on-error-container: #56241A;
-  --th-secondary-fixed-dim: #CCC0B5;
-  --th-surface-variant: #CCC0B5;
-  --th-on-primary-fixed: #0A0402;
-  --th-inverse-on-surface: #EEEBE7;
-  --th-surface-container: #EEEBE7;
-  --th-on-secondary: #0A0402;
-  --th-tertiary-container: #CCC0B5;
-  --th-surface-tint: #56241A;
-  --th-on-tertiary-fixed-variant: #0A0402;
-  --th-on-primary-container: #FFFFFF;
-  --th-secondary: #7C3F2F;           /* Terracotta */
+  /* Core palette - Premium Earthy Light Theme */
+  --background: #F6F0E7;
+  --background-secondary: #EFE5D8;
+  --background-elevated: #FFF9F1;
 
-  /* DevCanvas Fluid Typography System Tokens */
-  --text-display: clamp(4.25rem, 2.8rem + 6.2vw, 7.75rem);
-  --text-display--line-height: 0.92;
-  --text-display--letter-spacing: -0.035em;
+  /* Warm surfaces */
+  --surface: #F0E6DA;
+  --surface-secondary: #E5D5C5;
+  --surface-hover: #DDCBB9;
+  --surface-raised: #F4EDE3;
+  --bronze: #AD8766;
+  --warm-glow: #C09470;
+  --warm-highlight: #D4B08A;
+
+  /* Purple and lavender accents */
+  --muted-plum: #9580AA;
+  --lavender: #B7A0C9;
+  --lavender-bright: #C8B3D8;
+  --lavender-soft: #E4D9EE;
+  --lavender-muted: #9580AA;
+
+  /* Text and borders */
+  --text-primary: #35261E;
+  --text-secondary: #6F5B4C;
+  --text-muted: #8D7C6E;
+  --border: rgba(91, 67, 49, 0.16);
+  --border-strong: rgba(91, 67, 49, 0.26);
+  --silver: #8A7C6D;
+
+  /* Ambient lighting */
+  --ambient-brown: rgba(173, 135, 102, 0.18);
+  --ambient-lavender: rgba(183, 160, 201, 0.16);
+
+  --background-atmosphere:
+    radial-gradient(
+      ellipse at 70% 35%,
+      var(--ambient-lavender),
+      transparent 45%
+    ),
+    radial-gradient(
+      ellipse at 35% 20%,
+      var(--ambient-brown),
+      transparent 55%
+    ),
+    linear-gradient(
+      135deg,
+      #F6F0E7,
+      #F4EDE3,
+      #F6F0E7
+    );
+
+  /* Semantic UI Tokens mapped to user theme */
+  --th-primary: #B7A0C9;             /* Lavender - Primary Accent */
+  --th-primary-hover: #C8B3D8;       /* Lavender Bright - Hover */
+  --th-primary-muted: rgba(183, 160, 201, 0.18);
+  --th-background: #F6F0E7;
+  --th-foreground: #35261E;
+  --th-on-background: #35261E;
+  --th-on-primary: #3D2A20;
+  --th-brand-600: #9580AA;
+  --th-brand-100: #E5D5C5;
+  --th-neutral-900: #35261E;
+  --th-neutral-700: #6F5B4C;
+  --th-neutral-500: #8A6D58;
+  --th-neutral-200: #E5D5C5;
+  --th-neutral-50: #F6F0E7;
+  --th-success-500: #10B981;
+  --th-warning-400: #AD8766;
+  --th-danger-500: #DC2626;
+  --th-muted: #E5D5C5;
+  --th-muted-foreground: #6F5B4C;
+  --th-error: #DC2626;
+  --th-surface-container-low: #EFE5D8;
+  --th-secondary-fixed: #EFE5D8;
+  --th-outline: rgba(91, 67, 49, 0.16);
+  --th-inverse-primary: #F6F0E7;
+  --th-primary-container: #E4D9EE;
+  --th-surface-bright: #FFF9F1;
+  --th-on-primary-fixed-variant: #3D2A20;
+  --th-error-container: #FEE2E2;
+  --th-tertiary-fixed-dim: #8A6D58;
+  --th-primary-fixed: #F0E6DA;
+  --th-surface-dim: #E5D5C5;
+  --th-on-surface-variant: #6F5B4C;
+  --th-outline-variant: rgba(91, 67, 49, 0.16);
+  --th-tertiary-fixed: #8A6D58;
+  --th-surface: #F0E6DA;
+  --th-surface-container-lowest: #F6F0E7;
+  --th-on-error: #FFFFFF;
+  --th-on-secondary-fixed-variant: #35261E;
+  --th-on-secondary-fixed: #35261E;
+  --th-tertiary: #8A6D58;
+  --th-on-tertiary-container: #35261E;
+  --th-surface-container-high: #DDCBB9;
+  --th-secondary-container: #F0E6DA;
+  --th-primary-fixed-dim: #9580AA;
+  --th-inverse-surface: #35261E;
+  --th-on-secondary-container: #35261E;
+  --th-on-surface: #35261E;
+  --th-surface-container-highest: #DDCBB9;
+  --th-on-tertiary-fixed: #35261E;
+  --th-on-tertiary: #FFFFFF;
+  --th-on-error-container: #991B1B;
+  --th-secondary-fixed-dim: #E5D5C5;
+  --th-surface-variant: #F0E6DA;
+  --th-on-primary-fixed: #3D2A20;
+  --th-inverse-on-surface: #F6F0E7;
+  --th-surface-container: #EFE5D8;
+  --th-on-secondary: #FFFFFF;
+  --th-tertiary-container: #F0E6DA;
+  --th-surface-tint: #B7A0C9;
+  --th-on-tertiary-fixed-variant: #6F5B4C;
+  --th-on-primary-container: #3D2A20;
+  --th-secondary: #8A6D58;
+
+  /* Fluid Typography System Tokens */
+  --text-display: clamp(3.5rem, 2.5rem + 5vw, 6rem);
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.03em;
 
   --text-heading-xl: clamp(2.25rem, 1.7rem + 2.2vw, 3.75rem);
-  --text-heading-xl--line-height: 1.05;
+  --text-heading-xl--line-height: 1.1;
   --text-heading-xl--letter-spacing: -0.025em;
 
   --text-heading-lg: clamp(1.4rem, 1.15rem + 1.15vw, 2.35rem);
   --text-heading-lg--line-height: 1.25;
   --text-heading-lg--letter-spacing: -0.015em;
 
-  --text-heading-md: clamp(1.5rem, 1.28rem + 0.94vw, 2.125rem);
-  --text-heading-md--line-height: 1.2;
+  --text-heading-md: clamp(1.25rem, 1.1rem + 0.8vw, 1.85rem);
+  --text-heading-md--line-height: 1.3;
   --text-heading-md--letter-spacing: -0.02em;
 
-  --text-body-lg: clamp(1.125rem, 1.02rem + 0.38vw, 1.35rem);
+  --text-body-lg: clamp(1.05rem, 0.98rem + 0.35vw, 1.25rem);
   --text-body-lg--line-height: 1.7;
   --text-body-lg--letter-spacing: -0.01em;
 
@@ -98,7 +151,7 @@
 
   --text-label: clamp(0.6875rem, 0.665rem + 0.09vw, 0.75rem);
   --text-label--line-height: 1.2;
-  --text-label--letter-spacing: 0.2em;
+  --text-label--letter-spacing: 0.15em;
 
   --text-caption: clamp(0.625rem, 0.603rem + 0.09vw, 0.6875rem);
   --text-caption--line-height: 1.3;
@@ -106,7 +159,7 @@
 
   --text-button: clamp(0.8125rem, 0.78rem + 0.14vw, 0.9375rem);
   --text-button--line-height: 1.2;
-  --text-button--letter-spacing: 0.16em;
+  --text-button--letter-spacing: 0.02em;
 }
 
 @keyframes marquee {
@@ -137,71 +190,69 @@
   animation: marquee-reverse 60s linear infinite;
 }
 
-
 .dark {
-  --th-primary: #00D4AA;             /* Electric Teal - Primary Accent */
-  --th-primary-hover: #00E8BB;       /* Bright Teal - Hover */
-  --th-primary-muted: #00D4AA1A;     /* Teal 10% - Subtle backgrounds */
-  --th-background: #0A0E12;          /* Deep Charcoal - Primary Dark Background */
-  --th-foreground: #F0F4F8;          /* Cool White - Text on Dark */
-  --th-on-background: #F0F4F8;       /* Cool White */
-  --th-on-primary: #0A0E12;          /* Deep Charcoal on Teal */
-  --th-brand-600: #00B896;
-  --th-brand-100: #0D1A1F;
-  --th-neutral-900: #F0F4F8;         /* Cool White */
-  --th-neutral-700: #CBD5E1;         /* Light Slate */
-  --th-neutral-500: #64748B;         /* Cool Gray */
-  --th-neutral-200: #1E2D3D;         /* Dark Slate */
-  --th-neutral-50: #0A0E12;          /* Deep Charcoal */
-  --th-success-500: #10B981;         /* Emerald */
-  --th-warning-400: #F59E0B;         /* Amber */
-  --th-danger-500: #EF4444;          /* Red */
-  --th-muted: #1E2D3D;
-  --th-muted-foreground: #64748B;
+  --th-primary: #A976B2;             /* Lavender Bright */
+  --th-primary-hover: #C9B9CB;       /* Lavender Soft */
+  --th-primary-muted: rgba(169, 118, 178, 0.16);
+  --th-background: #1B110B;
+  --th-foreground: #F3F0EE;
+  --th-on-background: #F3F0EE;
+  --th-on-primary: #1B110B;
+  --th-brand-600: #82548B;
+  --th-brand-100: #2F1D15;
+  --th-neutral-900: #F3F0EE;
+  --th-neutral-700: #B8B0AC;
+  --th-neutral-500: #7B4C3A;
+  --th-neutral-200: #251710;
+  --th-neutral-50: #1B110B;
+  --th-success-500: #10B981;
+  --th-warning-400: #7B4C3A;
+  --th-danger-500: #EF4444;
+  --th-muted: #2F1D15;
+  --th-muted-foreground: #B8B0AC;
   --th-error: #EF4444;
-  --th-on-primary: #0A0E12;
-  --th-surface-container-low: #11181E; /* Elevated Surface */
-  --th-secondary-fixed: #1E2D3D;
-  --th-outline: #334155;             /* Subtle Border */
-  --th-inverse-primary: #0A0E12;
-  --th-primary-container: #00D4AA;
-  --th-surface-bright: #1E2D3D;
-  --th-on-primary-fixed-variant: #F0F4F8;
-  --th-error-container: #7F1D1D;
-  --th-tertiary-fixed-dim: #F59E0B;
-  --th-primary-fixed: #1E2D3D;
-  --th-surface-dim: #0D1A1F;
-  --th-on-surface-variant: #94A3B8;
-  --th-outline-variant: #F59E0B;
-  --th-tertiary-fixed: #F59E0B;
-  --th-surface: #11181E;             /* Elevated Surface - Cards on Dark */
-  --th-surface-container-lowest: #0D1A1F;
-  --th-on-error: #FEF2F2;
-  --th-on-secondary-fixed-variant: #F0F4F8;
-  --th-on-secondary-fixed: #F0F4F8;
-  --th-tertiary: #F59E0B;            /* Amber */
-  --th-on-tertiary-container: #F0F4F8;
-  --th-surface-container-high: #1E2D3D;
-  --th-secondary-container: #1E2D3D;
-  --th-primary-fixed-dim: #00B896;
-  --th-inverse-surface: #F0F4F8;
-  --th-on-secondary-container: #F0F4F8;
-  --th-on-surface: #F0F4F8;
-  --th-surface-container-highest: #1E2D3D;
-  --th-on-tertiary-fixed: #F0F4F8;
-  --th-on-tertiary: #0A0E12;
-  --th-on-error-container: #FEF2F2;
-  --th-secondary-fixed-dim: #1E2D3D;
-  --th-surface-variant: #1E2D3D;
-  --th-on-primary-fixed: #F0F4F8;
-  --th-inverse-on-surface: #0D1A1F;
-  --th-surface-container: #0A0E12;
-  --th-on-secondary: #0D1A1F;
-  --th-tertiary-container: #1E2D3D;
-  --th-surface-tint: #00D4AA;
-  --th-on-tertiary-fixed-variant: #F0F4F8;
-  --th-on-primary-container: #0A0E12;
-  --th-secondary: #475569;
+  --th-surface-container-low: #251710;
+  --th-secondary-fixed: #2F1D15;
+  --th-outline: rgba(223, 211, 209, 0.14);
+  --th-inverse-primary: #1B110B;
+  --th-primary-container: #492D38;
+  --th-surface-bright: #472B21;
+  --th-on-primary-fixed-variant: #F3F0EE;
+  --th-error-container: #451A1A;
+  --th-tertiary-fixed-dim: #7B4C3A;
+  --th-primary-fixed: #3A231C;
+  --th-surface-dim: #1B110B;
+  --th-on-surface-variant: #B8B0AC;
+  --th-outline-variant: rgba(223, 211, 209, 0.14);
+  --th-tertiary-fixed: #7B4C3A;
+  --th-surface: #3A231C;
+  --th-surface-container-lowest: #1B110B;
+  --th-on-error: #FFFFFF;
+  --th-on-secondary-fixed-variant: #F3F0EE;
+  --th-on-secondary-fixed: #F3F0EE;
+  --th-tertiary: #7B4C3A;
+  --th-on-tertiary-container: #F3F0EE;
+  --th-surface-container-high: #472B21;
+  --th-secondary-container: #3A231C;
+  --th-primary-fixed-dim: #82548B;
+  --th-inverse-surface: #F3F0EE;
+  --th-on-secondary-container: #F3F0EE;
+  --th-on-surface: #F3F0EE;
+  --th-surface-container-highest: #563426;
+  --th-on-tertiary-fixed: #F3F0EE;
+  --th-on-tertiary: #1B110B;
+  --th-on-error-container: #FFFFFF;
+  --th-secondary-fixed-dim: #2F1D15;
+  --th-surface-variant: #3A231C;
+  --th-on-primary-fixed: #F3F0EE;
+  --th-inverse-on-surface: #1B110B;
+  --th-surface-container: #2F1D15;
+  --th-on-secondary: #1B110B;
+  --th-tertiary-container: #3A231C;
+  --th-surface-tint: #A976B2;
+  --th-on-tertiary-fixed-variant: #F3F0EE;
+  --th-on-primary-container: #F3F0EE;
+  --th-secondary: #7B4C3A;
 }
 
 @theme inline {
@@ -492,6 +543,11 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .page-transition {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
   .animate-marquee,
   .animate-marquee-reverse,
   .animate-auth-ticker,
@@ -629,6 +685,111 @@ body {
   font-size: var(--text-button);
   line-height: var(--text-button--line-height);
   letter-spacing: var(--text-button--letter-spacing);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Landing experience utilities
+   Brown / white / silver / pale-lavender editorial palette
+   ────────────────────────────────────────────────────────────── */
+
+.lc-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='lcNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23lcNoise)' opacity='0.55'/%3E%3C/svg%3E");
+  opacity: 0.14;
+  mix-blend-mode: multiply;
+}
+
+.lc-grain-dark::after {
+  opacity: 0.1;
+  mix-blend-mode: screen;
+}
+
+.lc-grid {
+  background-image:
+    linear-gradient(to right, rgba(58, 36, 24, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(58, 36, 24, 0.07) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(80% 70% at 50% 40%, #000 10%, transparent 78%);
+  mask-image: radial-gradient(80% 70% at 50% 40%, #000 10%, transparent 78%);
+}
+
+.lc-grid-dark {
+  background-image:
+    linear-gradient(to right, rgba(251, 249, 246, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(251, 249, 246, 0.06) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(85% 75% at 50% 30%, #000 5%, transparent 80%);
+  mask-image: radial-gradient(85% 75% at 50% 30%, #000 5%, transparent 80%);
+}
+
+.lc-ink-gradient {
+  background-image: linear-gradient(94deg, #4a2f1f 0%, #8f4020 28%, #c4703f 52%, #e0a06c 68%, #4a2f1f 100%);
+  background-size: 220% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: lc-ink-shift 14s ease-in-out infinite alternate;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+@keyframes lc-ink-shift {
+  from { background-position: 0% 50%; }
+  to { background-position: 100% 50%; }
+}
+
+@keyframes lc-marquee-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+.lc-marquee-track {
+  animation-name: lc-marquee-scroll;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.lc-marquee:hover .lc-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes lc-spin {
+  to { transform: rotate(360deg); }
+}
+
+.lc-spin-slow {
+  animation: lc-spin 22s linear infinite;
+}
+
+.lc-spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 0%),
+    rgba(180, 85, 45, 0.2),
+    transparent 72%
+  );
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.lc-spotlight:hover::before {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lc-ink-gradient,
+  .lc-marquee-track,
+  .lc-spin-slow {
+    animation: none !important;
+  }
 }
 
 @media print {
