@@ -1,13 +1,18 @@
 import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.mjs';
 import path from 'path';
+import { pathToFileURL } from 'url';
 import { PdfDocument } from './types';
 
 // In Next.js Server Components / API routes, the fake worker dynamic import fails.
-// We explicitly set the workerSrc to the resolved path.
+// We explicitly set the workerSrc to the resolved file:// URL.
 if (typeof window === 'undefined') {
   const workerPath = path.join(process.cwd(), 'node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs');
-  pdfjs.GlobalWorkerOptions.workerSrc = workerPath;
-  console.log('[PDF Loader] Worker path:', workerPath);
+  try {
+    pdfjs.GlobalWorkerOptions.workerSrc = pathToFileURL(workerPath).href;
+  } catch {
+    pdfjs.GlobalWorkerOptions.workerSrc = workerPath;
+  }
+  console.log('[PDF Loader] Worker path:', pdfjs.GlobalWorkerOptions.workerSrc);
 }
 
 export async function loadPdf(buffer: Buffer): Promise<PdfDocument> {

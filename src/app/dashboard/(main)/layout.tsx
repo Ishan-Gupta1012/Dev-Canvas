@@ -84,12 +84,19 @@ const isActive = (item: NavItem) => {
                   >
                     <button
                       className={cn(
-                        'flex items-center gap-1 transition-colors hover:text-primary py-4',
-                        isActive(item) ? 'text-primary font-semibold' : 'text-on-surface-variant'
+                        'relative px-3 py-1.5 rounded-sm flex items-center gap-1 font-mono text-xs uppercase tracking-widest transition-colors duration-200',
+                        isActive(item) ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'
                       )}
                     >
-                      {item.name}
-                      <ChevronDown size={12} className={cn('transition-transform', activeDropdown === item.name && 'rotate-180')} />
+                      {isActive(item) && (
+                        <motion.span
+                          layoutId="dashboard-nav-active-pill"
+                          className="absolute inset-0 rounded-sm bg-primary/10 border border-primary/20 -z-10"
+                          transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                        />
+                      )}
+                      <span>{item.name}</span>
+                      <ChevronDown size={12} className={cn('transition-transform duration-200', activeDropdown === item.name && 'rotate-180')} />
                     </button>
                     <AnimatePresence>
                       {activeDropdown === item.name && (
@@ -213,7 +220,7 @@ const isActive = (item: NavItem) => {
               if (item.dropdown) {
                 return (
                   <div key={item.name} className="flex flex-col gap-3">
-                    <span className="text-on-background/40 text-xs">{item.name}</span>
+                    <span className="text-on-background/70 font-semibold">{item.name}</span>
                     <div className="pl-4 flex flex-col gap-3 border-l border-outline/15">
                       {item.dropdown.map(d => (
                         <Link
