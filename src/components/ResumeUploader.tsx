@@ -1037,12 +1037,12 @@ export default function ResumeUploader() {
             )}
 
             {/* Main Content Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-lg">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-lg">
               {/* Sidebar View Toggle */}
-              <div className="lg:col-span-1 flex flex-row lg:flex-col gap-sm bg-surface-container-lowest p-sm rounded-2xl border border-outline-variant h-fit">
+              <div className="lg:col-span-1 flex flex-col gap-sm bg-surface-container-lowest p-md rounded-2xl border border-outline-variant h-fit">
                 <button 
                   onClick={() => setActiveTab('merged')}
-                  className={`flex-1 flex items-center justify-center lg:justify-start gap-md px-md py-[10px] rounded-xl font-semibold text-sm transition-colors ${
+                  className={`w-full flex items-center justify-start gap-md px-md py-[10px] rounded-xl font-semibold text-sm transition-colors ${
                     activeTab === 'merged'
                       ? 'bg-primary text-on-primary'
                       : 'text-on-surface-variant hover:bg-surface-container-low'
@@ -1053,7 +1053,7 @@ export default function ResumeUploader() {
                 </button>
                 <button 
                   onClick={() => setActiveTab('resume')}
-                  className={`flex-1 flex items-center justify-center lg:justify-start gap-md px-md py-[10px] rounded-xl font-semibold text-sm transition-colors ${
+                  className={`w-full flex items-center justify-start gap-md px-md py-[10px] rounded-xl font-semibold text-sm transition-colors ${
                     activeTab === 'resume'
                       ? 'bg-secondary-container text-on-surface-variant'
                       : 'text-on-surface-variant hover:bg-surface-container-low'
@@ -1065,7 +1065,7 @@ export default function ResumeUploader() {
                 {externalData && (
                   <button 
                     onClick={() => setActiveTab('external')}
-                    className={`flex-1 flex items-center justify-center lg:justify-start gap-md px-md py-[10px] rounded-xl font-semibold text-sm transition-colors ${
+                    className={`w-full flex items-center justify-start gap-md px-md py-[10px] rounded-xl font-semibold text-sm transition-colors ${
                       activeTab === 'external'
                         ? 'bg-secondary-container text-on-surface-variant'
                         : 'text-on-surface-variant hover:bg-surface-container-low'
@@ -1077,7 +1077,7 @@ export default function ResumeUploader() {
                 )}
                 <button 
                   onClick={() => setActiveTab('debug')}
-                  className={`flex-1 flex items-center justify-center lg:justify-start gap-md px-md py-[10px] rounded-xl font-semibold text-sm transition-colors ${
+                  className={`w-full flex items-center justify-start gap-md px-md py-[10px] rounded-xl font-semibold text-sm transition-colors ${
                     activeTab === 'debug'
                       ? 'bg-secondary-container text-on-surface-variant font-bold border border-primary/20'
                       : 'text-on-surface-variant hover:bg-surface-container-low'
@@ -1089,7 +1089,7 @@ export default function ResumeUploader() {
               </div>
 
               {/* Viewer Body */}
-              <div className="lg:col-span-3">
+              <div className="lg:col-span-2">
                 <AnimatePresence mode="wait">
                   {/* TAB 1: Merged Portfolio */}
                   {activeTab === 'merged' && (

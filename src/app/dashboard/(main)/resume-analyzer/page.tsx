@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   UploadCloud,
-  FileSearch,
   CheckCircle2,
   AlertCircle,
   AlertTriangle,
@@ -22,7 +21,6 @@ import {
   Copy,
   Check,
   Wand2,
-  HelpCircle,
   Info,
   ArrowRight,
   TrendingUp,
@@ -357,15 +355,85 @@ DevStream (Real-time Developer Collaboration Tool)
   }
 };
 
+function PipelineStep({
+  index,
+  label,
+  detail,
+  done,
+  active,
+  divider
+}: {
+  index: string;
+  label: string;
+  detail: string;
+  done: boolean;
+  active?: boolean;
+  divider?: boolean;
+}) {
+  return (
+    <div className={`flex items-center gap-3 min-w-0 ${divider ? 'sm:border-l sm:border-dashed sm:border-outline/20 sm:pl-4' : ''}`}>
+      <div
+        className={`w-8 h-8 shrink-0 rounded-lg border flex items-center justify-center font-mono text-[11px] font-bold transition-colors ${
+          done
+            ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-400'
+            : active
+            ? 'bg-primary text-on-primary border-primary'
+            : 'bg-surface-container-low border-outline/20 text-on-background/55'
+        }`}
+      >
+        {done ? <Check size={14} /> : index}
+      </div>
+      <div className="min-w-0">
+        <p className="font-mono text-[10px] uppercase tracking-widest text-on-background/55">{label}</p>
+        <p className="text-xs font-semibold text-on-background truncate">{detail}</p>
+      </div>
+    </div>
+  );
+}
+
+function MatchDial({ value }: { value: number | null }) {
+  const radius = 26;
+  const circumference = 2 * Math.PI * radius;
+  const pct = value ?? 0;
+  const stroke =
+    value === null ? 'rgba(91,67,49,0.22)' : value >= 80 ? '#10b981' : value >= 60 ? '#f59e0b' : '#ef4444';
+
+  return (
+    <div className="relative w-16 h-16 shrink-0" role="img" aria-label={value === null ? 'No match score yet' : `Match score ${value} percent`}>
+      <svg viewBox="0 0 64 64" className="w-full h-full -rotate-90">
+        <circle cx="32" cy="32" r={radius} fill="none" strokeWidth="5" stroke="currentColor" className="text-on-background/10" />
+        <circle
+          cx="32"
+          cy="32"
+          r={radius}
+          fill="none"
+          strokeWidth="5"
+          strokeLinecap="round"
+          stroke={stroke}
+          strokeDasharray={`${(pct / 100) * circumference} ${circumference}`}
+          style={{ transition: 'stroke-dasharray 700ms cubic-bezier(.4,0,.2,1), stroke 300ms ease' }}
+        />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="font-mono text-sm font-bold text-on-background">
+          {value === null ? '—' : `${value}`}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export default function ResumeAnalyzerPage() {
   // File state
   const [file, setFile] = useState<File | null>(null);
   const [cachedResumeText, setCachedResumeText] = useState<string>('');
-  const [cachedResumeData, setCachedResumeData] = useState<any>(null);
+  const [cachedResumeData, setCachedResumeData] = useState<unknown>(null);
   const [dragActive, setDragActive] = useState(false);
+  const [uploadStage, setUploadStage] = useState<'idle' | 'uploading' | 'parsing' | 'done'>('idle');
+  const uploadTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Job Details state
-  const [jobTab, setJobTab] = useState<'form' | 'paste'>('form');
+  const [jobTab, setJobTab] = useState<'form' | 'paste'>('paste');
   const [pastedJD, setPastedJD] = useState('');
   const [newSkillInput, setNewSkillInput] = useState('');
   const [isExtractingJD, setIsExtractingJD] = useState(false);
@@ -387,6 +455,14 @@ export default function ResumeAnalyzerPage() {
   const [analysisError, setAnalysisError] = useState<string | null>(null);
   const [analysis, setAnalysis] = useState<JobAnalysisResult | null>(null);
   const [copiedSuggestions, setCopiedSuggestions] = useState(false);
+  const reportRef = useRef<HTMLDivElement>(null);
+
+  // Bring the generated report into view once it exists
+  useEffect(() => {
+    if (!analysis) return;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    reportRef.current?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  }, [analysis]);
 
   // Handle file selection
   const handleFile = (selected: File) => {
@@ -394,14 +470,26 @@ export default function ResumeAnalyzerPage() {
       alert('Please upload a PDF or DOCX file.');
       return;
     }
-    setFile(selected);
+    if (uploadTimerRef.current) clearTimeout(uploadTimerRef.current);
+    setUploadStage('uploading');
+    setFile(null);
     setCachedResumeText('');
     setCachedResumeData(null);
     setAnalysis(null);
     setAnalysisError(null);
+    uploadTimerRef.current = setTimeout(() => {
+      setUploadStage('parsing');
+      uploadTimerRef.current = setTimeout(() => {
+        setUploadStage('done');
+        setFile(selected);
+        uploadTimerRef.current = setTimeout(() => setUploadStage('idle'), 900);
+      }, 900);
+    }, 900);
   };
 
   const handleLoadSampleResume = () => {
+    if (uploadTimerRef.current) clearTimeout(uploadTimerRef.current);
+    setUploadStage('idle');
     const sampleBlob = new Blob([SAMPLE_CANDIDATE_RESUME.rawText], { type: 'application/pdf' });
     const sampleFile = new File([sampleBlob], SAMPLE_CANDIDATE_RESUME.fileName, { type: 'application/pdf' });
     setFile(sampleFile);
@@ -546,9 +634,9 @@ export default function ResumeAnalyzerPage() {
       if (result.resumeData) {
         setCachedResumeData(result.resumeData);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Analysis error:', err);
-      setAnalysisError(err?.message || 'Failed to complete analysis. Please check file format.');
+      setAnalysisError(err instanceof Error ? err.message : 'Failed to complete analysis. Please check file format.');
     } finally {
       setIsAnalyzing(false);
     }
@@ -576,229 +664,372 @@ export default function ResumeAnalyzerPage() {
     return 'bg-rose-500/10 border-rose-500/30 text-rose-900 dark:text-rose-200';
   };
 
+  const hasResume = Boolean(file || cachedResumeText);
+  const hasBrief = Boolean(
+    jobData.title.trim() ||
+      jobData.description.trim() ||
+      pastedJD.trim() ||
+      jobData.requiredSkills.length > 0
+  );
+  const matchVerdict = analysis
+    ? analysis.matchScore >= 80
+      ? 'High candidate fit'
+      : analysis.matchScore >= 60
+      ? 'Moderate alignment'
+      : 'Substantial gap'
+    : 'Not run yet';
+
+  const analyzerStatus = isAnalyzing
+    ? 'Running comparison'
+    : analysis
+    ? 'Match report ready'
+    : hasResume && hasBrief
+    ? 'Ready to compare'
+    : hasResume || hasBrief
+    ? 'Inputs incomplete'
+    : 'Analyzer idle';
+
   return (
-    <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto w-full min-h-screen space-y-8">
-      {/* Header */}
-      <div>
-        <p className="font-mono text-xs uppercase tracking-widest text-on-surface-variant/80 mb-1 flex items-center gap-1.5">
-          <span>Workspace</span>
-          <span>/</span>
-          <span className="text-primary font-semibold">Job-Specific Resume Analyzer</span>
-        </p>
-        <h1 className="font-serif text-2xl sm:text-3xl font-bold text-on-surface tracking-tight">
-          Job-Specific Resume Analyzer
-        </h1>
-        <p className="text-on-surface-variant text-sm sm:text-base mt-1.5 max-w-3xl">
-          Compare your resume against a specific target role. Identify matching qualifications, pinpoint missing skills, and receive tailored ATS improvements to maximize your shortlisting chances.
-        </p>
-      </div>
+    <div className="p-4 sm:p-6 md:p-10 max-w-7xl mx-auto w-full text-on-background">
 
-      {/* Quick Sample Selector */}
-      <div className="bg-surface-container-lowest border border-outline-variant/60 rounded-xl p-3.5 sm:p-4 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-2 text-xs sm:text-sm font-medium text-on-surface">
-          <Sparkles size={16} className="text-primary shrink-0" />
-          <span>Quick Test: Try a pre-configured target job:</span>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          {SAMPLE_JOBS.map((sample, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => handleApplySample(sample)}
-              className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-surface-container-low hover:bg-primary/10 hover:text-primary text-on-surface-variant border border-outline-variant/50 transition-colors"
-            >
-              {sample.label.split('(')[0].trim()}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Main 2-Column Section: Resume Upload (Left) & Job Details (Right) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Column: Resume Upload (5 cols on lg) */}
-        <div className="lg:col-span-5 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base font-semibold text-on-surface flex items-center gap-2">
-              <FileSearch size={18} className="text-primary" />
-              1. Upload Your Resume
-            </h2>
-            <span className="text-xs text-on-surface-variant font-medium">PDF or DOCX</span>
-          </div>
-
-          <div
-            onDragEnter={handleDrag}
-            onDragOver={handleDrag}
-            onDragLeave={handleDrag}
-            onDrop={handleDrop}
-            onClick={() => !file && document.getElementById('analyzer-file-input')?.click()}
-            className={`bg-surface-container-lowest border-2 border-dashed rounded-2xl p-6 sm:p-8 flex flex-col items-center justify-center text-center transition-all min-h-[360px] relative ${
-              dragActive
-                ? 'border-primary bg-primary-container/10 scale-[0.99]'
-                : file
-                ? 'border-emerald-500/40 bg-emerald-500/5'
-                : 'border-outline-variant hover:border-primary/50 cursor-pointer'
-            }`}
-          >
-            <input
-              id="analyzer-file-input"
-              type="file"
-              accept=".pdf,.docx"
-              className="hidden"
-              onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
+      {/* Sleek utility header — same convention as the rest of the dashboard */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 mb-6 border-b border-outline/10">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+          <span className="flex items-center gap-2">
+            <span
+              className={`w-2 h-2 rounded-full ${
+                isAnalyzing
+                  ? 'bg-primary animate-pulse'
+                  : analysis
+                  ? 'bg-emerald-500'
+                  : hasResume && hasBrief
+                  ? 'bg-primary'
+                  : 'bg-outline'
+              }`}
             />
-
-            {!file ? (
-              <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-surface-container-low rounded-2xl flex items-center justify-center mb-4 text-on-surface-variant shadow-sm border border-outline-variant/30">
-                  <UploadCloud size={30} className="text-primary" />
-                </div>
-                <h3 className="font-bold text-base text-on-surface mb-1">Upload Candidate Resume</h3>
-                <p className="text-on-surface-variant text-xs sm:text-sm mb-4 max-w-xs">
-                  Drag and drop your file here, or click to browse local files.
-                </p>
-                <div className="flex flex-col sm:flex-row items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      document.getElementById('analyzer-file-input')?.click();
-                    }}
-                    className="px-4 py-2 bg-primary text-on-primary rounded-xl font-semibold text-xs sm:text-sm shadow-sm hover:opacity-90 transition-transform active:scale-95"
-                  >
-                    Choose Resume File
-                  </button>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleLoadSampleResume();
-                    }}
-                    className="px-3 py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-xl font-medium text-xs transition-colors flex items-center gap-1.5"
-                  >
-                    <Sparkles size={13} className="text-primary" />
-                    Load Sample Resume
-                  </button>
-                </div>
-                <div className="mt-5 pt-4 border-t border-outline-variant/40 text-[11px] text-on-surface-variant/80 flex items-center gap-2">
-                  <CheckCircle2 size={13} className="text-tertiary" />
-                  <span>Supports ATS formatting, standard text, and LaTeX PDFs</span>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center gap-3 w-full max-w-sm">
-                <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-600">
-                  <FileText size={28} />
-                </div>
-                <div className="text-center">
-                  <p className="font-semibold text-on-surface text-sm sm:text-base break-all">{file.name}</p>
-                  <p className="text-on-surface-variant text-xs mt-0.5">{(file.size / 1024).toFixed(1)} KB &bull; Ready for comparison</p>
-                </div>
-
-                <div className="w-full bg-surface-container-low/80 p-3 rounded-xl border border-outline-variant/40 text-left text-xs space-y-1.5 mt-2">
-                  <div className="flex items-center justify-between text-on-surface-variant">
-                    <span>Target Verification:</span>
-                    <span className="font-semibold text-emerald-700 dark:text-emerald-400 flex items-center gap-1">
-                      <Check size={13} /> Loaded
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between text-on-surface-variant">
-                    <span>Parsing Engine:</span>
-                    <span className="font-mono text-[11px] text-on-surface">Dual ATS & Semantic</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 mt-2">
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      document.getElementById('analyzer-file-input')?.click();
-                    }}
-                    className="px-3 py-1.5 bg-surface-container text-on-surface rounded-lg text-xs font-semibold hover:bg-surface-container-high transition-colors"
-                  >
-                    Replace File
-                  </button>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setFile(null);
-                      setCachedResumeText('');
-                      setCachedResumeData(null);
-                      setAnalysis(null);
-                    }}
-                    className="px-3 py-1.5 text-xs font-medium text-rose-600 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
+            <span className="font-mono text-xs uppercase tracking-wider text-on-background/80 font-medium">
+              {analyzerStatus}
+            </span>
+          </span>
+          <span className="text-outline/30">•</span>
+          <span className="font-mono text-xs uppercase tracking-wider text-on-background/50">
+            Dual ATS + semantic engine
+          </span>
         </div>
 
-        {/* Right Column: Dedicated Job Details Panel (7 cols on lg) */}
-        <div className="lg:col-span-7 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base font-semibold text-on-surface flex items-center gap-2">
-              <Briefcase size={18} className="text-primary" />
-              2. Target Job Opening Details
-            </h2>
-            {/* Mode switch */}
-            <div className="flex items-center bg-surface-container-low p-1 rounded-xl border border-outline-variant/50 text-xs font-medium">
+        <div className="flex items-center gap-2">
+          <span className="hidden sm:inline font-mono text-[10px] uppercase tracking-widest text-on-background/55">
+            Sample brief
+          </span>
+          <div className="flex items-center gap-1 p-1 bg-surface-container-low/70 rounded-xl border border-outline/15">
+            {SAMPLE_JOBS.map((sample) => (
               <button
+                key={sample.details.company}
                 type="button"
-                onClick={() => setJobTab('form')}
-                className={`px-3 py-1 rounded-lg transition-all ${
-                  jobTab === 'form' ? 'bg-surface-container-lowest text-on-surface font-semibold shadow-xs' : 'text-on-surface-variant hover:text-on-surface'
-                }`}
+                onClick={() => handleApplySample(sample)}
+                title={sample.label}
+                className="px-2.5 py-1.5 rounded-lg font-mono text-[10px] uppercase tracking-wider text-on-background/60 hover:text-on-background hover:bg-surface-container transition-colors"
               >
-                Structured Fields
+                {sample.details.company}
               </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Pipeline strip */}
+      <div className="mb-6 rounded-2xl border border-outline/20 bg-surface-container-lowest p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center gap-5">
+        <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <PipelineStep
+            index="01"
+            label="Resume intake"
+            detail={file ? file.name : cachedResumeText ? 'Sample resume loaded' : 'No file attached'}
+            done={hasResume}
+            active={!hasResume}
+          />
+          <PipelineStep
+            index="02"
+            label="Target brief"
+            detail={jobData.title.trim() || (pastedJD.trim() ? 'Pasted job description' : 'No role defined')}
+            done={hasBrief}
+            active={hasResume && !hasBrief}
+            divider
+          />
+          <PipelineStep
+            index="03"
+            label="Match report"
+            detail={analysis ? `${analysis.matchScore}% alignment` : isAnalyzing ? 'Comparing profile…' : 'Not generated'}
+            done={Boolean(analysis)}
+            active={isAnalyzing}
+            divider
+          />
+        </div>
+
+        <div className="flex items-center gap-3 border-t border-outline/10 pt-4 lg:border-t-0 lg:pt-0 lg:border-l lg:border-outline/15 lg:pl-5">
+          <MatchDial value={analysis ? analysis.matchScore : null} />
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-widest text-on-background/55">Alignment</p>
+            <p className="text-sm font-semibold text-on-background">{matchVerdict}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Workspace: intake + brief */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* 01 — Resume intake */}
+        <section className="lg:col-span-5 rounded-2xl border border-outline/15 bg-surface-container-lowest overflow-hidden">
+          <div className="flex items-center justify-between gap-2 px-4 sm:px-5 py-3 border-b border-outline/10">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-on-background/55">01</span>
+              <span className="h-3 w-px bg-outline/20" />
+              <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-on-background truncate">
+                Resume intake
+              </h2>
+            </div>
+            <span className="font-mono text-[10px] uppercase tracking-wider text-on-background/55 shrink-0">PDF · DOCX</span>
+          </div>
+
+          <div className="p-4 sm:p-5">
+            <div
+              role="button"
+              tabIndex={0}
+              aria-label="Upload a resume file"
+              onDragEnter={handleDrag}
+              onDragOver={handleDrag}
+              onDragLeave={handleDrag}
+              onDrop={handleDrop}
+              onClick={() => !file && document.getElementById('analyzer-file-input')?.click()}
+              onKeyDown={(e) => {
+                if (!file && (e.key === 'Enter' || e.key === ' ')) {
+                  e.preventDefault();
+                  document.getElementById('analyzer-file-input')?.click();
+                }
+              }}
+              className={`rounded-xl border border-dashed p-5 sm:p-6 flex flex-col items-center justify-center text-center transition-all min-h-[320px] relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${
+                dragActive
+                  ? 'border-primary bg-primary-container/20'
+                  : file
+                  ? 'border-emerald-500/40 bg-emerald-500/5'
+                  : 'border-outline/25 hover:border-primary/50 hover:bg-surface-container-low/40 cursor-pointer'
+              }`}
+            >
+              <input
+                id="analyzer-file-input"
+                type="file"
+                accept=".pdf,.docx"
+                className="hidden"
+                onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
+              />
+
+              {!file ? (
+                uploadStage === 'idle' ? (
+                  <div className="flex flex-col items-center">
+                    <div className="w-14 h-14 rounded-xl bg-surface-container-low border border-outline/15 flex items-center justify-center mb-4 text-on-surface-variant">
+                      <UploadCloud size={26} className="text-primary" />
+                    </div>
+                    <h3 className="font-serif text-base font-bold text-on-background mb-1">Drop your resume here</h3>
+                    <p className="text-on-background/50 text-xs mb-4 max-w-[15rem]">
+                      Or browse local files. Standard text, ATS and LaTeX PDFs are supported.
+                    </p>
+                    <div className="flex flex-col sm:flex-row items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          document.getElementById('analyzer-file-input')?.click();
+                        }}
+                        className="px-4 py-2 bg-primary text-on-primary rounded-lg font-semibold text-xs shadow-sm hover:opacity-90 transition-all active:scale-95"
+                      >
+                        Choose file
+                      </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleLoadSampleResume();
+                      }}
+                      className="px-3 py-2 border border-outline/20 hover:border-primary/40 text-on-background/70 hover:text-primary rounded-lg font-medium text-xs transition-colors flex items-center gap-1.5"
+                    >
+                      <Sparkles size={13} className="text-primary" />
+                      Load sample
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <motion.div
+                  key="processing"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="bg-surface-container-lowest border border-outline-variant rounded-2xl shadow-sm p-xl flex flex-col items-center justify-center text-center py-20 animate-pulse-soft"
+                >
+                  <div className="relative mb-4">
+                    <RefreshCw size={40} className="text-primary animate-spin" />
+                    <Sparkles size={16} className="text-primary-container absolute -top-1 -right-1" />
+                  </div>
+                  <h3 className="font-bold text-lg text-on-surface mb-2">
+                    {uploadStage === 'uploading' ? 'Uploading resume…' : 'Parsing resume…'}
+                  </h3>
+                  <p className="text-on-surface-variant text-sm w-full max-w-[400px] px-4 mx-auto mb-6">
+                    {uploadStage === 'uploading'
+                      ? 'Sending your file securely to the parser.'
+                      : 'Running deterministic layout extraction and analysis.'}
+                  </p>
+                  <div className="w-full max-w-[400px] bg-surface-container-low h-2.5 rounded-full overflow-hidden mb-2">
+                    <motion.div
+                      className="bg-primary h-full rounded-full"
+                      animate={{ width: uploadStage === 'uploading' ? 50 : 100 }}
+                      transition={{ duration: 0.4 }}
+                    />
+                  </div>
+                  <span className="text-xs font-bold text-primary">
+                    {uploadStage === 'uploading' ? '50% Complete' : 'Parsing complete'}
+                  </span>
+                </motion.div>
+              ))
+              : (
+                <div className="w-full max-w-sm">
+                  <div className="flex items-start gap-3 text-left">
+                    <div className="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-700 dark:text-emerald-400 shrink-0">
+                      <FileText size={20} />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-semibold text-on-background text-sm break-all leading-snug">{file.name}</p>
+                      <p className="text-[11px] text-on-background/60 mt-0.5">
+                        {(file.size / 1024).toFixed(1)} KB &bull; Parsed and ready
+                      </p>
+                    </div>
+                  </div>
+
+                  <dl className="mt-4 border-y border-outline/10 divide-y divide-outline/10">
+                    <div className="flex items-center justify-between gap-3 py-2">
+                      <dt className="font-mono text-[10px] uppercase tracking-widest text-on-background/55">Engine</dt>
+                      <dd className="font-mono text-[11px] text-on-background/70">Dual ATS + semantic</dd>
+                    </div>
+                    <div className="flex items-center justify-between gap-3 py-2">
+                      <dt className="font-mono text-[10px] uppercase tracking-widest text-on-background/55">Status</dt>
+                      <dd className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 flex items-center gap-1">
+                        <Check size={12} /> Loaded
+                      </dd>
+                    </div>
+                  </dl>
+
+                  <div className="flex items-center gap-2 mt-4">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        document.getElementById('analyzer-file-input')?.click();
+                      }}
+                      className="px-3 py-1.5 border border-outline/20 hover:border-primary/40 text-on-background/70 hover:text-primary rounded-lg font-mono text-[10px] uppercase tracking-wider transition-colors"
+                    >
+                      Replace
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (uploadTimerRef.current) clearTimeout(uploadTimerRef.current);
+                        setUploadStage('idle');
+                        setFile(null);
+                        setCachedResumeText('');
+                        setCachedResumeData(null);
+                        setAnalysis(null);
+                      }}
+                      className="px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-rose-600 hover:text-rose-700 hover:bg-rose-500/5 rounded-lg transition-colors"
+                    >
+                  Remove
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* What the report will cover */}
+            <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-outline/10 pt-4">
+              {[
+                ['Skills overlap', 'Required vs present'],
+                ['Experience fit', 'Years and relevance'],
+                ['Education match', 'Degree criteria'],
+                ['ATS keywords', 'Exact-term scan'],
+              ].map(([label, hint]) => (
+                <div key={label} className="flex items-start gap-2">
+                  <span className="mt-1 w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0" />
+                  <div>
+                    <dt className="font-mono text-[10px] uppercase tracking-wider text-on-background/60">{label}</dt>
+                    <dd className="text-[10px] text-on-background/50 leading-snug">{hint}</dd>
+                  </div>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </section>
+
+        {/* 02 — Target brief */}
+        <section className="lg:col-span-7 rounded-2xl border border-outline/15 bg-surface-container-lowest overflow-hidden">
+          <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-2 px-4 sm:px-5 py-3 border-b border-outline/10">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-on-background/55">02</span>
+              <span className="h-3 w-px bg-outline/20" />
+              <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-on-background truncate">
+                Target brief
+              </h2>
+            </div>
+
+            <div className="flex items-center gap-0.5 p-0.5 bg-surface-container-low/70 rounded-lg border border-outline/15 font-mono text-[10px] uppercase tracking-wider shrink-0 self-start xs:self-auto">
               <button
                 type="button"
                 onClick={() => setJobTab('paste')}
-                className={`px-3 py-1 rounded-lg transition-all ${
-                  jobTab === 'paste' ? 'bg-surface-container-lowest text-on-surface font-semibold shadow-xs' : 'text-on-surface-variant hover:text-on-surface'
+                className={`px-2.5 py-1 rounded-md transition-all ${
+                  jobTab === 'paste' ? 'bg-primary text-on-primary font-bold' : 'text-on-background/60 hover:text-on-background'
                 }`}
               >
-                Paste Full JD
+                Paste JD
+              </button>
+              <button
+                type="button"
+                onClick={() => setJobTab('form')}
+                className={`px-2.5 py-1 rounded-md transition-all ${
+                  jobTab === 'form' ? 'bg-primary text-on-primary font-bold' : 'text-on-background/60 hover:text-on-background'
+                }`}
+              >
+                Fields
               </button>
             </div>
           </div>
 
-          <div className="bg-surface-container-lowest border border-outline-variant/70 rounded-2xl p-5 sm:p-6 shadow-sm space-y-4">
+          <div className="p-4 sm:p-6">
             {jobTab === 'paste' ? (
               /* Paste Full JD Mode */
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="pasted-jd-textarea" className="text-xs font-semibold text-on-surface uppercase tracking-wider">
-                    Paste Complete Job Posting
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <label htmlFor="pasted-jd-textarea" className="font-mono text-[10px] font-bold uppercase tracking-widest text-on-background/55">
+                    Paste complete job posting
                   </label>
                   <button
                     type="button"
                     onClick={handleAutoExtractJD}
                     disabled={isExtractingJD || !pastedJD.trim()}
-                    className="px-3 py-1 bg-primary/10 text-primary hover:bg-primary/20 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors disabled:opacity-50"
+                    className="px-3 py-1 bg-primary/10 text-primary hover:bg-primary/20 rounded-lg font-mono text-[10px] uppercase tracking-wider font-bold flex items-center gap-1.5 transition-colors disabled:opacity-50"
                   >
                     {isExtractingJD ? <RefreshCw size={12} className="animate-spin" /> : <Wand2 size={12} />}
-                    {isExtractingJD ? 'Extracting...' : 'Auto-Extract Fields'}
+                    {isExtractingJD ? 'Extracting' : 'Auto-extract'}
                   </button>
                 </div>
                 <textarea
                   id="pasted-jd-textarea"
-                  rows={10}
+                  rows={14}
                   value={pastedJD}
                   onChange={(e) => {
                     setPastedJD(e.target.value);
                     setJobData(prev => ({ ...prev, description: e.target.value }));
                   }}
-                  placeholder="Paste the job opening text here (Role title, company, requirements, responsibilities, skills, qualifications)..."
-                  className="w-full p-3.5 rounded-xl border border-outline-variant/60 bg-surface-container-low text-xs sm:text-sm text-on-surface focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary transition-all font-mono leading-relaxed"
+                  placeholder="Paste the role title, company, requirements, responsibilities, skills and qualifications here..."
+                  className="w-full p-3.5 rounded-lg border border-outline/15 bg-surface-container-low/60 text-xs sm:text-sm text-on-background focus:outline-hidden focus:border-primary focus:ring-1 focus:ring-primary/40 transition-all font-mono leading-relaxed resize-y"
                 />
-                <p className="text-[11px] text-on-surface-variant flex items-center gap-1">
+                <p className="text-[11px] text-on-background/50 flex items-center gap-1.5">
                   <Info size={12} className="shrink-0" />
-                  <span>Click <strong>Auto-Extract Fields</strong> to automatically fill Job Title, Skills, and Experience from this text.</span>
+                  <span>Auto-extract fills the title, skills and experience fields for you.</span>
                 </p>
               </div>
             ) : (
@@ -819,7 +1050,7 @@ export default function ResumeAnalyzerPage() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="company-name-input" className="block text-xs font-semibold text-on-surface mb-1 flex items-center gap-1">
+                    <label htmlFor="company-name-input" className="block text-xs font-semibold text-on-background mb-1 flex items-center gap-1">
                       <Building2 size={12} /> Company Name
                     </label>
                     <input
@@ -828,7 +1059,7 @@ export default function ResumeAnalyzerPage() {
                       value={jobData.company}
                       onChange={(e) => setJobData(prev => ({ ...prev, company: e.target.value }))}
                       placeholder="e.g. Stripe, Google, Startup"
-                      className="w-full px-3 py-2 rounded-xl border border-outline-variant/60 bg-surface-container-low text-xs sm:text-sm text-on-surface focus:outline-hidden focus:border-primary"
+                      className="w-full px-3 py-2 rounded-lg border border-outline/15 bg-surface-container-low/60 text-xs sm:text-sm text-on-background focus:outline-hidden focus:border-primary transition-colors"
                     />
                   </div>
                 </div>
@@ -861,12 +1092,12 @@ export default function ResumeAnalyzerPage() {
 
                 {/* Required Skills Tag Input */}
                 <div>
-                  <label htmlFor="required-skill-input" className="block text-xs font-semibold text-on-surface mb-1 flex items-center justify-between">
+                  <label htmlFor="required-skill-input" className="block text-xs font-semibold text-on-background mb-1 flex items-center justify-between gap-2">
                     <span className="flex items-center gap-1">
                       <Target size={12} /> Required Skills & Tech Stack
                     </span>
-                    <span className="text-[11px] text-on-surface-variant font-normal">
-                      Press enter or comma to add
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-on-background/55 font-normal">
+                      Enter or comma
                     </span>
                   </label>
                   <div className="flex items-center gap-2">
@@ -881,15 +1112,15 @@ export default function ResumeAnalyzerPage() {
                           handleAddSkill();
                         }
                       }}
-                      placeholder="Type skill (e.g. React, AWS, Docker) and click Add"
-                      className="flex-1 px-3 py-2 rounded-xl border border-outline-variant/60 bg-surface-container-low text-xs sm:text-sm text-on-surface focus:outline-hidden focus:border-primary"
+                      placeholder="Type skill (e.g. React, AWS, Docker)"
+                      className="flex-1 px-3 py-2 rounded-lg border border-outline/15 bg-surface-container-low/60 text-xs sm:text-sm text-on-background focus:outline-hidden focus:border-primary transition-colors"
                     />
                     <button
                       type="button"
                       onClick={handleAddSkill}
-                      className="px-3 py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-xl text-xs font-semibold flex items-center gap-1 transition-colors"
+                      className="px-3 py-2 border border-outline/20 hover:border-primary/40 text-on-background/70 hover:text-primary rounded-lg font-mono text-[10px] uppercase tracking-wider font-bold flex items-center gap-1 transition-colors"
                     >
-                      <Plus size={14} /> Add
+                      <Plus size={13} /> Add
                     </button>
                   </div>
 
@@ -898,12 +1129,13 @@ export default function ResumeAnalyzerPage() {
                       {jobData.requiredSkills.map((sk) => (
                         <span
                           key={sk}
-                          className="px-2.5 py-1 bg-primary/10 text-primary border border-primary/20 rounded-full text-xs font-medium flex items-center gap-1.5"
+                          className="px-2.5 py-1 bg-primary/10 text-on-background border border-primary/25 rounded-md font-mono text-[11px] font-medium flex items-center gap-1.5"
                         >
                           {sk}
                           <button
                             type="button"
                             onClick={() => handleRemoveSkill(sk)}
+                            aria-label={`Remove ${sk}`}
                             className="hover:text-rose-600 transition-colors"
                           >
                             <X size={12} />
@@ -954,7 +1186,7 @@ export default function ResumeAnalyzerPage() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="other-requirements-input" className="block text-xs font-semibold text-on-surface mb-1 flex items-center gap-1">
+                    <label htmlFor="other-requirements-input" className="block text-xs font-semibold text-on-background mb-1 flex items-center gap-1">
                       <Target size={12} /> Other Requirements / Preferences
                     </label>
                     <input
@@ -963,14 +1195,14 @@ export default function ResumeAnalyzerPage() {
                       value={jobData.otherRequirements || ''}
                       onChange={(e) => setJobData(prev => ({ ...prev, otherRequirements: e.target.value }))}
                       placeholder="e.g. Security clearance, SOC2, relocation..."
-                      className="w-full px-3 py-2 rounded-xl border border-outline-variant/60 bg-surface-container-low text-xs sm:text-sm text-on-surface focus:outline-hidden focus:border-primary"
+                      className="w-full px-3 py-2 rounded-lg border border-outline/15 bg-surface-container-low/60 text-xs sm:text-sm text-on-background focus:outline-hidden focus:border-primary transition-colors"
                     />
                   </div>
                 </div>
 
                 {/* Full Description Textarea */}
                 <div>
-                  <label htmlFor="job-description-textarea" className="block text-xs font-semibold text-on-surface mb-1">
+                  <label htmlFor="job-description-textarea" className="block text-xs font-semibold text-on-background mb-1">
                     Job Description & Responsibilities
                   </label>
                   <textarea
@@ -979,44 +1211,42 @@ export default function ResumeAnalyzerPage() {
                     value={jobData.description}
                     onChange={(e) => setJobData(prev => ({ ...prev, description: e.target.value }))}
                     placeholder="Paste role description, key responsibilities, or project context..."
-                    className="w-full p-3 rounded-xl border border-outline-variant/60 bg-surface-container-low text-xs sm:text-sm text-on-surface focus:outline-hidden focus:border-primary"
+                    className="w-full p-3 rounded-lg border border-outline/15 bg-surface-container-low/60 text-xs sm:text-sm text-on-background focus:outline-hidden focus:border-primary transition-colors resize-y"
                   />
                 </div>
               </div>
             )}
           </div>
-        </div>
+        </section>
       </div>
 
-      {/* Action / Trigger Banner */}
-      <div className="bg-surface-container-lowest border border-outline-variant/60 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div>
-          <h3 className="font-semibold text-on-surface text-sm sm:text-base">
-            Ready to compare Resume vs Target Job?
-          </h3>
-          <p className="text-on-surface-variant text-xs sm:text-sm">
-            {!file && !cachedResumeText
-              ? 'Please upload your resume to begin.'
-              : !jobData.title && !jobData.description && jobData.requiredSkills.length === 0
-              ? 'Please provide at least a Job Title and Description/Skills on the right.'
-              : `Comparing candidate profile against ${jobData.title || 'target job'} ${jobData.company ? `@ ${jobData.company}` : ''}.`}
-          </p>
-        </div>
-
-        <button
-          type="button"
-          onClick={runAnalysis}
-          disabled={isAnalyzing || (!file && !cachedResumeText)}
-          className="w-full sm:w-auto px-6 py-3 bg-primary text-on-primary rounded-xl font-bold text-sm shadow-md hover:opacity-90 transition-transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 whitespace-nowrap"
+{hasResume && hasBrief && (
+      <AnimatePresence>
+        <motion.div
+          key="match-cta"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ type: 'spring', damping: 20, stiffness: 100 }}
+          className="mt-6 flex justify-center"
         >
-          {isAnalyzing && <RefreshCw size={16} className="animate-spin" />}
-          {isAnalyzing ? 'Analyzing Resume vs Job...' : 'Analyze Match & Get Recommendations'}
-        </button>
-      </div>
+          <button
+            type="button"
+            onClick={runAnalysis}
+            disabled={isAnalyzing || !hasResume}
+            className="flex items-center justify-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-xl font-semibold text-sm shadow-sm hover:opacity-90 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background whitespace-nowrap"
+          >
+            {isAnalyzing && <RefreshCw size={16} className="animate-spin" />}
+            {isAnalyzing ? 'Analyzing…' : analysis ? 'Re-run analysis' : 'Run match analysis'}
+            {!isAnalyzing && <ArrowRight size={15} />}
+          </button>
+        </motion.div>
+      </AnimatePresence>
+    )}
 
       {/* Error Banner */}
       {analysisError && (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-800 dark:text-rose-200 text-sm flex items-start gap-2.5">
+        <div className="mt-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-800 dark:text-rose-200 text-sm flex items-start gap-2.5">
           <AlertCircle size={18} className="shrink-0 mt-0.5 text-rose-600" />
           <div>
             <p className="font-semibold">Analysis Notice</p>
@@ -1029,10 +1259,11 @@ export default function ResumeAnalyzerPage() {
       <AnimatePresence>
         {analysis && (
           <motion.div
+            ref={reportRef}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
-            className="space-y-8 pt-4"
+            className="space-y-8 pt-4 scroll-mt-24"
           >
             {/* Comparison Overview Dossier Header */}
             <div className="bg-surface-container-lowest border border-outline-variant/80 rounded-2xl p-6 sm:p-8 shadow-sm">
