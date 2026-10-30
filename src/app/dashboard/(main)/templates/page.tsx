@@ -81,7 +81,7 @@ export default function TemplatesPage() {
               />
 
               {/* Hover overlay */}
-              <div className="absolute inset-0 bg-on-background/75 backdrop-blur-[2px] flex flex-col items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="absolute inset-0 bg-black/55 backdrop-blur-md border border-white/20 flex flex-col items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="flex gap-2 mb-1">
                   {tpl.palette.map((c) => (
                     <div key={c} className="w-5 h-5 rounded-full border-2 border-white/30" style={{ backgroundColor: c }} />
