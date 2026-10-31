@@ -589,10 +589,14 @@ export default function PortfoliosPage() {
                           <button
                             onClick={() => handleUnpublish(portfolio.id)}
                             disabled={isDeploying === portfolio.id}
-                            className="p-2 text-on-surface-variant hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all flex-shrink-0"
-                            title="Unpublish Portfolio"
+                            className="flex-1 inline-flex items-center justify-center gap-2 py-2 px-3 bg-red-600 text-white font-mono text-xs uppercase tracking-wider font-bold rounded-lg hover:bg-red-700 transition-all shadow-sm shadow-red-600/20"
+                            title="Remove from deployment"
                           >
-                            <Clock size={13} />
+                            {isDeploying === portfolio.id ? (
+                              <Loader2 size={13} className="animate-spin" />
+                            ) : (
+                              <span>Remove</span>
+                            )}
                           </button>
                         </>
                       ) : (
@@ -698,22 +702,22 @@ export default function PortfoliosPage() {
               </div>
             </div>
             <p className="text-on-surface-variant text-sm mb-6 leading-relaxed">
-              Enter a unique slug for your portfolio. Your site will be live at{' '}
-              <span className="font-mono text-primary">{window.location.origin}/</span><span className="font-mono text-primary">your-slug</span>
+              Enter a unique name for your portfolio. Your site will be live at{' '}
+              <span className="font-mono text-primary">{window.location.origin}/</span><span className="font-mono text-primary">your-unique-name</span>
             </p>
             <div className="mb-6">
               <label className="block text-xs font-semibold text-on-surface mb-2 uppercase tracking-wider">
-                Portfolio Slug
+                Unique Portfolio Name
               </label>
               <input
                 type="text"
                 value={deploySlug}
                 onChange={(e) => setDeploySlug(e.target.value)}
-                placeholder="e.g. ishan"
+                placeholder="e.g. ishan-portfolio"
                 className="w-full px-3 py-2 rounded-lg border border-outline/15 bg-background text-on-surface focus:border-primary focus:ring-1 focus:ring-primary/40 transition-all font-mono text-sm"
               />
               <p className="text-[10px] text-on-surface-variant/60 mt-1">
-                Letters, numbers, and hyphens only (2+ characters)
+                Letters, numbers, and hyphens only (2+ characters). Must be unique across all users.
               </p>
             </div>
             <div className="flex gap-3">

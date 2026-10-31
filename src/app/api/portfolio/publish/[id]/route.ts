@@ -46,19 +46,19 @@ export async function POST(
       return NextResponse.json({ portfolio: data, message: 'Portfolio unpublished' });
     }
 
-    // Publish action - requires a slug
+    // Publish action - requires a unique name
     if (!slug || typeof slug !== 'string') {
-      return NextResponse.json({ error: 'Slug is required to publish' }, { status: 400 });
+      return NextResponse.json({ error: 'Unique portfolio name is required to publish' }, { status: 400 });
     }
 
-    // Normalize slug: lowercase, alphanumeric + hyphens only
+    // Normalize unique name: lowercase, alphanumeric + hyphens only
     const normalizedSlug = slug.toLowerCase().trim().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
 
     if (!normalizedSlug || normalizedSlug.length < 2) {
-      return NextResponse.json({ error: 'Invalid slug. Use at least 2 characters (letters, numbers, hyphens).' }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid unique name. Use at least 2 characters (letters, numbers, hyphens).' }, { status: 400 });
     }
 
-    // Check if slug is already taken by another portfolio
+    // Check if unique name is already taken by another portfolio
     const { data: existing } = await supabase
       .from('portfolios')
       .select('id')
@@ -67,7 +67,7 @@ export async function POST(
       .single();
 
     if (existing) {
-      return NextResponse.json({ error: 'This slug is already taken. Please choose another.' }, { status: 409 });
+      return NextResponse.json({ error: 'This unique name is already taken. Please choose another.' }, { status: 409 });
     }
 
     const { data, error } = await supabase
