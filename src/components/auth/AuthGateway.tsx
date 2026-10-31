@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import GenerativeAttractorCanvas from '@/components/OpeningExperience/GenerativeAttractorCanvas';
 import { skipIntroOnNextLanding } from '@/lib/intro-entry';
-import { ArrowLeft, Loader2, Mail, Lock, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Loader2, Mail, Lock, RotateCcw, Globe } from 'lucide-react';
+import { motion, circOut } from 'framer-motion';
 
 export type AuthMode = 'signin' | 'signup';
 
@@ -52,6 +53,8 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
   const [emailNotConfirmed, setEmailNotConfirmed] = useState(false);
   const isLeavingRef = useRef(false);
 
+  const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => setIsVisible(true));
     return () => window.cancelAnimationFrame(frame);
@@ -71,7 +74,6 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
 
   useEffect(() => {
     if (!user || isLoading) return;
-    // The gateway fades itself out before handing over to the dashboard
     const fadeFrame = window.requestAnimationFrame(() => setIsLeaving(true));
     const timer = window.setTimeout(() => {
       skipIntroOnNextLanding();
@@ -107,7 +109,6 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
     try {
       if (isSignUp) {
         await signUp(email.trim(), password, name.trim());
-        // If we get here without error, user is signed in and will be redirected
         setMessage({
           tone: 'sent',
           text: 'Account created! Redirecting to dashboard...',
@@ -117,19 +118,16 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
       }
       setPassword('');
       setIsSubmitting(false);
-    } catch (error) {
+    } catch (error: unknown) {
       setIsSubmitting(false);
       const reason = error instanceof Error ? error.message : '';
-      
+
       console.error('AuthGateway caught error:', error, 'reason:', reason);
-      
-      // Check for account already exists error
+
       if (reason.startsWith('ACCOUNT_EXISTS:')) {
         const userMessage = reason.split('ACCOUNT_EXISTS:')[1];
         setMessage({ tone: 'error', text: userMessage });
-      }
-      // Check for email not confirmed error
-      else if (reason.startsWith('EMAIL_NOT_CONFIRMED:')) {
+      } else if (reason.startsWith('EMAIL_NOT_CONFIRMED:')) {
         setEmailNotConfirmed(true);
         const userMessage = reason.split('EMAIL_NOT_CONFIRMED:')[1];
         setMessage({ tone: 'error', text: userMessage });
@@ -175,228 +173,318 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
 
   if (isLoading && !hasSubmitted) {
     return (
-      <div className="relative min-h-screen bg-[#EEEBE7] flex items-center justify-center">
-        <Loader2 className="w-6 h-6 text-[#7C3F2F] animate-spin" aria-label="Checking session" />
+      <div className="relative min-h-screen bg-[#F7EFE2] flex items-center justify-center">
+        <Loader2 className="w-6 h-6 text-[#A65A3A] animate-spin" aria-label="Checking session" />
       </div>
     );
   }
 
   return (
-    <div className="relative min-h-screen lg:h-screen w-full bg-[#EEEBE7] text-[#0A0402] font-sans flex flex-col overflow-x-hidden">
-      <div
-        className="flex flex-col flex-1 min-h-0 transition-opacity duration-500 ease-in-out motion-reduce:transition-none"
-        style={{ opacity: isVisible && !isLeaving ? 1 : 0 }}
-      >
-      {/* Full-bleed attractor with the left side faded so the form sits on clear ground */}
-      <div
-        className="fixed inset-0 z-0 pointer-events-none"
-        style={{
-          WebkitMaskImage: 'linear-gradient(to right, transparent 42%, #000 78%)',
-          maskImage: 'linear-gradient(to right, transparent 42%, #000 78%)',
-        }}
-      >
-        <GenerativeAttractorCanvas />
+    <div className="relative min-h-screen w-full bg-[#F7EFE2] text-[#35261E] font-sans flex flex-col overflow-x-hidden selection:bg-[#C9875B]/30 selection:text-[#1A1005]">
+      {/* Animated glow orbs layer */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-[#D6A15F]/30 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-[#C9875B]/25 rounded-full blur-[140px] animate-[float_6s_ease-in-out_infinite]" />
+        <div className="absolute top-[20%] right-[20%] w-[30vw] h-[30vw] bg-[#8A5A2B]/20 rounded-full blur-[100px] animate-pulse" />
+        <div className="absolute -top-[5%] left-[35%] w-[20vw] h-[20vw] bg-[#A65A3A]/15 rounded-full blur-[80px] animate-[spin_10s_linear_infinite]" />
       </div>
 
-      <header className="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-10 pt-6 sm:pt-8 flex items-center justify-between gap-4">
-        <button
-          type="button"
-          onClick={handleBack}
-          className="inline-flex items-center gap-2 min-h-[44px] font-mono text-[11px] uppercase tracking-[0.2em] text-[#3E1510] hover:text-[#56241A] transition-colors group cursor-pointer"
-        >
-          <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-1" aria-hidden="true" />
-          Back
-        </button>
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#56241A] animate-pulse" aria-hidden="true" />
-          <span className="font-mono text-[12px] uppercase tracking-[0.22em] text-[#0A0402] font-bold">
-            DevCanvas // Access
-          </span>
-        </div>
-      </header>
+      {/* Full-bleed attractor canvas on left half */}
+      <div className="fixed inset-0 z-0 pointer-events-none" style={{ WebkitMaskImage: 'linear-gradient(to right, transparent 0%, #000 55%)', maskImage: 'linear-gradient(to right, transparent 0%, #000 55%)' }}>
+        <GenerativeAttractorCanvas mode="static" palette="copper" />
+      </div>
 
-      <main className="relative z-10 flex-1 min-h-0 w-full max-w-[1440px] mx-auto px-5 sm:px-10 py-6 sm:py-8 lg:py-0 lg:px-14 flex items-center justify-start">
-        <div className="w-full max-w-[480px] border border-[#CCC0B5] bg-[#EEEBE7]/90 backdrop-blur-[2px] px-6 sm:px-9 py-10 sm:py-12 lg:py-12 flex flex-col gap-6 lg:gap-7 shadow-[0_24px_60px_-30px_rgba(10,4,2,0.5)]">
-          <h1 className="font-serif text-[36px] sm:text-[42px] lg:text-[40px] leading-[0.95] tracking-[-1.4px]">
-            {isSignUp ? (
-              <>
-                <span className="text-[#0A0402]">Open your</span>
-                <br />
-                <span className="text-[#7C3F2F]">workspace.</span>
-              </>
-            ) : (
-              <>
-                <span className="text-[#0A0402]">Pick up</span>
-                <br />
-                <span className="text-[#7C3F2F]">where you left off.</span>
-              </>
-            )}
-          </h1>
-
-          <div
-            role="status"
-            aria-live="polite"
-            className={
-              message
-                ? `border px-4 py-3 font-mono text-[12px] uppercase leading-[1.5] ${
-                    message.tone === 'sent'
-                      ? 'border-[#56241A]/40 bg-[#56241A]/10 text-[#3E1510]'
-                      : 'border-[#D35724]/50 bg-[#D35724]/10 text-[#8A3A15]'
-                  }`
-                : 'hidden'
-            }
+      <div className="relative z-10 flex flex-col min-h-screen w-full">
+        {/* Header */}
+        <header className="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-10 pt-6 sm:pt-8 flex items-center justify-between gap-4">
+          <motion.button
+            whileHover={{ x: -4 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleBack}
+            type="button"
+            className="inline-flex items-center gap-2 min-h-[44px] font-mono text-[11px] uppercase tracking-[0.2em] text-[#4A3421] hover:text-[#8A5A2B] transition-colors group cursor-pointer"
           >
-            {message?.text}
+            <motion.div whileHover={{ x: -2 }} className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-1" aria-hidden="true">
+              <ArrowLeft />
+            </motion.div>
+            <span>Back</span>
+          </motion.button>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#8A5A2B] animate-pulse" aria-hidden="true" />
+            <span className="font-mono text-[12px] uppercase tracking-[0.22em] text-[#35261E] font-bold">
+              DevCanvas // Access
+            </span>
           </div>
+        </header>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-6" noValidate>
-            {isSignUp && (
-              <div className="flex flex-col gap-2.5">
-                <label htmlFor="name" className="font-mono text-[11px] uppercase tracking-[0.15em] text-[#3E1510]">
-                  Name
-                </label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  autoComplete="name"
-                  placeholder="Your name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="h-12 w-full px-4 bg-[#FFFFFF] border border-[#CCC0B5] text-[#0A0402] placeholder:text-[#7C3F2F] font-mono text-[13px] outline-none transition-colors focus:border-[#56241A] focus-visible:ring-2 focus-visible:ring-[#7C3F2F] focus-visible:ring-offset-2 focus-visible:ring-offset-[#EEEBE7]"
-                />
-              </div>
+        {/* Main content - split layout */}
+        <main className="relative z-10 flex-1 min-h-0 w-full max-w-[1440px] mx-auto px-5 sm:px-10 py-6 sm:py-8 lg:py-0 lg:px-14 flex items-center justify-center">
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, ease: circOut, delay: 0.2 }}
+            className="w-full max-w-[480px] border border-[#E3D3BE]/60 bg-[#F7EFE2]/80 backdrop-blur-md rounded-[24px] px-6 sm:px-9 py-10 sm:py-12 lg:py-14 flex flex-col gap-6 lg:gap-7 shadow-[0_40px_80px_-20px_rgba(10,4,2,0.35)]"
+          >
+            {/* Left: Dramatic headline brand block */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: circOut, delay: 0.1 }}
+              className="flex flex-col gap-4 mb-2"
+            >
+              <motion.span
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: circOut, delay: 0.15 }}
+                className="inline-block px-3 py-1 bg-[#C9875B]/10 border border-[#C9875B]/30 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider text-[#8A5A2B] mb-1"
+              >
+                Clearance Required
+              </motion.span>
+              <motion.h1
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: circOut, delay: 0.2 }}
+                className="font-serif text-[40px] sm:text-[52px] lg:text-[56px] leading-[0.9] tracking-[-2px] text-[#35261E] mb-2"
+              >
+                {isSignUp ? (
+                  <>
+                    <span className="block text-[#35261E]">Claim your</span>
+                    <span className="block text-[#A65A3A]">workspace.</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="block text-[#35261E]">Welcome back.</span>
+                    <span className="block text-[#A65A3A]">Continue building.</span>
+                  </>
+                )}
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: circOut, delay: 0.3 }}
+                className="font-mono text-[12px] uppercase tracking-[0.18em] text-[#4A3421]/70 leading-[1.6]"
+              >
+                {isSignUp
+                  ? 'Create your portfolio identity and start assembling your story.'
+                  : 'Sign in to access your projects, resume data, and published portfolios.'}
+              </motion.p>
+            </motion.div>
+
+            {/* Status message */}
+            {message && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                role="status"
+                aria-live="polite"
+                className={`border px-5 py-4 font-mono text-[12px] uppercase leading-[1.6] rounded-xl ${
+                  message.tone === 'sent'
+                    ? 'border-[#8A5A2B]/40 bg-[#8A5A2B]/15 text-[#4A3421] shadow-[0_0_20px_rgba(138,90,43,0.15)]'
+                    : 'border-[#D35724]/50 bg-[#D35724]/15 text-[#8A3A15] shadow-[0_0_20px_rgba(211,87,36,0.15)]'
+                }`}
+              >
+                {message?.text}
+              </motion.div>
             )}
 
-            <div className="flex flex-col gap-2.5">
-              <label htmlFor="email" className="font-mono text-[11px] uppercase tracking-[0.15em] text-[#3E1510]">
-                Email
-              </label>
-              <div className="relative">
-                <Mail
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7C3F2F] pointer-events-none"
-                  aria-hidden="true"
-                />
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="xyz@gmail.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="h-12 w-full pl-11 pr-4 bg-[#FFFFFF] border border-[#CCC0B5] text-[#0A0402] placeholder:text-[#7C3F2F] font-mono text-[13px] outline-none transition-colors focus:border-[#56241A] focus-visible:ring-2 focus-visible:ring-[#7C3F2F] focus-visible:ring-offset-2 focus-visible:ring-offset-[#EEEBE7]"
-                />
-              </div>
-            </div>
+            {emailNotConfirmed && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                role="alert"
+                aria-live="polite"
+                className="border border-[#D35724]/50 bg-[#D35724]/15 px-5 py-4 font-mono text-[12px] uppercase leading-[1.6] rounded-xl text-[#8A3A15] shadow-[0_0_20px_rgba(211,87,36,0.15)]"
+              >
+                Please confirm your email address before signing in. Check your inbox for the confirmation link.
+              </motion.div>
+            )}
 
-            <div className="flex flex-col gap-2.5">
-              <label htmlFor="password" className="font-mono text-[11px] uppercase tracking-[0.15em] text-[#3E1510]">
-                Password
-              </label>
-              <div className="relative">
-                <Lock
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7C3F2F] pointer-events-none"
-                  aria-hidden="true"
-                />
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete={isSignUp ? 'new-password' : 'current-password'}
-                  placeholder={isSignUp ? 'At least 8 characters' : 'Your password'}
-                  minLength={8}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="h-12 w-full pl-11 pr-4 bg-[#FFFFFF] border border-[#CCC0B5] text-[#0A0402] placeholder:text-[#7C3F2F] font-mono text-[13px] outline-none transition-colors focus:border-[#56241A] focus-visible:ring-2 focus-visible:ring-[#7C3F2F] focus-visible:ring-offset-2 focus-visible:ring-offset-[#EEEBE7]"
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="h-12 w-full inline-flex items-center justify-center gap-2 bg-[#56241A] hover:bg-[#7C3F2F] disabled:bg-[#7C3F2F]/50 text-[#FFFFFF] border border-[#3E1510] font-mono text-[12px] uppercase tracking-[0.2em] transition-colors duration-200 cursor-pointer disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
-                  Working
-                </>
-              ) : isSignUp ? (
-                'Sign up'
-              ) : (
-                'Sign in'
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
+              {isSignUp && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, ease: circOut, delay: 0.4 }}
+                  className="flex flex-col gap-2"
+                >
+                  <label htmlFor="name" className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#4A3421]/80 block mb-1">
+                    Name
+                  </label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    autoComplete="name"
+                    placeholder="Your name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="h-12 w-full px-4 bg-[#FDF8EF]/60 border border-[#E3D3BE]/50 text-[#35261E] placeholder:text-[#A65A3A] font-mono text-[13px] outline-none transition-all duration-200 focus:border-[#8A5A2B] focus-visible:ring-2 focus-visible:ring-[#A65A3A]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7EFE2] rounded-xl"
+                  />
+                </motion.div>
               )}
-            </button>
 
-            {!isSignUp && emailNotConfirmed && (
-              <button
-                type="button"
-                onClick={handleResendConfirmation}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: circOut, delay: 0.45 }}
+                className="flex flex-col gap-2"
+              >
+                <label htmlFor="email" className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#4A3421]/80 block mb-1 flex items-center gap-1.5">
+                  <Mail className="w-3 h-3 text-[#8A5A2B]/60" aria-hidden="true" />
+                  Email
+                </label>
+                <div className="relative group">
+                  <Mail
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8A5A2B] pointer-events-none transition-colors group-focus-within:text-[#C9875B]"
+                    aria-hidden="true"
+                  />
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="name@domain.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="h-12 w-full pl-12 pr-4 bg-[#FDF8EF]/60 border border-[#E3D3BE]/50 text-[#35261E] placeholder:text-[#A65A3A] font-mono text-[13px] outline-none transition-all duration-200 focus:border-[#8A5A2B] focus-visible:ring-2 focus-visible:ring-[#A65A3A]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7EFE2] rounded-xl"
+                  />
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: circOut, delay: 0.5 }}
+                className="flex flex-col gap-2"
+              >
+                <label htmlFor="password" className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#4A3421]/80 block mb-1 flex items-center gap-1.5">
+                  <Lock className="w-3 h-3 text-[#8A5A2B]/60" aria-hidden="true" />
+                  Password
+                </label>
+                <div className="relative group">
+                  <Lock
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8A5A2B] pointer-events-none transition-colors group-focus-within:text-[#C9875B]"
+                    aria-hidden="true"
+                  />
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete={isSignUp ? 'new-password' : 'current-password'}
+                    placeholder={isSignUp ? 'At least 8 characters' : 'Your password'}
+                    minLength={8}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="h-12 w-full pl-12 pr-4 bg-[#FDF8EF]/60 border border-[#E3D3BE]/50 text-[#35261E] placeholder:text-[#A65A3A] font-mono text-[13px] outline-none transition-all duration-200 focus:border-[#8A5A2B] focus-visible:ring-2 focus-visible:ring-[#A65A3A]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7EFE2] rounded-xl"
+                  />
+                </div>
+              </motion.div>
+
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 disabled={isSubmitting}
-                className="h-12 w-full inline-flex items-center justify-center gap-2 bg-[#EEEBE7] hover:bg-[#E0DDD5] disabled:bg-[#E0DDD5]/50 text-[#3E1510] border border-[#CCC0B5] font-mono text-[12px] uppercase tracking-[0.2em] transition-colors duration-200 cursor-pointer disabled:cursor-not-allowed"
+                type="submit"
+                initial="hidden"
+                animate="visible"
+                transition={{ delay: 0.3 }}
+                className="h-12 w-full inline-flex items-center justify-center gap-2.5 bg-[#8A5A2B] hover:bg-[#A65A3A] disabled:bg-[#A65A3A]/40 text-[#FFFFFF] border border-[#4A3421]/40 font-mono text-[11px] uppercase tracking-[0.22em] font-bold transition-all duration-200 disabled:cursor-not-allowed cursor-pointer shadow-[0_0_30px_rgba(138,90,43,0.25)] hover:shadow-[0_0_40px_rgba(138,90,43,0.35)] rounded-xl"
               >
                 {isSubmitting ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
+                    <span>Working</span>
+                  </>
+                ) : isSignUp ? (
+                  <>
+                    <Globe size={16} />
+                    <span>Create account</span>
+                  </>
+                ) : (
+                  <>
+                    <Globe size={16} />
+                    <span>Sign in</span>
+                  </>
+                )}
+              </motion.button>
+            </form>
+
+            {!isSignUp && emailNotConfirmed && (
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleResendConfirmation}
+                disabled={isSubmitting}
+                type="button"
+                initial="hidden"
+                animate="visible"
+                className="h-11 w-full inline-flex items-center justify-center gap-2 bg-transparent hover:bg-[#EDE1CF] disabled:bg-[#EDE1CF]/30 text-[#4A3421] border border-[#E3D3BE]/40 font-mono text-[10px] uppercase tracking-[0.22em] transition-all duration-200 disabled:cursor-not-allowed cursor-pointer rounded-xl"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" aria-hidden="true" />
                     Sending
                   </>
                 ) : (
                   <>
-                    <RotateCcw className="w-4 h-4" aria-hidden="true" />
+                    <RotateCcw size={14} />
                     Resend confirmation email
                   </>
                 )}
-              </button>
+              </motion.button>
             )}
-          </form>
 
-          <div className="flex items-center gap-4" aria-hidden="true">
-            <span className="h-px flex-1 bg-[#CCC0B5]" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#7C3F2F]">or continue with</span>
-            <span className="h-px flex-1 bg-[#CCC0B5]" />
-          </div>
+            <div className="mt-8 flex items-center gap-4" aria-hidden="true">
+              <span className="h-[1px] flex-1 bg-[#E3D3BE]/40" />
+              <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#8A5A3A]/60">or continue with</span>
+              <span className="h-[1px] flex-1 bg-[#E3D3BE]/40" />
+            </div>
 
-          <div className="grid grid-cols-2 gap-3.5">
-            {PROVIDERS.map(({ id, label, mark }) => (
-              <button
-                key={id}
-                type="button"
-                onClick={() => handleProvider(id)}
-                aria-label={`Continue with ${label}`}
-                className="group h-12 w-full flex items-center justify-center gap-2 px-3 border border-[#CCC0B5] bg-[#FFFFFF] hover:border-[#56241A] transition-colors duration-200 cursor-pointer"
-              >
-                {mark}
-                <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-[#0A0402]">
-                  {label}
-                </span>
-              </button>
-            ))}
-          </div>
-
-          <div className="flex items-center justify-between gap-4 border-t border-[#CCC0B5] pt-6">
-            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-[#3E1510]/70">
-              {isSignUp ? 'Already have an account?' : 'No account yet?'}
-            </p>
-            <Link
-              href={isSignUp ? '/signin' : '/signup'}
-              className="group inline-flex items-center gap-2 min-h-[44px] font-mono text-[11px] uppercase tracking-[0.2em] text-[#56241A] hover:text-[#7C3F2F] transition-colors"
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="grid grid-cols-2 gap-3"
             >
-              {isSignUp ? 'Sign in' : 'Create account'}
-              <span className="transition-transform group-hover:translate-x-1" aria-hidden="true">
-                →
-              </span>
-            </Link>
-          </div>
-        </div>
-      </main>
+              {PROVIDERS.map(({ id, label, mark }) => (
+                <motion.button
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  key={id}
+                  type="button"
+                  onClick={() => handleProvider(id)}
+                  aria-label={`Continue with ${label}`}
+                  className="group h-12 w-full flex items-center justify-center gap-2.5 px-3 border border-[#E3D3BE]/50 bg-[#FDF8EF]/40 hover:border-[#8A5A2B] hover:bg-[#F7EFE2] transition-all duration-200 cursor-pointer rounded-xl"
+                >
+                  {mark}
+                  <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#35261E]/90 group-hover:text-[#8A5A2B] transition-colors">
+                    {label}
+                  </span>
+                </motion.button>
+              ))}
+            </motion.div>
 
-      <footer className="relative z-10 hidden lg:flex w-full max-w-[1440px] mx-auto px-5 sm:px-10 pb-5 flex items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-[0.15em] text-[#3E1510]/50">
-        <span>© 2026 DevCanvas</span>
-        <span>Clearance required</span>
-      </footer>
+            <div className="mt-8 flex items-center justify-between gap-4 border-t border-[#E3D3BE]/30 pt-6">
+              <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#4A3421]/60">
+                {isSignUp ? 'Already have an account?' : 'No account yet?'}
+              </p>
+              <Link
+                href={isSignUp ? '/signin' : '/signup'}
+                className="group inline-flex items-center gap-2 min-h-[44px] font-mono text-[10px] uppercase tracking-[0.22em] font-bold text-[#8A5A2B] hover:text-[#A65A3A] transition-colors cursor-pointer"
+              >
+                {isSignUp ? 'Sign in' : 'Create account'}
+                <motion.span whileHover={{ x: 4 }} className="transition-transform" aria-hidden="true">
+                  →
+                </motion.span>
+              </Link>
+            </div>
+          </motion.div>
+        </main>
 
+        <footer className="relative z-10 hidden lg:flex w-full max-w-[1440px] mx-auto px-5 sm:px-10 pb-5 flex items-center justify-between gap-4 font-mono text-[9px] uppercase tracking-[0.15em] text-[#4A3421]/40">
+          <span>© 2026 DevCanvas</span>
+          <span>Clearance required</span>
+        </footer>
       </div>
     </div>
   );
