@@ -27,23 +27,6 @@ import {
 import { cn } from '@/components/dashboard/ui';
 import DownloadZipButton from '@/components/DownloadZipButton';
 import { PortfolioData } from '@/types/portfolio';
-import {
-  FolderOpen,
-  Trash2,
-  Eye,
-  Plus,
-  Loader2,
-  AlertCircle,
-  CheckCircle,
-  Clock,
-  ExternalLink,
-  Sparkles,
-  Layout,
-  ArrowRight,
-  Globe,
-  Code2,
-  Share2
-} from 'lucide-react';
 
 interface Portfolio {
   id: string;
@@ -57,6 +40,7 @@ interface Portfolio {
     };
   };
   status: 'draft' | 'published';
+  slug?: string;
   created_at: string;
   updated_at: string;
 }
