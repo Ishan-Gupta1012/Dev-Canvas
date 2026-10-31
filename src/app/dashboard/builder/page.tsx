@@ -7,7 +7,9 @@ import ModernDeveloperTemplate from '@/components/templates/ModernDeveloper';
 import DeveloperProTemplate from '@/components/templates/DeveloperPro';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Save, Plus, Trash2, User, Briefcase, Code, Mail, Edit3, X, Zap, GitBranch, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Save, Plus, Trash2, User, Briefcase, Code, Mail, Edit3, X, Zap, GitBranch, Loader2, AlertCircle, CheckCircle, Download } from 'lucide-react';
+import DownloadZipButton from '@/components/DownloadZipButton';
+
 import { useAuth } from '@/context/AuthContext';
 import { createClient } from '@/utils/supabase/client';
 
@@ -104,7 +106,7 @@ export default function BuilderPage() {
       if (temp) {
         setTimeout(() => setSelectedTemplate(temp), 0);
       }
-      
+
       const portfolioId = params.get('portfolio');
       if (portfolioId) {
         setEditingPortfolioId(portfolioId);
@@ -118,7 +120,7 @@ export default function BuilderPage() {
             (draft.data.achievements?.length ?? 0) > 0 ||
             (draft.data.projects?.length ?? 0) > 0 ||
             (draft.data.skills?.length ?? 0) > 0;
-          
+
           if (hasContent) {
             // Automatically restore draft without prompting
             setData(draft.data);
@@ -145,7 +147,7 @@ export default function BuilderPage() {
     try {
       const response = await fetch(`/api/portfolio/save/${portfolioId}`);
       const result = await response.json();
-      
+
       if (response.ok && result.portfolio) {
         setData(result.portfolio.data);
         setSelectedTemplate(result.portfolio.template_name);
@@ -181,7 +183,7 @@ export default function BuilderPage() {
         const supabase = createClient();
         const { data: { session } } = await supabase.auth.getSession();
         const githubIdentity = session?.user?.identities?.find(id => id.provider === 'github');
-        
+
         if (githubIdentity && githubIdentity.identity_data?.user_name) {
           usernameToSet = githubIdentity.identity_data.user_name;
           setGithubConnected(true);
@@ -193,7 +195,7 @@ export default function BuilderPage() {
         handleHeroChange('githubUsername', usernameToSet);
       }
     };
-    
+
     checkGitHubIdentity();
   }, [user, data.hero.githubUsername]);
 
@@ -210,7 +212,7 @@ export default function BuilderPage() {
     });
   };
 
-const handleSavePortfolio = async () => {
+  const handleSavePortfolio = async () => {
     if (!user) {
       setSaveStatus('error');
       setSaveError('Please log in to save your portfolio');
@@ -222,11 +224,11 @@ const handleSavePortfolio = async () => {
     setSaveError(null);
 
     try {
-      const url = editingPortfolioId 
+      const url = editingPortfolioId
         ? `/api/portfolio/save/${editingPortfolioId}`
         : '/api/portfolio/save';
       const method = editingPortfolioId ? 'PUT' : 'POST';
-      
+
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
@@ -247,7 +249,7 @@ const handleSavePortfolio = async () => {
       setSaveStatus('success');
       // Clear draft after successful server save
       clearDraft();
-      
+
       // Redirect to portfolios after short success flash
       setTimeout(() => {
         router.push('/dashboard/portfolios');
@@ -256,7 +258,7 @@ const handleSavePortfolio = async () => {
       console.error('Save error:', err);
       setSaveStatus('error');
       setSaveError(err instanceof Error ? err.message : 'Failed to save portfolio');
-      
+
       setTimeout(() => {
         setSaveStatus('idle');
       }, 5000);
@@ -264,7 +266,7 @@ const handleSavePortfolio = async () => {
       setIsSaving(false);
     }
   };
-  
+
   // Resizing and Dragging State
   const [panelWidth, setPanelWidth] = useState(500);
   const [panelPos, setPanelPos] = useState({ x: 16, y: 16 });
@@ -434,7 +436,7 @@ const handleSavePortfolio = async () => {
 
   return (
     <div className="relative flex h-screen w-screen bg-[#050505] text-white overflow-hidden font-sans">
-      
+
       {/* Live Preview (Base Layer) */}
       <div className="absolute inset-0 z-0 h-full w-full overflow-y-auto overflow-x-hidden custom-scrollbar">
         {/* Render Template */}
@@ -447,16 +449,16 @@ const handleSavePortfolio = async () => {
 
       {/* Floating Editor Panel */}
       {!isPreviewFullscreen && (
-        <div 
+        <div
           className={`absolute top-0 left-0 z-50 flex bg-[#121212]/95 backdrop-blur-3xl border border-white/10 rounded-2xl shadow-2xl transition-opacity duration-300 ease-in-out ${isCollapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
-          style={{ 
-            width: `${panelWidth}px`, 
+          style={{
+            width: `${panelWidth}px`,
             height: 'calc(100vh - 32px)',
-            transform: `translate(${panelPos.x}px, ${panelPos.y}px)` 
+            transform: `translate(${panelPos.x}px, ${panelPos.y}px)`
           }}
         >
           {/* Resize Handle */}
-          <div 
+          <div
             className="absolute top-0 -right-2 w-4 h-full cursor-col-resize z-[60] flex items-center justify-center group"
             onMouseDown={startResizing}
           >
@@ -468,20 +470,19 @@ const handleSavePortfolio = async () => {
             <Link href="/dashboard/templates" className="p-3 hover:bg-white/10 rounded-xl transition-colors text-white/70 hover:text-white" title="Back to Templates">
               <ArrowLeft size={20} />
             </Link>
-            
+
             <div className="w-full h-px bg-white/10" />
-            
+
             <div className="flex flex-col gap-2 w-full px-2">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as 'hero' | 'projects' | 'achievements' | 'skills' | 'contact')}
                   title={tab.label}
-                  className={`p-3 rounded-xl flex justify-center items-center transition-all group relative ${
-                    activeTab === tab.id 
-                      ? 'bg-primary text-white shadow-lg shadow-primary/20' 
+                  className={`p-3 rounded-xl flex justify-center items-center transition-all group relative ${activeTab === tab.id
+                      ? 'bg-primary text-white shadow-lg shadow-primary/20'
                       : 'text-white/50 hover:bg-white/5 hover:text-white'
-                  }`}
+                    }`}
                 >
                   {tab.icon}
                   {/* Tooltip */}
@@ -495,29 +496,33 @@ const handleSavePortfolio = async () => {
 
           {/* Main Form Content Wrapper */}
           <div className="flex-1 flex flex-col min-w-0 h-full">
-            
+
             {/* Header */}
-            <div 
+            <div
               className="h-[72px] min-h-[72px] px-6 border-b border-white/10 flex items-center justify-between bg-white/[0.02] cursor-move"
               onMouseDown={startDragging}
             >
               <h2 className="font-bold text-lg tracking-wide select-none">
                 {tabs.find(t => t.id === activeTab)?.label}
               </h2>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <button onClick={() => setIsCollapsed(true)} className="p-2 hover:bg-white/10 text-white/50 hover:text-white rounded-full transition-colors" title="Hide Editor">
                   <X size={20} />
                 </button>
-                <button 
+                <DownloadZipButton
+                  portfolioData={data}
+                  templateName={selectedTemplate}
+                  variant="compact"
+                />
+                <button
                   onClick={handleSavePortfolio}
                   disabled={isSaving}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-colors shadow-lg ${
-                    saveStatus === 'success' 
-                      ? 'bg-emerald-600 text-white shadow-emerald-600/20' 
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-colors shadow-lg ${saveStatus === 'success'
+                      ? 'bg-emerald-600 text-white shadow-emerald-600/20'
                       : saveStatus === 'error'
                         ? 'bg-red-600 text-white shadow-red-600/20'
                         : 'bg-primary text-white hover:bg-primary/90 shadow-primary/20'
-                  }`}
+                    }`}
                   title={saveStatus === 'success' ? 'Saved!' : saveStatus === 'error' ? 'Save failed' : 'Save portfolio'}
                 >
                   {saveStatus === 'success' && <CheckCircle size={16} />}
@@ -530,19 +535,19 @@ const handleSavePortfolio = async () => {
 
             {/* Scrollable Area */}
             <div className="flex-1 overflow-y-auto min-h-0 p-6 scroll-smooth custom-scrollbar">
-              
+
               {/* HERO TAB */}
               {activeTab === 'hero' && (
                 <div className="flex flex-col gap-6 animate-fade-in-up">
                   <div className="flex flex-col gap-5 bg-white/5 p-5 rounded-2xl border border-white/5">
-                    
+
                     <div className="flex flex-col gap-2">
                       <label className="text-xs font-bold text-white/60 uppercase tracking-wider">Profile Photo</label>
-                      <input 
-                        type="file" 
+                      <input
+                        type="file"
                         accept="image/png, image/jpeg, image/webp"
-                        onChange={handlePhotoUpload} 
-                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-primary file:text-white hover:file:opacity-90 cursor-pointer text-white/80" 
+                        onChange={handlePhotoUpload}
+                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-primary file:text-white hover:file:opacity-90 cursor-pointer text-white/80"
                       />
                     </div>
 
@@ -569,7 +574,7 @@ const handleSavePortfolio = async () => {
                           <label className="text-xs font-bold text-white uppercase tracking-wider">GitHub Integration</label>
                         </div>
                       </div>
-                      
+
                       {githubConnected ? (
                         <div className="mt-2 flex items-center gap-2 px-3 py-2 bg-green-500/10 border border-green-500/20 text-green-400 rounded-lg text-sm font-semibold">
                           <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
@@ -578,7 +583,7 @@ const handleSavePortfolio = async () => {
                       ) : (
                         <div className="mt-2">
                           <p className="text-xs text-white/50 mb-3">Connect your GitHub to automatically display your repositories and commit graph.</p>
-                          <button 
+                          <button
                             onClick={handleConnectGithub}
                             disabled={isConnectingGithub}
                             className="w-full h-10 bg-white text-black hover:bg-neutral-200 disabled:opacity-50 text-sm font-bold rounded-lg transition-colors flex items-center justify-center gap-2"
@@ -593,10 +598,10 @@ const handleSavePortfolio = async () => {
                       )}
                       {githubConnected && (
                         <div className="mt-3 flex items-center gap-2">
-                          <input 
-                            type="checkbox" 
-                            id="showGithub" 
-                            checked={data.hero.showGithub !== false} 
+                          <input
+                            type="checkbox"
+                            id="showGithub"
+                            checked={data.hero.showGithub !== false}
                             onChange={(e) => handleHeroChange('showGithub', e.target.checked)}
                             className="w-4 h-4 rounded bg-black/40 border-white/10 text-primary focus:ring-primary focus:ring-offset-gray-900 cursor-pointer"
                           />
@@ -621,11 +626,11 @@ const handleSavePortfolio = async () => {
                       <h3 className="text-xs font-bold text-white/60 uppercase tracking-wider">Social Links</h3>
                       <button onClick={addSocial} className="text-primary hover:bg-primary/20 bg-primary/10 p-2 rounded-full transition-colors"><Plus size={16} /></button>
                     </div>
-                    
+
                     <div className="flex flex-col gap-3">
                       {data.hero.socials.map((social, idx) => (
                         <div key={idx} className="flex gap-3 items-center bg-black/40 p-3 rounded-xl border border-white/5 focus-within:border-primary/50 transition-colors">
-                          <select 
+                          <select
                             value={social.platform}
                             onChange={(e) => handleSocialChange(idx, 'platform', e.target.value)}
                             className="bg-transparent border-r border-white/10 pr-3 py-1 text-sm outline-none font-bold text-white/80 cursor-pointer"
@@ -659,7 +664,7 @@ const handleSavePortfolio = async () => {
                   {data.projects.map((project, index) => (
                     <div key={project.id} className="bg-white/5 p-5 rounded-2xl border border-white/5 flex flex-col gap-5 relative group hover:border-primary/30 transition-all">
                       <button onClick={() => removeProject(index)} className="absolute top-4 right-4 text-error hover:bg-error/20 bg-black/40 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all shadow-sm"><Trash2 size={16} /></button>
-                      
+
                       <div className="flex items-center gap-3 border-b border-white/10 pb-4 pr-10">
                         <div className="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-xs">{index + 1}</div>
                         <input type="text" placeholder="Project Name" value={project.name} onChange={(e) => handleProjectChange(index, 'name', e.target.value)} className="flex-1 bg-transparent text-xl font-bold focus:outline-none placeholder:text-white/30 text-white" />
@@ -667,11 +672,11 @@ const handleSavePortfolio = async () => {
 
                       <div className="flex flex-col gap-2">
                         <label className="text-xs font-bold text-white/60 uppercase tracking-wider">Thumbnail Image</label>
-                        <input 
-                          type="file" 
+                        <input
+                          type="file"
                           accept="image/*"
-                          onChange={(e) => handleProjectImageUpload(index, e)} 
-                          className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary outline-none transition-all file:mr-4 file:py-1.5 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-white/10 file:text-white hover:file:bg-white/20 cursor-pointer text-white/80" 
+                          onChange={(e) => handleProjectImageUpload(index, e)}
+                          className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary outline-none transition-all file:mr-4 file:py-1.5 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-white/10 file:text-white hover:file:bg-white/20 cursor-pointer text-white/80"
                         />
                       </div>
 
@@ -682,12 +687,12 @@ const handleSavePortfolio = async () => {
 
                       <div className="flex flex-col gap-2">
                         <label className="text-xs font-bold text-white/60 uppercase tracking-wider">Tech Stack (comma separated)</label>
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           placeholder="React, Node.js, Tailwind..."
-                          value={project.techStack.join(', ')} 
-                          onChange={(e) => handleProjectChange(index, 'techStack', e.target.value.split(',').map(s => s.trim()))} 
-                          className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none placeholder:text-white/30 text-white" 
+                          value={project.techStack.join(', ')}
+                          onChange={(e) => handleProjectChange(index, 'techStack', e.target.value.split(',').map(s => s.trim()))}
+                          className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none placeholder:text-white/30 text-white"
                         />
                       </div>
 
@@ -707,7 +712,7 @@ const handleSavePortfolio = async () => {
                       </div>
                     </div>
                   ))}
-                  
+
                   <button onClick={addProject} className="w-full py-5 border-2 border-dashed border-white/20 rounded-2xl text-white font-bold hover:bg-white/5 hover:border-white/40 transition-all flex items-center justify-center gap-2">
                     <Plus size={18} /> Add New Project
                   </button>
@@ -720,7 +725,7 @@ const handleSavePortfolio = async () => {
                   {data.achievements.map((ach, index) => (
                     <div key={ach.id} className="bg-white/5 p-5 rounded-2xl border border-white/5 flex flex-col gap-5 relative group hover:border-primary/30 transition-all">
                       <button onClick={() => removeAchievement(index)} className="absolute top-4 right-4 text-error hover:bg-error/20 bg-black/40 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all shadow-sm"><Trash2 size={16} /></button>
-                      
+
                       <div className="flex flex-col gap-2 pb-2 border-b border-white/10">
                         <label className="text-xs font-bold text-white/60 uppercase tracking-wider">Role / Title</label>
                         <input type="text" placeholder="Senior Developer" value={ach.title} onChange={(e) => handleAchievementChange(index, 'title', e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none font-bold text-white placeholder:text-white/30" />
@@ -744,7 +749,7 @@ const handleSavePortfolio = async () => {
 
                     </div>
                   ))}
-                  
+
                   <button onClick={addAchievement} className="w-full py-5 border-2 border-dashed border-white/20 rounded-2xl text-white font-bold hover:bg-white/5 hover:border-white/40 transition-all flex items-center justify-center gap-2">
                     <Plus size={18} /> Add Experience / Achievement
                   </button>
@@ -758,22 +763,22 @@ const handleSavePortfolio = async () => {
                     <h3 className="text-xs font-bold text-white/60 uppercase tracking-wider">Core Skills</h3>
                     <button onClick={addSkill} className="text-primary hover:bg-primary/20 bg-primary/10 p-2 rounded-full transition-colors"><Plus size={16} /></button>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4">
                     {data.skills.map((skill, index) => (
                       <div key={skill.id} className="relative group">
-                        <input 
-                          type="text" 
-                          value={skill.name} 
-                          onChange={(e) => handleSkillChange(index, e.target.value)} 
+                        <input
+                          type="text"
+                          value={skill.name}
+                          onChange={(e) => handleSkillChange(index, e.target.value)}
                           className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm font-bold focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors text-white placeholder:text-white/30"
-                          placeholder="e.g. React.js" 
+                          placeholder="e.g. React.js"
                         />
                         <button onClick={() => removeSkill(index)} className="absolute right-2 top-1/2 -translate-y-1/2 text-error hover:bg-error/20 bg-white/5 p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={14} /></button>
                       </div>
                     ))}
                   </div>
-                  
+
                   {data.skills.length === 0 && (
                     <div className="text-center py-10 text-white/30 text-sm font-bold border-2 border-dashed border-white/10 rounded-xl mt-4">
                       No skills added yet. Click the + button to add one.
@@ -785,7 +790,7 @@ const handleSavePortfolio = async () => {
               {/* CONTACT TAB */}
               {activeTab === 'contact' && (
                 <div className="flex flex-col gap-6 animate-fade-in-up bg-white/5 p-6 rounded-2xl border border-white/5">
-                  
+
                   <div className="flex flex-col gap-5 pt-2">
                     <div className="flex flex-col gap-2">
                       <label className="text-xs font-bold text-white/60 uppercase tracking-wider">Public Email Address</label>
@@ -806,7 +811,7 @@ const handleSavePortfolio = async () => {
 
       {/* Re-Open Toggle Button when collapsed */}
       {!isPreviewFullscreen && isCollapsed && (
-        <button 
+        <button
           onClick={() => setIsCollapsed(false)}
           className="absolute top-6 left-6 z-50 bg-[#121212]/95 text-white p-4 rounded-full shadow-2xl border border-white/10 backdrop-blur-md hover:bg-white/10 hover:scale-105 transition-all flex items-center gap-2 group animate-fade-in-up"
         >
@@ -817,9 +822,10 @@ const handleSavePortfolio = async () => {
 
       {/* Overlay to block pointer events on preview when resizing to avoid iframe catching mouse events */}
       {isResizing && <div className="absolute inset-0 z-40 cursor-col-resize" />}
-      
+
       {/* Scrollbar CSS */}
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .custom-scrollbar::-webkit-scrollbar {
           width: 6px;
         }

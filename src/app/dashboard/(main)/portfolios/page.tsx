@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -25,6 +25,8 @@ import {
   Share2
 } from 'lucide-react';
 import { cn } from '@/components/dashboard/ui';
+import DownloadZipButton from '@/components/DownloadZipButton';
+import { PortfolioData } from '@/types/portfolio';
 
 interface Portfolio {
   id: string;
@@ -526,6 +528,11 @@ export default function PortfoliosPage() {
                       >
                         <Edit3 size={13} /> Edit Portfolio
                       </Link>
+                      <DownloadZipButton
+                        portfolioData={portfolio.data as unknown as PortfolioData}
+                        templateName={portfolio.template_name}
+                        variant="compact"
+                      />
                       <Link
                         href={previewUrl}
                         target="_blank"
