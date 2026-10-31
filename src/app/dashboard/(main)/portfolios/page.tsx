@@ -27,6 +27,23 @@ import {
 import { cn } from '@/components/dashboard/ui';
 import DownloadZipButton from '@/components/DownloadZipButton';
 import { PortfolioData } from '@/types/portfolio';
+import {
+  FolderOpen,
+  Trash2,
+  Eye,
+  Plus,
+  Loader2,
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  ExternalLink,
+  Sparkles,
+  Layout,
+  ArrowRight,
+  Globe,
+  Code2,
+  Share2
+} from 'lucide-react';
 
 interface Portfolio {
   id: string;
@@ -53,10 +70,9 @@ export default function PortfoliosPage() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'draft'>('all');
-
-  useEffect(() => {
-    fetchPortfolios();
-  }, []);
+  const [deployModalPortfolioId, setDeployModalPortfolioId] = useState<string | null>(null);
+  const [deploySlug, setDeploySlug] = useState('');
+  const [isDeploying, setIsDeploying] = useState<string | null>(null);
 
   const fetchPortfolios = async () => {
     try {
@@ -74,6 +90,10 @@ export default function PortfoliosPage() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchPortfolios();
+  }, []);
 
   const handleDelete = async (portfolioId: string) => {
     setIsDeleting(portfolioId);
@@ -102,6 +122,54 @@ export default function PortfoliosPage() {
     navigator.clipboard.writeText(url);
     setCopiedId(portfolioId);
     setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const handleDeploy = async (portfolioId: string, slug: string) => {
+    setIsDeploying(portfolioId);
+    try {
+      const response = await fetch(`/api/portfolio/publish/${portfolioId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug, action: 'publish' }),
+      });
+      const result = await response.json();
+
+      if (response.ok) {
+        setDeployModalPortfolioId(null);
+        setDeploySlug('');
+        setIsDeploying(null);
+        fetchPortfolios();
+      } else {
+        alert(result.error || 'Failed to deploy portfolio');
+        setIsDeploying(null);
+      }
+    } catch (err) {
+      alert('Failed to deploy portfolio. Please try again.');
+      setIsDeploying(null);
+    }
+  };
+
+  const handleUnpublish = async (portfolioId: string) => {
+    setIsDeploying(portfolioId);
+    try {
+      const response = await fetch(`/api/portfolio/publish/${portfolioId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'unpublish' }),
+      });
+      const result = await response.json();
+
+      if (response.ok) {
+        setIsDeploying(null);
+        fetchPortfolios();
+      } else {
+        alert(result.error || 'Failed to unpublish portfolio');
+        setIsDeploying(null);
+      }
+    } catch (err) {
+      alert('Failed to unpublish portfolio. Please try again.');
+      setIsDeploying(null);
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -389,7 +457,7 @@ export default function PortfoliosPage() {
             No {statusFilter} portfolios found
           </h3>
           <p className="text-xs text-on-surface-variant/70 mb-4">
-            You don't have any portfolios matching the "{statusFilter}" status filter.
+            You dont have any portfolios matching the {statusFilter} status filter.
           </p>
           <button
             onClick={() => setStatusFilter('all')}
@@ -522,12 +590,47 @@ export default function PortfoliosPage() {
 
                     {/* Action Buttons */}
                     <div className="flex items-center gap-2">
-                      <Link
-                        href={editUrl}
-                        className="flex-1 inline-flex items-center justify-center gap-2 py-2 px-3 bg-primary text-on-primary font-mono text-xs uppercase tracking-wider font-bold rounded-lg hover:bg-primary/90 transition-all shadow-sm shadow-primary/15"
-                      >
-                        <Edit3 size={13} /> Edit Portfolio
-                      </Link>
+                      {portfolio.status === 'published' ? (
+                        <>
+                          <Link
+                            href={`/${portfolio.slug}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 inline-flex items-center justify-center gap-2 py-2 px-3 bg-emerald-600 text-white font-mono text-xs uppercase tracking-wider font-bold rounded-lg hover:bg-emerald-700 transition-all shadow-sm shadow-emerald-600/20"
+                            title="Open Live Portfolio"
+                          >
+                            <Globe size={13} />
+                            <span>Live Site</span>
+                          </Link>
+                          <button
+                            onClick={() => handleUnpublish(portfolio.id)}
+                            disabled={isDeploying === portfolio.id}
+                            className="p-2 text-on-surface-variant hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all flex-shrink-0"
+                            title="Unpublish Portfolio"
+                          >
+                            <Clock size={13} />
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => {
+                              setDeployModalPortfolioId(portfolio.id);
+                              setDeploySlug('');
+                            }}
+                            disabled={isDeploying === portfolio.id}
+                            className="flex-1 inline-flex items-center justify-center gap-2 py-2 px-3 bg-primary text-on-primary font-mono text-xs uppercase tracking-wider font-bold rounded-lg hover:bg-primary/90 transition-all shadow-sm shadow-primary/15"
+                            title="Deploy Portfolio"
+                          >
+                            <Globe size={13} />
+                            {isDeploying === portfolio.id ? (
+                              <Loader2 size={13} className="animate-spin" />
+                            ) : (
+                              <span>Deploy</span>
+                            )}
+                          </button>
+                        </>
+                      )}
                       <DownloadZipButton
                         portfolioData={portfolio.data as unknown as PortfolioData}
                         templateName={portfolio.template_name}
@@ -562,7 +665,7 @@ export default function PortfoliosPage() {
                         </div>
                       </div>
                       <p className="text-on-surface-variant text-sm mb-6 leading-relaxed">
-                        Are you sure you want to delete <strong className="text-on-surface font-semibold">"{portfolio.title || 'Untitled Portfolio'}"</strong>? All customized data and layouts for this portfolio will be removed.
+                        Are you sure you want to delete <strong className="text-on-surface font-semibold">&apos;{portfolio.title || 'Untitled Portfolio'}&apos;</strong>? All customized data and layouts for this portfolio will be removed.
                       </p>
                       <div className="flex gap-3">
                         <button
@@ -592,6 +695,66 @@ export default function PortfoliosPage() {
               </article>
             );
           })}
+        </div>
+      )}
+
+      {/* Deploy Modal */}
+      {deployModalPortfolioId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-background border border-outline/20 rounded-2xl p-6 max-w-md w-full animate-slide-up shadow-2xl">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-primary/10 border border-primary/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                <Globe size={20} className="text-primary" />
+              </div>
+              <div>
+                <h4 className="font-serif text-lg font-bold text-on-surface">Deploy Portfolio</h4>
+                <p className="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant/60">
+                  Choose your public URL
+                </p>
+              </div>
+            </div>
+            <p className="text-on-surface-variant text-sm mb-6 leading-relaxed">
+              Enter a unique slug for your portfolio. Your site will be live at{' '}
+              <span className="font-mono text-primary">{window.location.origin}/</span><span className="font-mono text-primary">your-slug</span>
+            </p>
+            <div className="mb-6">
+              <label className="block text-xs font-semibold text-on-surface mb-2 uppercase tracking-wider">
+                Portfolio Slug
+              </label>
+              <input
+                type="text"
+                value={deploySlug}
+                onChange={(e) => setDeploySlug(e.target.value)}
+                placeholder="e.g. ishan"
+                className="w-full px-3 py-2 rounded-lg border border-outline/15 bg-background text-on-surface focus:border-primary focus:ring-1 focus:ring-primary/40 transition-all font-mono text-sm"
+              />
+              <p className="text-[10px] text-on-surface-variant/60 mt-1">
+                Letters, numbers, and hyphens only (2+ characters)
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setDeployModalPortfolioId(null)}
+                className="flex-1 px-4 py-2.5 border border-outline/20 text-on-surface font-mono text-xs uppercase tracking-wider font-semibold rounded-lg hover:bg-surface-container-low transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => deployModalPortfolioId && handleDeploy(deployModalPortfolioId, deploySlug)}
+                disabled={isDeploying === deployModalPortfolioId || !deploySlug.trim()}
+                className="flex-1 px-4 py-2.5 bg-primary text-on-primary font-mono text-xs uppercase tracking-wider font-bold rounded-lg hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm shadow-primary/15"
+              >
+                {isDeploying === deployModalPortfolioId ? (
+                  <>
+                    <Loader2 size={14} className="animate-spin" />
+                    Deploying...
+                  </>
+                ) : (
+                  'Deploy Now'
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
