@@ -191,8 +191,8 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
       <div
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
-          WebkitMaskImage: 'linear-gradient(to right, transparent 42%, #000 78%)',
-          maskImage: 'linear-gradient(to right, transparent 42%, #000 78%)',
+          WebkitMaskImage: `linear-gradient(to ${isSignUp ? 'left' : 'right'}, transparent 42%, #000 78%)`,
+          maskImage: `linear-gradient(to ${isSignUp ? 'left' : 'right'}, transparent 42%, #000 78%)`,
         }}
       >
         <GenerativeAttractorCanvas mode="static" palette="copper" />
