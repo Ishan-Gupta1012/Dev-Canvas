@@ -219,39 +219,6 @@ export default function AboutPage() {
           </motion.div>
         </section>
 
-        {/* Section 4: Statistics */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-8 py-20 border-b border-[#D6A15F]/20">
-          <motion.div
-            variants={reveal}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 divide-y sm:divide-y-0 sm:divide-x divide-[#D6A15F]/20"
-          >
-            {[
-              { label: 'Portfolios Deployed', value: '10k+' },
-              { label: 'Github Repos Synced', value: '500k+' },
-              { label: 'Core Premium Layouts', value: '3' },
-              { label: 'Server Uptime', value: '99.9%' },
-            ].map((stat, i) => (
-              <motion.div
-                key={i}
-                variants={reveal}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.15 }}
-                className="p-8 flex flex-col items-center text-center border-[#D6A15F]/10 rounded-[16px] hover:border-[#D6A15F]/40 transition-colors"
-              >
-                <div className="font-mono text-[9px] text-[#8A5A2B]/60 mb-4 uppercase tracking-[0.2em]">
-                  [{String(i + 1).padStart(2, '0')} / METRIC]
-                </div>
-                <div className="font-serif text-4xl md:text-5xl font-bold text-[#2E180E] mb-2">{stat.value}</div>
-                <div className="font-mono text-[10px] text-[#5B341E]/60 uppercase tracking-[0.15em]">{stat.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </section>
-
         {/* Section 5: Capabilities */}
         <section className="max-w-7xl mx-auto px-4 sm:px-8 py-20 border-b border-[#D6A15F]/20">
           <motion.div
