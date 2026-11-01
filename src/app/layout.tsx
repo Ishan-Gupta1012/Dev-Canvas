@@ -3,6 +3,7 @@ import { Inter, Cormorant_Garamond, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import ChatWidget from "@/components/chat/ChatWidget";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -42,12 +43,13 @@ export default function RootLayout({
       <body className="min-h-screen bg-background text-on-background font-sans antialiased flex flex-col overflow-x-clip">
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="light"
           enableSystem={false}
           disableTransitionOnChange
         >
           <AuthProvider>
             {children}
+            <ChatWidget />
           </AuthProvider>
         </ThemeProvider>
       </body>
