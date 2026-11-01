@@ -21,7 +21,7 @@ type NavItem = {
   name: string;
   href?: string;
   exact?: boolean;
-  dropdown?: { name: string; href: string }[];
+  dropdown?: { name: string; href: string; navLabel?: string }[];
 };
 
 const navItems: NavItem[] = [
@@ -30,8 +30,8 @@ const navItems: NavItem[] = [
     name: 'Resume',
     dropdown: [
       // { name: 'Upload / Parse', href: '/dashboard/resume' }, // Hidden - kept in code
-      { name: 'Resume Maker', href: '/dashboard/resume-builder' },
-      { name: 'Analyzer', href: '/dashboard/resume-analyzer' }
+      { name: 'Resume Maker', href: '/dashboard/resume-builder', navLabel: 'Maker' },
+      { name: 'Analyzer', href: '/dashboard/resume-analyzer', navLabel: 'Analyzer' }
     ]
   },
   { name: 'Templates', href: '/dashboard/templates' },
@@ -58,17 +58,30 @@ const isActive = (item: NavItem) => {
     return false;
   };
 
+  // Show the active sub-page (e.g. Resume → Maker) directly in the navbar
+  const activeChild = (item: NavItem) =>
+    item.dropdown?.find(d => pathname.startsWith(d.href)) ?? null;
+
+  const navLabel = (item: NavItem) => activeChild(item)?.navLabel ?? item.name;
+
   return (
        <div
          className="bg-background text-on-surface font-sans selection:bg-primary-container selection:text-on-primary-container select-none min-h-screen flex flex-col transition-opacity duration-500 ease-out motion-reduce:transition-none"
          style={{ opacity: isMounted ? 1 : 0 }}
        >
         <DashboardAuthGuard />
+      {/* Warm landing-style atmosphere behind the app */}
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 app-atmosphere" />
       {/* Top Navbar */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/15 backdrop-blur-2xl text-on-background shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/85 backdrop-blur-xl text-on-background border-b border-outline/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between relative">
-          <Link href="/dashboard" className="flex items-center gap-2 group">
-            <span className="font-serif font-semibold text-lg tracking-tight text-primary">DevCanvas</span>
+          <Link href="/dashboard" className="flex items-center gap-2.5 group">
+            <span
+              aria-hidden="true"
+              className="w-5 h-5 rounded"
+              style={{ background: 'linear-gradient(140deg, #EBCF97, #B0803F)' }}
+            />
+            <span className="text-[15px] font-bold tracking-tight text-on-background">DevCanvas</span>
           </Link>
 
           {/* Desktop Nav - Centered */}
@@ -84,7 +97,7 @@ const isActive = (item: NavItem) => {
                   >
                     <button
                       className={cn(
-                        'relative px-3 py-1.5 rounded-sm flex items-center gap-1 font-mono text-xs uppercase tracking-widest transition-colors duration-200',
+                        'relative px-3 py-1.5 rounded-sm flex items-center gap-1 font-mono text-xs uppercase tracking-widest whitespace-nowrap transition-colors duration-200',
                         isActive(item) ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'
                       )}
                     >
@@ -95,7 +108,7 @@ const isActive = (item: NavItem) => {
                           transition={{ type: 'spring', stiffness: 380, damping: 32 }}
                         />
                       )}
-                      <span>{item.name}</span>
+                      <span>{navLabel(item)}</span>
                       <ChevronDown size={12} className={cn('transition-transform duration-200', activeDropdown === item.name && 'rotate-180')} />
                     </button>
                     <AnimatePresence>
@@ -128,7 +141,7 @@ const isActive = (item: NavItem) => {
                   key={item.name}
                   href={item.href!}
                   className={cn(
-                    'relative px-3 py-1.5 rounded-sm transition-colors duration-200',
+                    'relative px-3 py-1.5 rounded-sm transition-colors duration-200 whitespace-nowrap',
                     isActive(item) ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'
                   )}
                 >
@@ -220,7 +233,7 @@ const isActive = (item: NavItem) => {
               if (item.dropdown) {
                 return (
                   <div key={item.name} className="flex flex-col gap-3">
-                    <span className="text-on-background/70 font-semibold">{item.name}</span>
+                    <span className="text-on-background/70 font-semibold">{navLabel(item)}</span>
                     <div className="pl-4 flex flex-col gap-3 border-l border-outline/15">
                       {item.dropdown.map(d => (
                         <Link
@@ -252,12 +265,12 @@ const isActive = (item: NavItem) => {
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 w-full bg-background pt-16">
+      <main className="relative z-10 flex-1 w-full pt-16">
         {children}
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-outline/15 bg-background py-8">
+      <footer className="relative z-10 mt-auto border-t border-outline/15 bg-background/70 backdrop-blur-sm py-8">
         <div className="max-w-7xl mx-auto px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 opacity-60">
             <span className="font-serif font-semibold text-sm tracking-tight text-on-background">DevCanvas</span>

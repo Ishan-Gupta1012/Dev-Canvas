@@ -42,7 +42,7 @@ function ScoreRing({ score }: { score: number }) {
   const r = 44;
   const circ = 2 * Math.PI * r;
   const dash = (score / 100) * circ;
-  const color = score >= 60 ? '#10b981' : score >= 30 ? '#f59e0b' : '#ef4444';
+  const color = score >= 60 ? 'var(--th-success-500)' : score >= 30 ? 'var(--th-warning-400)' : 'var(--th-danger-500)';
   return (
     <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
       <circle cx="50" cy="50" r={r} fill="none" stroke="currentColor" strokeWidth="8" className="text-on-background/10" />
@@ -146,14 +146,14 @@ export default function Dashboard() {
           <div className="bg-background border border-outline/10 rounded-2xl p-6">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
-                <Cpu size={18} className="text-[#8b5cf6]" />
+                <Cpu size={18} className="text-primary" />
                 <p className="font-mono text-sm uppercase tracking-widest text-on-background/60">AI Credits Used</p>
               </div>
               <span className="font-serif text-xl font-bold">{user?.aiCreditsUsed ?? 0} / 50</span>
             </div>
             <div className="w-full h-2 bg-primary/10 rounded-full overflow-hidden">
               <div className="h-full rounded-full transition-all duration-700"
-                style={{ width: `${Math.min(((user?.aiCreditsUsed ?? 0) / 50) * 100, 100)}%`, backgroundColor: (user?.aiCreditsUsed ?? 0) >= 40 ? '#ef4444' : '#8b5cf6' }} />
+                style={{ width: `${Math.min(((user?.aiCreditsUsed ?? 0) / 50) * 100, 100)}%`, backgroundColor: (user?.aiCreditsUsed ?? 0) >= 40 ? 'var(--th-danger-500)' : 'var(--th-primary)' }} />
             </div>
             <p className="font-mono text-xs text-on-background/50 mt-2">{50 - (user?.aiCreditsUsed ?? 0)} credits remaining this month</p>
           </div>

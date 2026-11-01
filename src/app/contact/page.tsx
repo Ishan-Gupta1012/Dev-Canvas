@@ -49,7 +49,7 @@ export default function ContactPage() {
 
       <main className="flex-1 pt-24 md:pt-32">
         {/* Header */}
-        <section className="py-12 md:py-20 border-b border-primary bg-grid-paper">
+        <section className="py-12 md:py-20 border-b border-outline/20 bg-grid-paper">
           <div className="max-w-4xl mx-auto px-4 sm:px-8">
             <div className="font-mono text-xs uppercase tracking-widest text-on-background/60 mb-6">
               ✦ Project Inquiry / Contact Form
@@ -69,7 +69,7 @@ export default function ContactPage() {
           <div className="max-w-2xl mx-auto px-4 sm:px-8">
             
             {formSubmitted ? (
-              <div className="border border-primary p-8 md:p-12 text-center bg-background">
+              <div className="border border-outline/25 p-8 md:p-12 text-center bg-background">
                 <div className="font-mono text-xs text-green-600 mb-4">[SUBMITTED SUCCESSFULLY]</div>
                 <h2 className="font-serif text-3xl font-semibold mb-4">Thank you, {formData.name}.</h2>
                 <p className="text-sm text-on-background/80 leading-relaxed mb-6">

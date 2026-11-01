@@ -60,7 +60,7 @@ export default function AuthGatewayCanvas({ focused = false, className = '' }: A
       // Deep void background with subtle radial warmth
       const bg = ctx.createRadialGradient(w * 0.35, h * 0.5, 0, w * 0.35, h * 0.5, Math.max(w, h) * 0.7);
       bg.addColorStop(0, '#1A0C08');
-      bg.addColorStop(0.45, '#0A0402');
+      bg.addColorStop(0.45, '#35261E');
       bg.addColorStop(1, '#050201');
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, w, h);

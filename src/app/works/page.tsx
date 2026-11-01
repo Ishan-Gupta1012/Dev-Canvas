@@ -44,7 +44,7 @@ export default function WorksPage() {
       <main className="flex-1 pt-24 md:pt-32">
 
         {/* Header */}
-        <section className="py-12 md:py-20 border-b border-primary bg-grid-paper">
+        <section className="py-12 md:py-20 border-b border-outline/20 bg-grid-paper">
           <div className="max-w-7xl mx-auto px-4 sm:px-8">
             <div className="font-mono text-xs uppercase tracking-widest text-on-background/60 mb-6">
               ✦ Selected Layouts / Portfolio Templates
@@ -65,7 +65,7 @@ export default function WorksPage() {
         </section>
 
         {/* Filter Navigation */}
-        <section className="border-b border-primary bg-background sticky top-16 z-30">
+        <section className="border-b border-outline/20 bg-background sticky top-16 z-30">
           <div className="max-w-7xl mx-auto px-4 sm:px-8 py-4 flex flex-wrap gap-2 md:gap-6 items-center">
             <span className="font-mono text-[10px] text-on-background/45 uppercase tracking-widest mr-2">Filter By:</span>
             {categories.map(cat => (
@@ -91,10 +91,10 @@ export default function WorksPage() {
               {filtered.map((template, idx) => (
                 <div
                   key={template.id}
-                  className="group flex flex-col border border-primary rounded-sm bg-background overflow-hidden transition-all duration-300 hover:scale-[1.01]"
+                  className="group flex flex-col border border-outline/25 rounded-sm bg-background overflow-hidden transition-all duration-300 hover:scale-[1.01]"
                 >
                   {/* Template Screenshot */}
-                  <div className="aspect-[16/10] border-b border-primary overflow-hidden relative bg-primary/5">
+                  <div className="aspect-[16/10] border-b border-outline/20 overflow-hidden relative bg-primary/5">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={template.imgUrl}
@@ -102,7 +102,7 @@ export default function WorksPage() {
                       className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                     {/* Creator badge */}
-                    <div className="absolute top-4 left-4 font-mono text-[9px] uppercase tracking-widest bg-background text-on-background px-2 py-0.5 border border-primary rounded-xs shadow-sm">
+                    <div className="absolute top-4 left-4 font-mono text-[9px] uppercase tracking-widest bg-background text-on-background px-2 py-0.5 border border-outline/25 rounded-xs shadow-sm">
                       {template.creator}
                     </div>
                     {/* Badge */}
