@@ -23,6 +23,22 @@ const staggerContainer = {
   },
 } as const;
 
+// Transparent stagger container for the capability cards.
+const cardStagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+} as const;
+
+// Cards animate position only — they stay visible even if the observer never fires.
+const cardReveal = {
+  hidden: { opacity: 1, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: 'circOut' },
+  },
+} as const;
+
 const team = [
   {
     name: 'Ishan Gupta',
@@ -60,12 +76,12 @@ const problems = [
 ];
 
 const superpowers = [
-  { title: 'High Performance', desc: 'Static site generation guarantees 100/100 Lighthouse performance metrics right out of the box.' },
-  { title: 'GitHub Syncing', desc: 'Keep your contributions, repositories, and stars up-to-date in real-time with our hooks.' },
-  { title: 'Tailwind Core', desc: 'No complex styling engines. Clean, production-ready Tailwind configuration that you fully own.' },
-  { title: 'Monospace Detailing', desc: 'Editorial, technical layout details that fit engineering portfolios perfectly.' },
-  { title: 'Micro-animations', desc: 'Subtle, premium physics-based animations that make your work feel interactive and alive.' },
-  { title: 'Complete Ownership', desc: 'Export raw Next.js codebase at any time. No proprietary locks, no platform lock-in.' },
+  { title: 'High Performance', tag: 'SSG', desc: 'Static site generation guarantees 100/100 Lighthouse performance metrics right out of the box.' },
+  { title: 'GitHub Syncing', tag: 'HOOKS', desc: 'Keep your contributions, repositories, and stars up-to-date in real-time with our hooks.' },
+  { title: 'Tailwind Core', tag: 'CSS', desc: 'No complex styling engines. Clean, production-ready Tailwind configuration that you fully own.' },
+  { title: 'Monospace Detailing', tag: 'TYPE', desc: 'Editorial, technical layout details that fit engineering portfolios perfectly.' },
+  { title: 'Micro-animations', tag: 'MOTION', desc: 'Subtle, premium physics-based animations that make your work feel interactive and alive.' },
+  { title: 'Complete Ownership', tag: 'EXPORT', desc: 'Export raw Next.js codebase at any time. No proprietary locks, no platform lock-in.' },
 ];
 
 export default function AboutPage() {
@@ -226,41 +242,82 @@ export default function AboutPage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
-            className="flex flex-col lg:flex-row gap-12 items-center"
           >
-            <div className="lg:w-1/2 order-2 lg:order-1">
+            <div className="max-w-2xl mx-auto text-center">
               <div className="font-mono text-xs uppercase tracking-widest text-[#8A5A2B] mb-6">
                 ✦ Our Capabilities
               </div>
               <h2 className="font-serif text-4xl sm:text-5xl leading-[1.0] tracking-tight text-[#2E180E] mb-6">
                 Engineering skills<span className="block italic font-normal text-[#A65A3A]">refined by design.</span>
               </h2>
-              <p className="text-sm text-[#5B341E]/70 leading-relaxed mb-8">
+              <p className="text-sm text-[#5B341E]/70 leading-relaxed max-w-xl mx-auto">
                 Our capabilities represent our core philosophy. We construct highly optimized portfolio skeletons that sync natively with your GitHub commits.
               </p>
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-[9px] uppercase tracking-[0.18em] text-[#8A5A2B]/70">
+                <span className="whitespace-nowrap"><span className="font-serif text-sm text-[#2E180E]">100</span> Lighthouse</span>
+                <span className="w-1 h-1 rounded-full bg-[#D6A15F]" />
+                <span className="whitespace-nowrap"><span className="font-serif text-sm text-[#2E180E]">00</span> Lock-in</span>
+                <span className="w-1 h-1 rounded-full bg-[#D6A15F]" />
+                <span className="whitespace-nowrap"><span className="font-serif text-sm text-[#2E180E]">06</span> Capabilities</span>
+              </div>
             </div>
+
             <motion.div
-              variants={staggerContainer}
+              variants={cardStagger}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
-              className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 order-1 lg:order-2"
+              viewport={{ once: true, amount: 0.05 }}
+              className="mt-14 max-w-5xl mx-auto overflow-hidden rounded-[20px] border border-[#D6A15F]/30 bg-[#FFFCF5]/80 shadow-[0_24px_70px_-50px_rgba(46,24,14,0.5)]"
             >
               {superpowers.map((power, idx) => (
-                <motion.div
+                <motion.article
                   key={idx}
-                  variants={reveal}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.15 }}
-                  className="border border-[#D6A15F]/25 p-8 rounded-[16px] bg-[#FFFFFF]/60 transition-all duration-300 hover:border-[#8A5A2B]/50 hover:bg-[#F7EFE2]/40 hover:shadow-[0_0_30px_rgba(214,161,95,0.15)]"
+                  variants={cardReveal}
+                  tabIndex={0}
+                  className={`group relative overflow-hidden transition-colors duration-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-[#8A5A2B]/60 lg:h-[136px] ${
+                    idx !== 0 ? 'border-t border-[#D6A15F]/25' : ''
+                  }`}
                 >
-                  <div className="font-mono text-[9px] text-[#8A5A2B]/60 mb-3 uppercase tracking-[0.2em]">
-                    [{String(idx + 1).padStart(2, '0')} / PWR]
+                  <div className="lg:flex lg:h-full lg:flex-col lg:transition-transform lg:duration-700 lg:ease-[cubic-bezier(0.76,0,0.24,1)] lg:group-hover:-translate-y-full lg:group-focus-visible:-translate-y-full">
+                    {/* front face */}
+                    <div className="flex items-center gap-4 px-5 py-5 sm:gap-6 sm:px-8 lg:h-full lg:shrink-0 lg:py-0">
+                      <span className="w-12 shrink-0 font-mono text-[10px] uppercase tracking-[0.2em] text-[#8A5A2B]/70">
+                        [{String(idx + 1).padStart(2, '0')}]
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-serif text-xl font-semibold text-[#2E180E] sm:text-2xl">
+                          {power.title}
+                        </h3>
+                        <p className="mt-1.5 text-[11px] leading-relaxed text-[#5B341E]/60 lg:line-clamp-1 lg:max-w-2xl">
+                          {power.desc}
+                        </p>
+                      </div>
+                      <span className="hidden shrink-0 rounded-full border border-[#D6A15F]/40 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.18em] text-[#8A5A2B] sm:block">
+                        {power.tag}
+                      </span>
+                      <span className="hidden shrink-0 font-mono text-sm text-[#8A5A2B]/40 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 sm:block">
+                        ↗
+                      </span>
+                    </div>
+
+                    {/* back face — the entire cuboid rolls up on hover */}
+                    <div className="hidden h-full shrink-0 items-center gap-6 bg-[#2E180E] px-8 lg:flex">
+                      <span className="w-12 shrink-0 font-mono text-[10px] uppercase tracking-[0.2em] text-[#D6A15F]">
+                        [{String(idx + 1).padStart(2, '0')}]
+                      </span>
+                      <h3 className="w-52 shrink-0 font-serif text-2xl font-semibold text-[#F7EFE2]">
+                        {power.title}
+                      </h3>
+                      <p className="min-w-0 flex-1 text-xs leading-relaxed text-[#F0E2CF]/75">
+                        {power.desc}
+                      </p>
+                      <span className="shrink-0 rounded-full border border-[#D6A15F]/40 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.18em] text-[#D6A15F]">
+                        {power.tag}
+                      </span>
+                      <span className="shrink-0 font-mono text-sm text-[#D6A15F]">↗</span>
+                    </div>
                   </div>
-                  <h3 className="font-serif text-xl sm:text-2xl font-semibold text-[#2E180E] mb-3">{power.title}</h3>
-                  <p className="text-xs text-[#5B341E]/70 leading-relaxed">{power.desc}</p>
-                </motion.div>
+                </motion.article>
               ))}
             </motion.div>
           </motion.div>
