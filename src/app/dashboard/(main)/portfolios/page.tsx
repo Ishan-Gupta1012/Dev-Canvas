@@ -580,7 +580,7 @@ export default function PortfoliosPage() {
       href={`/${portfolio.slug}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex-1 inline-flex items-center justify-center gap-2 py-2 px-3 bg-emerald-600 text-emerald-600 border border-emerald-600/20 rounded-lg font-mono text-xs uppercase tracking-wider font-bold hover:bg-emerald-600 hover:text-white transition-all shadow-sm shadow-emerald-600/20"
+      className="flex-1 inline-flex items-center justify-center gap-2 py-2 px-3 bg-emerald-600 text-white border border-emerald-600/30 rounded-lg font-mono text-xs uppercase tracking-wider font-bold hover:bg-emerald-700 hover:blur-sm transition-all duration-200 shadow-sm shadow-emerald-600/20"
       title="Open Live Portfolio"
     >
       <Globe size={13} />
