@@ -107,24 +107,15 @@ export default function ChatWidget() {
           className="w-[380px] h-[520px] bg-[#F7EFE2] border border-[#D6A15F]/40 rounded-2xl shadow-[0_0_50px_rgba(10,4,2,0.3)] flex flex-col overflow-hidden"
         >
           {/* Header */}
-          <div className="bg-[#8A5A2B] text-white p-4 flex items-center justify-between gap-3">
+          <div className="bg-[#8A5A2B] text-white p-4 flex items-center gap-3">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
                 <MessageCircle size={18} strokeWidth={2} />
               </div>
               <div>
                 <h4 className="font-serif text-sm font-bold leading-tight">DevCanvas Assistant</h4>
-                <p className="text-[10px] opacity-90 uppercase tracking-wider">Portfolio support</p>
               </div>
             </div>
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              onClick={() => setIsOpen(false)}
-              className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
-              aria-label="Close chat"
-            >
-              <X size={16} strokeWidth={2} />
-            </motion.button>
           </div>
 
           {/* Messages area */}
