@@ -57,11 +57,11 @@ export default function ModernDeveloperTemplate({ data }: Props) {
             </div>
             
             <div className="hidden md:flex items-center gap-8 bg-[#111] px-6 py-3 rounded-full border border-white/5 shadow-lg">
-              <button onClick={() => document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' })} className="text-sm font-medium text-white hover:text-[#ccff00] transition-colors">Home</button>
-              <button onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })} className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Projects</button>
-              <button onClick={() => document.getElementById('experience')?.scrollIntoView({ behavior: 'smooth' })} className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Achievements</button>
-              <button onClick={() => document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' })} className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Skills</button>
-              <button onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Contact</button>
+              <a href="#home" className="text-sm font-medium text-white hover:text-[#ccff00] transition-colors">Home</a>
+              <a href="#projects" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Projects</a>
+              <a href="#experience" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Achievements</a>
+              <a href="#skills" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Skills</a>
+              <a href="#contact" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Contact</a>
             </div>
           </nav>
         </div>
