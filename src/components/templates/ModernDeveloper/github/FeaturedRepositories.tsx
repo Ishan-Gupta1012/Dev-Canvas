@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { GithubRepo } from './types';
 import { Star, GitFork, ExternalLink, GitBranch, ShieldCheck, ShieldAlert, EyeOff, Eye } from 'lucide-react';

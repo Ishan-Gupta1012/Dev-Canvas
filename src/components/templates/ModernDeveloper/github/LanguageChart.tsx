@@ -1,4 +1,6 @@
 /* eslint-disable */
+'use client';
+
 import React, { useState, useMemo } from 'react';
 import { GithubRepo } from './types';
 import { Code } from 'lucide-react';
