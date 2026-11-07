@@ -1,6 +1,6 @@
-﻿'use client';
+'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { 
@@ -22,10 +22,13 @@ import {
   Globe,
   Layers,
   Code2,
-  Share2
+  Share2,
+  GripVertical
 } from 'lucide-react';
 import { cn } from '@/components/dashboard/ui';
 import DownloadZipButton from '@/components/DownloadZipButton';
+import PortfolioDustbin, { PortfolioDustbinHandle, TrashedPortfolioItem } from '@/components/dashboard/PortfolioDustbin';
+import CrumpledPaperAnimation, { CrumpledPaperAnimationHandle } from '@/components/dashboard/CrumpledPaperAnimation';
 import { PortfolioData } from '@/types/portfolio';
 import { getPortfolioPath, getPublicBaseUrl, isLocalOrigin } from '@/lib/siteUrl';
 
@@ -39,6 +42,9 @@ interface Portfolio {
       tagline?: string;
       avatarUrl?: string;
     };
+    _isTrashed?: boolean;
+    _trashedAt?: string;
+    _prevStatus?: 'draft' | 'published';
   };
   status: 'draft' | 'published';
   slug?: string;
@@ -52,12 +58,19 @@ export default function PortfoliosPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'draft'>('all');
   const [deployModalPortfolioId, setDeployModalPortfolioId] = useState<string | null>(null);
   const [deploySlug, setDeploySlug] = useState('');
   const [isDeploying, setIsDeploying] = useState<string | null>(null);
+
+  // Dustbin & Crumpled Paper Animation State
+  const dustbinRef = useRef<PortfolioDustbinHandle>(null);
+  const animRef = useRef<CrumpledPaperAnimationHandle>(null);
+  const [isDustbinActive, setIsDustbinActive] = useState(false);
+  const [isDragOverBin, setIsDragOverBin] = useState(false);
+  const [animatingPortfolioId, setAnimatingPortfolioId] = useState<string | null>(null);
+  const [draggingPortfolioId, setDraggingPortfolioId] = useState<string | null>(null);
   /**
    * Public origin for share links. Resolved per render rather than in an
    * effect: `NEXT_PUBLIC_SITE_URL` is inlined at build time, so in deployments
@@ -87,25 +100,308 @@ export default function PortfoliosPage() {
     fetchPortfolios();
   }, []);
 
-  const handleDelete = async (portfolioId: string) => {
+  // Soft Delete into Trash with Crumpled-Paper Animation
+  const handleDeleteClick = (portfolio: Portfolio) => {
+    const cardEl = document.getElementById(`portfolio-card-${portfolio.id}`);
+    const mouthRect = dustbinRef.current?.getMouthRect();
+
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Direct fallback if elements aren't positioned or user prefers reduced motion
+    if (!cardEl || !mouthRect || !animRef.current || prefersReducedMotion) {
+      performSoftDelete(portfolio.id);
+      dustbinRef.current?.triggerImpact();
+      return;
+    }
+
+    const cardRect = cardEl.getBoundingClientRect();
+    setIsDustbinActive(true);
+    setAnimatingPortfolioId(portfolio.id);
+
+    animRef.current.startAnimation({
+      portfolioId: portfolio.id,
+      sourceRect: cardRect,
+      targetRect: mouthRect,
+      mode: 'trash',
+      onComplete: async () => {
+        dustbinRef.current?.triggerImpact();
+        setIsDustbinActive(false);
+        setAnimatingPortfolioId(null);
+        await performSoftDelete(portfolio.id);
+      },
+    });
+  };
+
+  const performSoftDelete = async (portfolioId: string) => {
     setIsDeleting(portfolioId);
     try {
-      const response = await fetch(`/api/portfolio/save/${portfolioId}`, {
+      const response = await fetch('/api/portfolio/trash', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ portfolioId, action: 'trash' }),
+      });
+      const result = await response.json();
+
+      if (response.ok) {
+        setPortfolios(prev =>
+          prev.map(p =>
+            p.id === portfolioId
+              ? {
+                  ...p,
+                  status: 'draft',
+                  data: {
+                    ...p.data,
+                    _isTrashed: true,
+                    _trashedAt: new Date().toISOString(),
+                    _prevStatus: p.status,
+                  },
+                }
+              : p
+          )
+        );
+      } else {
+        setDeleteError(result.error || 'Failed to move portfolio to trash');
+      }
+    } catch {
+      setDeleteError('Failed to move portfolio to trash');
+    } finally {
+      setIsDeleting(null);
+    }
+  };
+
+  // Reversible Restore with Unfolding Animation
+  const handleRestorePortfolio = async (portfolioId: string) => {
+    // 1. Instantly un-trash locally so activePortfolios.length becomes > 0 immediately!
+    // This immediately eliminates the "No Portfolios Created Yet" empty state and mounts the grid.
+    setPortfolios(prev =>
+      prev.map(p => {
+        if (p.id !== portfolioId) return p;
+        const updatedData = { ...p.data };
+        const prevStatus = (updatedData._prevStatus as 'draft' | 'published') || 'draft';
+        delete updatedData._isTrashed;
+        delete updatedData._trashedAt;
+        delete updatedData._prevStatus;
+        return {
+          ...p,
+          status: prevStatus,
+          data: updatedData,
+        };
+      })
+    );
+
+    // Keep the restored card invisible in the grid until the unfolding animation lands
+    setAnimatingPortfolioId(portfolioId);
+
+    // Small tick to allow the browser to lay out the active grid and card element
+    setTimeout(() => {
+      const cardEl = document.getElementById(`portfolio-card-${portfolioId}`);
+      const mouthRect = dustbinRef.current?.getMouthRect();
+
+      const prefersReducedMotion =
+        typeof window !== 'undefined' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const targetRect =
+        cardEl?.getBoundingClientRect() ||
+        ({
+          left: window.innerWidth / 2 - 160,
+          top: window.innerHeight / 2 - 100,
+          width: 320,
+          height: 240,
+          right: window.innerWidth / 2 + 160,
+          bottom: window.innerHeight / 2 + 140,
+        } as DOMRect);
+
+      if (mouthRect && animRef.current && !prefersReducedMotion) {
+        animRef.current.startAnimation({
+          portfolioId,
+          sourceRect: targetRect,
+          targetRect: mouthRect,
+          mode: 'restore',
+          onComplete: async () => {
+            dustbinRef.current?.triggerImpact();
+            setAnimatingPortfolioId(null);
+            await persistRestore(portfolioId);
+          },
+        });
+      } else {
+        dustbinRef.current?.triggerImpact();
+        setAnimatingPortfolioId(null);
+        persistRestore(portfolioId);
+      }
+    }, 45);
+  };
+
+  const persistRestore = async (portfolioId: string) => {
+    try {
+      const response = await fetch('/api/portfolio/trash', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ portfolioId, action: 'restore' }),
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        setDeleteError(result.error || 'Failed to restore portfolio');
+        // Rollback on failure
+        setPortfolios(prev =>
+          prev.map(p =>
+            p.id === portfolioId
+              ? {
+                  ...p,
+                  data: { ...p.data, _isTrashed: true },
+                }
+              : p
+          )
+        );
+      }
+    } catch {
+      setDeleteError('Failed to restore portfolio');
+    }
+  };
+
+  // Drag-to-Crumple Handler for Portfolio Cards
+  const handleCardPointerDown = (
+    e: React.PointerEvent<HTMLElement>,
+    portfolio: Portfolio
+  ) => {
+    // Only primary button
+    if (e.button !== 0) return;
+
+    // Do not initiate drag if user clicked an interactive button/link
+    const target = e.target as HTMLElement;
+    if (target.closest('button, a, input, select, textarea, [data-no-drag="true"]')) {
+      return;
+    }
+
+    const startX = e.clientX;
+    const startY = e.clientY;
+    let isDragging = false;
+
+    const onPointerMove = (moveEvent: PointerEvent) => {
+      const dist = Math.hypot(moveEvent.clientX - startX, moveEvent.clientY - startY);
+
+      if (!isDragging && dist > 6) {
+        isDragging = true;
+        const cardEl = document.getElementById(`portfolio-card-${portfolio.id}`);
+        const cardRect = cardEl?.getBoundingClientRect();
+
+        if (cardRect && animRef.current) {
+          setDraggingPortfolioId(portfolio.id);
+          setIsDustbinActive(true);
+          document.body.style.userSelect = 'none';
+
+          animRef.current.startDrag({
+            portfolioId: portfolio.id,
+            sourceRect: cardRect,
+            pointerX: moveEvent.clientX,
+            pointerY: moveEvent.clientY,
+          });
+        }
+      }
+
+      if (isDragging && animRef.current) {
+        const mouthRect = dustbinRef.current?.getMouthRect();
+        const isOver = Boolean(
+          mouthRect &&
+          moveEvent.clientX >= mouthRect.left - 50 &&
+          moveEvent.clientX <= mouthRect.right + 50 &&
+          moveEvent.clientY >= mouthRect.top - 40 &&
+          moveEvent.clientY <= mouthRect.bottom + 70
+        );
+
+        setIsDragOverBin(isOver);
+        animRef.current.updateDrag(moveEvent.clientX, moveEvent.clientY, isOver);
+      }
+    };
+
+    const onPointerUp = (upEvent: PointerEvent) => {
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+      document.body.style.userSelect = '';
+
+      if (isDragging && animRef.current) {
+        const mouthRect = dustbinRef.current?.getMouthRect();
+        const isOver = Boolean(
+          mouthRect &&
+          upEvent.clientX >= mouthRect.left - 50 &&
+          upEvent.clientX <= mouthRect.right + 50 &&
+          upEvent.clientY >= mouthRect.top - 40 &&
+          upEvent.clientY <= mouthRect.bottom + 70
+        );
+
+        if (isOver && mouthRect) {
+          // Successfully dropped in dustbin!
+          animRef.current.dropIntoBin({
+            targetRect: mouthRect,
+            onComplete: async () => {
+              dustbinRef.current?.triggerImpact();
+              setDraggingPortfolioId(null);
+              setIsDustbinActive(false);
+              setIsDragOverBin(false);
+              await performSoftDelete(portfolio.id);
+            },
+          });
+        } else {
+          // Cancelled: smoothly fly back to card slot and un-crumple
+          const cardEl = document.getElementById(`portfolio-card-${portfolio.id}`);
+          const cardRect =
+            cardEl?.getBoundingClientRect() ||
+            ({
+              left: startX - 160,
+              top: startY - 100,
+              width: 320,
+              height: 200,
+            } as DOMRect);
+
+          animRef.current.cancelDrag({
+            sourceRect: cardRect,
+            onComplete: () => {
+              setDraggingPortfolioId(null);
+              setIsDustbinActive(false);
+              setIsDragOverBin(false);
+            },
+          });
+        }
+      }
+    };
+
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
+  };
+
+  // Permanent Delete (requires explicit confirmation from inside trash drawer)
+  const handlePermanentDelete = async (portfolioId: string) => {
+    try {
+      const response = await fetch(`/api/portfolio/trash?id=${portfolioId}`, {
         method: 'DELETE',
       });
-      
       const result = await response.json();
-      
+
       if (response.ok) {
         setPortfolios(prev => prev.filter(p => p.id !== portfolioId));
       } else {
-        setDeleteError(result.error || 'Failed to delete portfolio');
+        setDeleteError(result.error || 'Failed to permanently delete portfolio');
       }
-    } catch (err) {
-      setDeleteError('Failed to delete portfolio');
-    } finally {
-      setIsDeleting(null);
-      setShowDeleteConfirm(null);
+    } catch {
+      setDeleteError('Failed to permanently delete portfolio');
+    }
+  };
+
+  // Empty Entire Trash
+  const handleEmptyTrash = async () => {
+    try {
+      const trashed = portfolios.filter(p => !!p.data?._isTrashed);
+      await Promise.all(
+        trashed.map(p =>
+          fetch(`/api/portfolio/trash?id=${p.id}`, { method: 'DELETE' })
+        )
+      );
+      setPortfolios(prev => prev.filter(p => !p.data?._isTrashed));
+    } catch {
+      setDeleteError('Failed to empty trash');
     }
   };
 
@@ -213,13 +509,16 @@ export default function PortfoliosPage() {
     'creative-edge': 'Creative Edge',
   };
 
-  const filteredPortfolios = portfolios.filter(p => {
+  const activePortfolios = portfolios.filter(p => !p.data?._isTrashed);
+  const trashedPortfolios = portfolios.filter(p => !!p.data?._isTrashed);
+
+  const filteredPortfolios = activePortfolios.filter(p => {
     if (statusFilter === 'all') return true;
     return p.status === statusFilter;
   });
 
-  const publishedCount = portfolios.filter(p => p.status === 'published').length;
-  const draftCount = portfolios.filter(p => p.status === 'draft').length;
+  const publishedCount = activePortfolios.filter(p => p.status === 'published').length;
+  const draftCount = activePortfolios.filter(p => p.status === 'draft').length;
 
   if (isLoading) {
     return (
@@ -236,16 +535,19 @@ export default function PortfoliosPage() {
 
   return (
     <div className="flex-1 w-full max-w-7xl mx-auto px-6 md:px-10 py-6 md:py-8">
+      {/* 3D Crumpled Paper Animation Overlay */}
+      <CrumpledPaperAnimation ref={animRef} />
+
       {/* Sleek Utility Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-outline/10">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="font-mono text-xs uppercase tracking-wider text-on-surface-variant font-medium">
-              {portfolios.length} {portfolios.length === 1 ? 'Portfolio' : 'Portfolios'}
+              {activePortfolios.length} {activePortfolios.length === 1 ? 'Portfolio' : 'Portfolios'}
             </span>
           </div>
-          {portfolios.length > 0 && (
+          {activePortfolios.length > 0 && (
             <>
               <span className="text-outline/30">•</span>
               <span className="font-mono text-xs uppercase tracking-wider text-on-surface-variant/60">
@@ -260,6 +562,24 @@ export default function PortfoliosPage() {
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
+          {/* Dustbin Component (Normal compact state, expands during delete interaction) */}
+          <PortfolioDustbin
+            ref={dustbinRef}
+            trashedCount={trashedPortfolios.length}
+            trashedItems={trashedPortfolios.map(p => ({
+              id: p.id,
+              title: p.title,
+              template_name: p.template_name,
+              updated_at: p.updated_at,
+              data: p.data,
+            }))}
+            isActive={isDustbinActive}
+            isDragOver={isDragOverBin}
+            onRestore={handleRestorePortfolio}
+            onPermanentDelete={handlePermanentDelete}
+            onEmptyTrash={handleEmptyTrash}
+          />
+
           <Link
             href="/dashboard/templates"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-outline/20 font-mono text-xs uppercase tracking-wider font-semibold text-on-surface hover:border-primary/40 hover:text-primary transition-all bg-background shadow-xs"
@@ -291,8 +611,8 @@ export default function PortfoliosPage() {
         </div>
       )}
 
-      {/* Quick Stats & Filter Bar (shown if user has portfolios or for overview) */}
-      {portfolios.length > 0 && (
+      {/* Quick Stats & Filter Bar (shown if user has active portfolios) */}
+      {activePortfolios.length > 0 && (
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           {/* Status Tabs */}
           <div className="flex items-center gap-1.5 p-1 bg-surface-container-low/70 border border-outline/15 rounded-xl font-mono text-xs uppercase tracking-wider self-start">
@@ -305,7 +625,7 @@ export default function PortfoliosPage() {
                   : "text-on-surface-variant hover:text-on-surface"
               )}
             >
-              All ({portfolios.length})
+              All ({activePortfolios.length})
             </button>
             <button
               onClick={() => setStatusFilter('published')}
@@ -338,7 +658,7 @@ export default function PortfoliosPage() {
       )}
 
       {/* Portfolios Content */}
-      {portfolios.length === 0 ? (
+      {activePortfolios.length === 0 ? (
         /* Rich, High-Aesthetics Empty State */
         <div className="flex flex-col items-center">
           {/* Main Hero Card for Empty State */}
@@ -490,15 +810,21 @@ export default function PortfoliosPage() {
         </div>
       ) : (
         /* Portfolios Grid with Refined Premium Cards */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="portfolios-grid-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredPortfolios.map((portfolio) => {
             const previewUrl = `/preview/${portfolio.id}`;
             const editUrl = `/dashboard/builder?portfolio=${portfolio.id}`;
 
             return (
               <article 
+                id={`portfolio-card-${portfolio.id}`}
                 key={portfolio.id}
-                className="group relative bg-background border border-outline/15 rounded-2xl overflow-hidden transition-all duration-300 hover:border-primary/30 hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] hover:-translate-y-1 flex flex-col"
+                onPointerDown={(e) => handleCardPointerDown(e, portfolio)}
+                className={cn(
+                  "group relative bg-background border border-outline/15 rounded-2xl overflow-hidden transition-all duration-300 hover:border-primary/30 hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] hover:-translate-y-1 flex flex-col cursor-grab active:cursor-grabbing",
+                  animatingPortfolioId === portfolio.id && "opacity-0 pointer-events-none scale-95 transition-all duration-200",
+                  draggingPortfolioId === portfolio.id && "opacity-25 border-dashed border-red-500/40 bg-red-500/5 scale-95 pointer-events-none shadow-none"
+                )}
               >
                 {/* Visual Header / Cover */}
                 <div className="relative aspect-[16/10] bg-gradient-to-br from-primary/10 via-surface-container-low to-tertiary/10 overflow-hidden border-b border-outline/10">
@@ -506,10 +832,10 @@ export default function PortfoliosPage() {
                     <img 
                       src={portfolio.data.hero.avatarUrl} 
                       alt={portfolio.data.hero.name || 'Portfolio avatar'}
-                      className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-500"
+                      className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-500 pointer-events-none"
                     />
                   ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center">
+                    <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center pointer-events-none select-none">
                       <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-2">
                         <Code2 size={24} className="text-primary" />
                       </div>
@@ -520,20 +846,29 @@ export default function PortfoliosPage() {
                   )}
                   
                   {/* Subtle Gradient Veil */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
                   
                   {/* Top Status & Template Badges */}
-                  <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between gap-2 z-10">
-                    <span className="px-2.5 py-1 bg-background/90 backdrop-blur-md border border-outline/15 text-[10px] font-mono uppercase tracking-wider font-semibold rounded-lg shadow-sm">
-                      {templateNames[portfolio.template_name] || portfolio.template_name}
-                    </span>
+                  <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between gap-2 z-10 pointer-events-none">
+                    <div className="flex items-center gap-1.5 pointer-events-auto">
+                      <span className="px-2.5 py-1 bg-background/90 backdrop-blur-md border border-outline/15 text-[10px] font-mono uppercase tracking-wider font-semibold rounded-lg shadow-sm">
+                        {templateNames[portfolio.template_name] || portfolio.template_name}
+                      </span>
+                      <span
+                        className="inline-flex items-center gap-1 px-2 py-0.5 bg-black/60 text-white/80 rounded-md text-[10px] font-mono uppercase tracking-wider backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity select-none"
+                        title="Click & drag this card to the bin"
+                      >
+                        <GripVertical size={11} className="opacity-70" />
+                        <span>Drag to Bin</span>
+                      </span>
+                    </div>
 
                     {portfolio.status === 'published' ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-mono font-bold uppercase tracking-wider bg-emerald-500/90 text-white rounded-lg shadow-sm backdrop-blur-md">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-mono font-bold uppercase tracking-wider bg-emerald-500/90 text-white rounded-lg shadow-sm backdrop-blur-md pointer-events-auto">
                         <CheckCircle size={10} /> Published
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-500/90 text-white rounded-lg shadow-sm backdrop-blur-md">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-500/90 text-white rounded-lg shadow-sm backdrop-blur-md pointer-events-auto">
                         <Clock size={10} /> Draft
                       </span>
                     )}
@@ -580,12 +915,14 @@ export default function PortfoliosPage() {
                       </h3>
                       
                       <button
-                        onClick={() => setShowDeleteConfirm(portfolio.id)}
-                        disabled={isDeleting === portfolio.id}
-                        className="p-1 text-on-surface-variant/40 hover:text-red-500 hover:bg-red-500/10 rounded-md transition-all flex-shrink-0"
-                        title="Delete Portfolio"
+                        onClick={() => handleDeleteClick(portfolio)}
+                        onMouseEnter={() => setIsDustbinActive(true)}
+                        onMouseLeave={() => setIsDustbinActive(false)}
+                        disabled={isDeleting === portfolio.id || animatingPortfolioId === portfolio.id}
+                        className="p-1.5 text-on-surface-variant/40 hover:text-red-500 hover:bg-red-500/10 rounded-md transition-all flex-shrink-0 cursor-pointer"
+                        title="Move to Bin (Crumple into Dustbin)"
                       >
-                        {isDeleting === portfolio.id ? (
+                        {isDeleting === portfolio.id || animatingPortfolioId === portfolio.id ? (
                           <Loader2 size={14} className="animate-spin text-red-500" />
                         ) : (
                           <Trash2 size={14} />
@@ -674,50 +1011,6 @@ export default function PortfoliosPage() {
                     </div>
                   </div>
                 </div>
-
-                {/* Delete Confirmation Modal */}
-                {showDeleteConfirm === portfolio.id && (
-                  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-                    <div className="bg-background border border-outline/20 rounded-2xl p-6 max-w-md w-full animate-slide-up shadow-2xl">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                          <AlertCircle size={20} className="text-red-500" />
-                        </div>
-                        <div>
-                          <h4 className="font-serif text-lg font-bold text-on-surface">Delete Portfolio?</h4>
-                          <p className="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant/60">
-                            Permanent Action
-                          </p>
-                        </div>
-                      </div>
-                      <p className="text-on-surface-variant text-sm mb-6 leading-relaxed">
-                        Are you sure you want to delete <strong className="text-on-surface font-semibold">&apos;{portfolio.title || 'Untitled Portfolio'}&apos;</strong>? All customized data and layouts for this portfolio will be removed.
-                      </p>
-                      <div className="flex gap-3">
-                        <button
-                          onClick={() => setShowDeleteConfirm(null)}
-                          className="flex-1 px-4 py-2.5 border border-outline/20 text-on-surface font-mono text-xs uppercase tracking-wider font-semibold rounded-lg hover:bg-surface-container-low transition-all"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          onClick={() => handleDelete(portfolio.id)}
-                          disabled={isDeleting === portfolio.id}
-                          className="flex-1 px-4 py-2.5 bg-red-600 text-white font-mono text-xs uppercase tracking-wider font-bold rounded-lg hover:bg-red-700 transition-all shadow-md shadow-red-600/20 flex items-center justify-center gap-2"
-                        >
-                          {isDeleting === portfolio.id ? (
-                            <>
-                              <Loader2 size={14} className="animate-spin" />
-                              Deleting...
-                            </>
-                          ) : (
-                            'Confirm Delete'
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </article>
             );
           })}
