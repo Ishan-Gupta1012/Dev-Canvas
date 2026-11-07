@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import { MessageCircle, Send, X, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -12,6 +13,7 @@ interface Message {
 }
 
 export default function ChatWidget() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -80,6 +82,9 @@ export default function ChatWidget() {
       setIsLoading(false);
     }
   };
+
+  // The landing page has its own closing scene; no floating chat there.
+  if (pathname === '/') return null;
 
   return (
     <div className="fixed bottom-6 right-6 z-[100]">
