@@ -6,8 +6,8 @@ interface GenerativeAttractorCanvasProps {
   className?: string;
   /** 'landing' scrolls with page sections; 'static' holds a fixed auth-page pose */
   mode?: 'landing' | 'static' | 'hero';
-  /** Colour story: warm earth (default) or brown / copper / silver for the landing */
-  palette?: 'earth' | 'copper';
+  /** Colour story: warm earth (default), brown / copper / silver for the landing, or charcoal for standard app */
+  palette?: 'earth' | 'copper' | 'charcoal';
 }
 
 export default function GenerativeAttractorCanvas({
@@ -78,18 +78,27 @@ export default function GenerativeAttractorCanvas({
     const projDepth = new Float32Array(numPoints);
 
     // --- 2. PRE-COMPUTE COLOR LOOKUP TABLE ---
-    // Earth:   espresso → burgundy → terracotta → copper
-    // Copper:  deep brown → chestnut → copper → sand
+    // Earth:    espresso → burgundy → terracotta → copper
+    // Copper:   deep brown → chestnut → copper → sand
+    // Charcoal: charcoal → slate → cool grey → coral red
     const STOPS: [number, number, number][] =
-      palette === 'copper'
+      palette === 'charcoal'
         ? [
+          [26, 28, 30], // Charcoal #1A1C1E
+          [74, 78, 84], // Slate
+          [118, 123, 129], // Slate grey #767B81
+          [163, 166, 172], // Cool grey #A3A6AC
+          [233, 88, 88], // Coral red #E95858
+        ]
+        : palette === 'copper'
+          ? [
             [30, 19, 13], // Espresso      #1E130D
             [74, 45, 28], // Chestnut      #4A2D1C
             [122, 58, 30], // Burnt copper  #7A3A1E
             [178, 92, 50], // Copper        #B25C32
             [216, 158, 112], // Sand         #D89E70
           ]
-        : [
+          : [
             [52, 40, 29], // Dark chocolate
             [62, 21, 16], // Deep earth brown
             [86, 36, 26], // Earthy burgundy
@@ -121,23 +130,30 @@ export default function GenerativeAttractorCanvas({
 
     // Traveling pulses
     const PULSE_COLORS =
-      palette === 'copper'
+      palette === 'charcoal'
         ? [
+          { r: 26, g: 28, b: 30 },
+          { r: 118, g: 123, b: 129 },
+          { r: 233, g: 88, b: 88 },
+          { r: 163, g: 166, b: 172 },
+        ]
+        : palette === 'copper'
+          ? [
             { r: 74, g: 47, b: 31 }, // Chestnut
             { r: 196, g: 112, b: 63 }, // Copper
             { r: 227, g: 161, b: 95 }, // Amber
             { r: 198, g: 194, b: 189 }, // Silver
           ]
-        : [
+          : [
             { r: 124, g: 63, b: 47 }, // Terracotta
             { r: 86, g: 36, b: 26 }, // Earthy burgundy
             { r: 160, g: 103, b: 79 }, // Warm copper
             { r: 62, g: 21, b: 16 }, // Deep earth brown
           ];
 
-    const CANVAS_FILL = palette === 'copper' ? '#FAF7F3' : '#EEEBE7';
+    const CANVAS_FILL = palette === 'charcoal' ? '#F3F4F5' : palette === 'copper' ? '#FAF7F3' : '#EEEBE7';
 
-    const PULSE_LUTS = PULSE_COLORS.map(c => 
+    const PULSE_LUTS = PULSE_COLORS.map(c =>
       [0.2, 0.4, 0.6, 0.75, 0.9, 1.0].map(
         a => `rgba(${c.r}, ${c.g}, ${c.b}, ${a.toFixed(2)})`
       )
@@ -242,21 +258,21 @@ export default function GenerativeAttractorCanvas({
       // --- 5. MULTI-KEYFRAME TRANSFORMATION TARGETS ---
       const kf0 = mode === 'static'
         ? {
-            cx: isMobile ? 0.5 * width : 0.36 * width,
-            cy: 0.52 * height,
-            scl: Math.min(width, height) / 40,
-            yaw: 0.35,
-            pitch: 0.25,
-          }
+          cx: isMobile ? 0.5 * width : 0.36 * width,
+          cy: 0.52 * height,
+          scl: Math.min(width, height) / 40,
+          yaw: 0.35,
+          pitch: 0.25,
+        }
         : mode === 'hero'
-        ? {
+          ? {
             cx: isMobile ? 0.5 * width : 0.72 * width,
             cy: 0.48 * height,
             scl: Math.min(width, height) / 46,
             yaw: -0.2,
             pitch: 0.08,
           }
-        : {
+          : {
             cx: isMobile ? 0.5 * width : 0.22 * width,
             cy: 0.50 * height,
             scl: Math.min(width, height) / 48,

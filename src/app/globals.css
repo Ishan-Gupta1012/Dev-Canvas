@@ -9,121 +9,129 @@
 }
 
 :root {
-  /* Core palette — warm paper & amber, matched to the landing story */
-  --background: #F7EFE2;
-  --background-secondary: #F0E2CF;
-  --background-elevated: #FDF7EC;
+  /* Centralized Design Tokens — Landing Page Single Source of Truth */
+  --color-primary: #1A1C1E;
+  --color-primary-hover: #2C2F33;
+  --color-accent: #E95858;
+  --color-accent-hover: #D94545;
+  --color-background: #F3F4F5;
+  --color-surface: #FFFFFF;
+  --color-surface-hover: #F8F9FA;
+  --color-text-primary: #1A1C1E;
+  --color-text-secondary: #767B81;
+  --color-muted: #A3A6AC;
+  --color-border: #DADCE0;
+  --color-border-subtle: rgba(41, 44, 48, 0.08);
 
-  /* Warm surfaces */
-  --surface: #F2E7D7;
-  --surface-secondary: #E9DAC6;
-  --surface-hover: #DECCB4;
-  --surface-raised: #FAF3E7;
-  --bronze: #C9875B;
-  --warm-glow: #D6A15F;
-  --warm-highlight: #E3BE7C;
+  /* Core Palette */
+  --charcoal: #1A1C1E;
+  --coral-red: #E95858;
+  --cool-offwhite: #F3F4F5;
+  --pure-white: #FFFFFF;
+  --slate-grey: #767B81;
+  --cool-grey: #A3A6AC;
+  --light-grey: #DADCE0;
 
-  /* Amber and copper accents (landing palette) */
-  --muted-amber: #B0803F;
-  --amber: #C08A3E;
-  --amber-bright: #D3A557;
-  --amber-soft: #F0E2C8;
-  --amber-muted: #B0803F;
-  --light-brown: #D9C7B5;
+  /* Surfaces & Backgrounds */
+  --background: #F3F4F5;
+  --background-secondary: #E9EAEB;
+  --background-elevated: #FFFFFF;
+  --surface: #FFFFFF;
+  --surface-secondary: #F8F9FA;
+  --surface-hover: #F1F2F4;
+  --surface-raised: #FFFFFF;
 
-  /* Text and borders */
-  --text-primary: #35261E;
-  --text-secondary: #6B5138;
-  --text-muted: #8D7C6E;
-  --border: rgba(74, 52, 33, 0.16);
-  --border-strong: rgba(74, 52, 33, 0.28);
-  --silver: #8A7C6D;
+  /* Text & Borders */
+  --text-primary: #1A1C1E;
+  --text-secondary: #767B81;
+  --text-muted: #A3A6AC;
+  --border: #DADCE0;
+  --border-strong: #A3A6AC;
 
-  /* Ambient lighting */
-  --ambient-brown: rgba(201, 135, 91, 0.18);
-  --ambient-amber: rgba(227, 190, 124, 0.20);
-
+  /* Background atmosphere matching landing page */
   --background-atmosphere:
     radial-gradient(
-      ellipse at 78% 8%,
-      var(--ambient-amber),
+      ellipse 60% 45% at 78% 8%,
+      rgba(233, 88, 88, 0.05),
       transparent 62%
     ),
     radial-gradient(
-      ellipse at 12% 72%,
-      var(--ambient-brown),
+      ellipse 55% 40% at 12% 72%,
+      rgba(163, 166, 172, 0.12),
       transparent 66%
     ),
     linear-gradient(
       180deg,
-      #F8F1E5 0%,
-      #F7EFE2 45%,
-      #F4E9D7 100%
+      #F8F9FA 0%,
+      #F3F4F5 45%,
+      #E9EAEB 100%
     );
 
   /* Semantic UI Tokens mapped to user theme */
-  --th-primary: #8A5A2B;             /* Amber Bronze - Primary Accent */
-  --th-primary-hover: #A9743A;       /* Warm Gold - Hover */
-  --th-primary-muted: rgba(138, 90, 43, 0.14);
-  --th-background: #F7EFE2;
-  --th-foreground: #35261E;
-  --th-on-background: #35261E;
-  --th-on-primary: #FBF3E6;
-  --th-brand-600: #94612F;
-  --th-brand-100: #F0E2C8;
-  --th-neutral-900: #35261E;
-  --th-neutral-700: #6B5138;
-  --th-neutral-500: #8F7968;
-  --th-neutral-200: #E3D3BE;
-  --th-neutral-50: #F7EFE2;
-  --th-success-500: #5F7A58;
-  --th-warning-400: #B07A3C;
-  --th-danger-500: #A63A2A;
-  --th-muted: #E9DCC8;
-  --th-muted-foreground: #6B5138;
-  --th-error: #A63A2A;
-  --th-surface-container-low: #F2E7D7;
-  --th-secondary-fixed: #F0E2CF;
-  --th-outline: rgba(74, 52, 33, 0.18);
-  --th-inverse-primary: #F7EFE2;
-  --th-primary-container: #F0E2C8;
-  --th-surface-bright: #FDF7EC;
-  --th-on-primary-fixed-variant: #3A2716;
-  --th-error-container: #F6DDD6;
-  --th-tertiary-fixed-dim: #C9875B;
-  --th-primary-fixed: #F2E7D7;
-  --th-surface-dim: #E9DCC8;
-  --th-on-surface-variant: #6B5138;
-  --th-outline-variant: rgba(74, 52, 33, 0.16);
-  --th-tertiary-fixed: #C9875B;
-  --th-surface: #F2E7D7;
-  --th-surface-container-lowest: #FAF3E7;
+  --th-primary: #1A1C1E;             /* Charcoal Black - Primary Heading & Button */
+  --th-primary-hover: #2C2F33;       /* Hover */
+  --th-primary-muted: rgba(26, 28, 30, 0.08);
+  --th-accent: #E95858;              /* Coral Red - Highlight Accent */
+  --th-accent-hover: #D94545;
+  --th-background: #F3F4F5;          /* Cool Off-White */
+  --th-foreground: #1A1C1E;
+  --th-on-background: #1A1C1E;
+  --th-on-primary: #FFFFFF;
+  --th-brand-600: #1A1C1E;
+  --th-brand-100: #E9EAEB;
+  --th-neutral-900: #1A1C1E;
+  --th-neutral-700: #767B81;
+  --th-neutral-500: #A3A6AC;
+  --th-neutral-200: #DADCE0;
+  --th-neutral-50: #F3F4F5;
+  --th-success-500: #10B981;
+  --th-warning-400: #F59E0B;
+  --th-danger-500: #E95858;
+  --th-muted: #E9EAEB;
+  --th-muted-foreground: #767B81;
+  --th-error: #E95858;
+  --th-surface-container-low: #F8F9FA;
+  --th-secondary-fixed: #E9EAEB;
+  --th-outline: #DADCE0;
+  --th-inverse-primary: #F3F4F5;
+  --th-primary-container: #E9EAEB;
+  --th-surface-bright: #FFFFFF;
+  --th-on-primary-fixed-variant: #1A1C1E;
+  --th-error-container: #FDE8E8;
+  --th-tertiary-fixed-dim: #E95858;
+  --th-primary-fixed: #E9EAEB;
+  --th-surface-dim: #E9EAEB;
+  --th-on-surface-variant: #767B81;
+  --th-outline-variant: rgba(41, 44, 48, 0.12);
+  --th-tertiary-fixed: #E95858;
+  --th-surface: #FFFFFF;
+  --th-surface-container-lowest: #FFFFFF;
   --th-on-error: #FFFFFF;
-  --th-on-secondary-fixed-variant: #35261E;
-  --th-on-secondary-fixed: #35261E;
-  --th-tertiary: #A65A3A;
-  --th-on-tertiary-container: #35261E;
-  --th-surface-container-high: #E3D3BE;
-  --th-secondary-container: #F0E2CF;
-  --th-primary-fixed-dim: #B0803F;
-  --th-inverse-surface: #2B1B12;
-  --th-on-secondary-container: #35261E;
-  --th-on-surface: #35261E;
-  --th-surface-container-highest: #D8C8B4;
-  --th-on-tertiary-fixed: #35261E;
-  --th-on-tertiary: #FDF7EC;
-  --th-on-error-container: #7A2216;
-  --th-secondary-fixed-dim: #E9DCC8;
-  --th-surface-variant: #F2E7D7;
-  --th-on-primary-fixed: #3A2716;
-  --th-inverse-on-surface: #F7EFE2;
-  --th-surface-container: #EDE1CF;
-  --th-on-secondary: #FDF7EC;
-  --th-tertiary-container: #F4E6D3;
-  --th-surface-tint: #C08A3E;
-  --th-on-tertiary-fixed-variant: #6B5138;
-  --th-on-primary-container: #3A2716;
-  --th-secondary: #A65A3A;
+  --th-on-secondary-fixed-variant: #1A1C1E;
+  --th-on-secondary-fixed: #1A1C1E;
+  --th-tertiary: #E95858;
+  --th-on-tertiary-container: #1A1C1E;
+  --th-surface-container-high: #E9EAEB;
+  --th-secondary-container: #F3F4F5;
+  --th-primary-fixed-dim: #2C2F33;
+  --th-inverse-surface: #1A1C1E;
+  --th-on-secondary-container: #1A1C1E;
+  --th-on-surface: #1A1C1E;
+  --th-surface-container-highest: #DADCE0;
+  --th-on-tertiary-fixed: #1A1C1E;
+  --th-on-tertiary: #FFFFFF;
+  --th-on-error-container: #7F1D1D;
+  --th-secondary-fixed-dim: #DADCE0;
+  --th-surface-variant: #F8F9FA;
+  --th-on-primary-fixed: #1A1C1E;
+  --th-inverse-on-surface: #F3F4F5;
+  --th-surface-container: #F8F9FA;
+  --th-on-secondary: #FFFFFF;
+  --th-tertiary-container: #FDE8E8;
+  --th-surface-tint: #1A1C1E;
+  --th-on-tertiary-fixed-variant: #767B81;
+  --th-on-primary-container: #1A1C1E;
+  --th-secondary: #767B81;
 
   /* Fluid Typography System Tokens */
   --text-display: clamp(3.5rem, 2.5rem + 5vw, 6rem);
@@ -192,76 +200,103 @@
 }
 
 .dark {
-  --th-primary: #D3A557;             /* Landing gold */
-  --th-primary-hover: #E3BE7C;       /* Landing gold light */
-  --th-primary-muted: rgba(211, 165, 87, 0.16);
-  --th-background: #150D08;
-  --th-foreground: #F4EDE3;
-  --th-on-background: #F4EDE3;
-  --th-on-primary: #17100A;
-  --th-brand-600: #C9974F;
-  --th-brand-100: #332017;
-  --th-neutral-900: #F4EDE3;
-  --th-neutral-700: #C9B8A8;
-  --th-neutral-500: #A68D78;
-  --th-neutral-200: #332017;
-  --th-neutral-50: #150D08;
-  --th-success-500: #7F9B6E;
-  --th-warning-400: #D3A05C;
-  --th-danger-500: #E06A4E;
-  --th-muted: #2A1810;
-  --th-muted-foreground: #BEB0A0;
-  --th-error: #E06A4E;
-  --th-surface-container-low: #2A1810;
-  --th-secondary-fixed: #2A1810;
-  --th-outline: rgba(244, 237, 227, 0.36);
-  --th-inverse-primary: #150D08;
-  --th-primary-container: #3A2415;
-  --th-surface-bright: #3E2218;
-  --th-on-primary-fixed-variant: #F4EDE3;
-  --th-error-container: #451A1A;
-  --th-tertiary-fixed-dim: #C9A36A;
-  --th-primary-fixed: #332017;
-  --th-surface-dim: #150D08;
-  --th-on-surface-variant: #C9B8A8;
-  --th-outline-variant: rgba(244, 237, 227, 0.30);
-  --th-tertiary-fixed: #C9A36A;
-  --th-surface: #301C13;
-  --th-surface-container-lowest: #23150D;
+  --color-primary: #F3F4F5;
+  --color-primary-hover: #FFFFFF;
+  --color-accent: #E95858;
+  --color-accent-hover: #EF5350;
+  --color-background: #111315;
+  --color-surface: #1A1C1E;
+  --color-surface-hover: #222528;
+  --color-text-primary: #F3F4F5;
+  --color-text-secondary: #A3A6AC;
+  --color-muted: #767B81;
+  --color-border: #2C2F33;
+  --color-border-subtle: rgba(255, 255, 255, 0.08);
+
+  --background: #111315;
+  --surface: #1A1C1E;
+  --surface-secondary: #222528;
+  --text-primary: #F3F4F5;
+  --text-secondary: #A3A6AC;
+  --text-muted: #767B81;
+  --border: #2C2F33;
+  --border-strong: #767B81;
+
+  --th-primary: #F3F4F5;
+  --th-primary-hover: #FFFFFF;
+  --th-primary-muted: rgba(243, 244, 245, 0.12);
+  --th-accent: #E95858;
+  --th-accent-hover: #EF5350;
+  --th-background: #111315;
+  --th-foreground: #F3F4F5;
+  --th-on-background: #F3F4F5;
+  --th-on-primary: #1A1C1E;
+  --th-brand-600: #F3F4F5;
+  --th-brand-100: #222528;
+  --th-neutral-900: #F3F4F5;
+  --th-neutral-700: #A3A6AC;
+  --th-neutral-500: #767B81;
+  --th-neutral-200: #2C2F33;
+  --th-neutral-50: #111315;
+  --th-success-500: #10B981;
+  --th-warning-400: #F59E0B;
+  --th-danger-500: #E95858;
+  --th-muted: #222528;
+  --th-muted-foreground: #A3A6AC;
+  --th-error: #E95858;
+  --th-surface-container-low: #1E2023;
+  --th-secondary-fixed: #222528;
+  --th-outline: #2C2F33;
+  --th-inverse-primary: #111315;
+  --th-primary-container: #222528;
+  --th-surface-bright: #282B2F;
+  --th-on-primary-fixed-variant: #F3F4F5;
+  --th-error-container: #3B1B1D;
+  --th-tertiary-fixed-dim: #E95858;
+  --th-primary-fixed: #222528;
+  --th-surface-dim: #111315;
+  --th-on-surface-variant: #A3A6AC;
+  --th-outline-variant: rgba(255, 255, 255, 0.12);
+  --th-tertiary-fixed: #E95858;
+  --th-surface: #1A1C1E;
+  --th-surface-container-lowest: #141618;
   --th-on-error: #FFFFFF;
-  --th-on-secondary-fixed-variant: #F4EDE3;
-  --th-on-secondary-fixed: #F4EDE3;
-  --th-tertiary: #C9A36A;
-  --th-on-tertiary-container: #F4EDE3;
-  --th-surface-container-high: #3A2417;
-  --th-secondary-container: #2C1912;
-  --th-primary-fixed-dim: #C9974F;
-  --th-inverse-surface: #F4EDE3;
-  --th-on-secondary-container: #F4EDE3;
-  --th-on-surface: #F4EDE3;
-  --th-surface-container-highest: #472B1C;
-  --th-on-tertiary-fixed: #F4EDE3;
-  --th-on-tertiary: #150D08;
+  --th-on-secondary-fixed-variant: #F3F4F5;
+  --th-on-secondary-fixed: #F3F4F5;
+  --th-tertiary: #E95858;
+  --th-on-tertiary-container: #F3F4F5;
+  --th-surface-container-high: #26292D;
+  --th-secondary-container: #1E2023;
+  --th-primary-fixed-dim: #E9EAEB;
+  --th-inverse-surface: #F3F4F5;
+  --th-on-secondary-container: #F3F4F5;
+  --th-on-surface: #F3F4F5;
+  --th-surface-container-highest: #32353A;
+  --th-on-tertiary-fixed: #F3F4F5;
+  --th-on-tertiary: #111315;
   --th-on-error-container: #FFFFFF;
-  --th-secondary-fixed-dim: #24130D;
-  --th-surface-variant: #301C13;
-  --th-on-primary-fixed: #F4EDE3;
-  --th-inverse-on-surface: #150D08;
-  --th-surface-container: #301C13;
-  --th-on-secondary: #150D08;
-  --th-tertiary-container: #2C1912;
-  --th-surface-tint: #D3A557;
-  --th-on-tertiary-fixed-variant: #F4EDE3;
-  --th-on-primary-container: #F4EDE3;
-  --th-secondary: #C9875B;
-  --th-light-brown: #B0876B;
+  --th-secondary-fixed-dim: #1E2023;
+  --th-surface-variant: #1E2023;
+  --th-on-primary-fixed: #F3F4F5;
+  --th-inverse-on-surface: #111315;
+  --th-surface-container: #1A1C1E;
+  --th-on-secondary: #111315;
+  --th-tertiary-container: #2A1718;
+  --th-surface-tint: #F3F4F5;
+  --th-on-tertiary-fixed-variant: #F3F4F5;
+  --th-on-primary-container: #F3F4F5;
+  --th-secondary: #A3A6AC;
+  --th-light-brown: #2C2F33;
 }
 
 @theme inline {
   --color-primary: var(--th-primary);
   --color-primary-hover: var(--th-primary-hover);
+  --color-accent: var(--th-accent);
+  --color-accent-hover: var(--th-accent-hover);
   --color-background: var(--th-background);
   --color-foreground: var(--th-foreground);
+  --color-surface: var(--th-surface);
   
   --color-brand-600: var(--th-brand-600);
   --color-brand-100: var(--th-brand-100);
@@ -278,8 +313,11 @@
   --font-serif: var(--font-serif), Georgia, serif;
   --font-mono: var(--font-mono), monospace;
   
-  --color-cream: #F7F4EF;
-  --color-charcoal: #111111;
+  --color-charcoal: #1A1C1E;
+  --color-coral: #E95858;
+  --color-offwhite: #F3F4F5;
+  --color-slate: #767B81;
+  --color-cream: #F3F4F5;
   
   --color-muted: var(--th-muted);
   --color-muted-foreground: var(--th-muted-foreground);
@@ -451,17 +489,17 @@ body {
     linear-gradient(to bottom, rgba(240, 244, 248, 0.03) 1px, transparent 1px);
 }
 
-/* Landing-style warm atmosphere for the app shell */
+/* Landing-style cool atmosphere for the app shell */
 .app-atmosphere {
   background:
-    radial-gradient(ellipse 58% 42% at 80% 4%, rgba(227, 190, 124, 0.30) 0%, transparent 62%),
-    radial-gradient(ellipse 45% 38% at 8% 82%, rgba(201, 135, 91, 0.15) 0%, transparent 65%);
+    radial-gradient(ellipse 58% 42% at 80% 4%, rgba(233, 88, 88, 0.05) 0%, transparent 62%),
+    radial-gradient(ellipse 45% 38% at 8% 82%, rgba(26, 28, 30, 0.03) 0%, transparent 65%);
 }
 
 .dark .app-atmosphere {
   background:
-    radial-gradient(ellipse 55% 40% at 82% 0%, rgba(211, 165, 87, 0.10) 0%, transparent 60%),
-    radial-gradient(ellipse 45% 38% at 8% 82%, rgba(201, 135, 91, 0.07) 0%, transparent 65%);
+    radial-gradient(ellipse 55% 40% at 82% 0%, rgba(233, 88, 88, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 38% at 8% 82%, rgba(255, 255, 255, 0.02) 0%, transparent 65%);
 }
 
 .custom-cursor {
@@ -1231,3 +1269,179 @@ body::-webkit-scrollbar,
 }
 
 
+
+/* ══════════════════════════════════════════════════════════════
+   Bento Grid Dashboard — shadow card system
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── CSS variable defaults (Preset 1: Soft Ambient) ─────── */
+.bento-grid-root {
+  --bento-shadow:
+    0 1px 3px -1px rgba(26, 28, 30, 0.04),
+    0 6px 16px -3px rgba(26, 28, 30, 0.06),
+    0 16px 28px -6px rgba(26, 28, 30, 0.04),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
+  --bento-shadow-hover:
+    0 4px 8px -2px rgba(26, 28, 30, 0.05),
+    0 12px 24px -4px rgba(26, 28, 30, 0.08),
+    0 24px 38px -8px rgba(26, 28, 30, 0.06),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 1);
+  --bento-bg: rgba(255, 255, 255, 0.92);
+  --bento-backdrop: blur(14px);
+}
+
+/* Preset 2: Elevated Sculpted Depth */
+.bento-grid-root[data-shadow-preset="sculpted"] {
+  --bento-shadow:
+    0 1px 3px rgba(26, 28, 30, 0.05),
+    0 8px 20px -4px rgba(26, 28, 30, 0.08),
+    0 20px 36px -8px rgba(26, 28, 30, 0.06),
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.9);
+  --bento-shadow-hover:
+    0 2px 5px rgba(26, 28, 30, 0.07),
+    0 14px 30px -4px rgba(26, 28, 30, 0.11),
+    0 28px 46px -8px rgba(26, 28, 30, 0.08),
+    inset 0 1.5px 1.5px rgba(255, 255, 255, 1);
+  --bento-bg: #FFFFFF;
+  --bento-backdrop: none;
+}
+
+/* Preset 3: Frosted Clean Glass */
+.bento-grid-root[data-shadow-preset="frosted"] {
+  --bento-shadow:
+    0 8px 32px 0 rgba(26, 28, 30, 0.06),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 2px 0 rgba(26, 28, 30, 0.02);
+  --bento-shadow-hover:
+    0 14px 42px 0 rgba(26, 28, 30, 0.09),
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 2px 0 rgba(26, 28, 30, 0.04);
+  --bento-bg: rgba(255, 255, 255, 0.75);
+  --bento-backdrop: blur(24px) saturate(180%);
+}
+
+/* Preset 4: Soft Dual Rim Light */
+.bento-grid-root[data-shadow-preset="rimlight"] {
+  --bento-shadow:
+    -4px -4px 14px rgba(255, 255, 255, 0.9),
+    5px 6px 18px rgba(26, 28, 30, 0.07),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8);
+  --bento-shadow-hover:
+    -6px -6px 18px rgba(255, 255, 255, 1),
+    8px 10px 24px rgba(26, 28, 30, 0.10),
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.9);
+  --bento-bg: #FFFFFF;
+  --bento-backdrop: none;
+}
+
+/* ── The card itself ─────────────────────────────────────────── */
+.bento-card {
+  background: var(--bento-bg);
+  backdrop-filter: var(--bento-backdrop);
+  -webkit-backdrop-filter: var(--bento-backdrop);
+  box-shadow: var(--bento-shadow);
+  border-radius: 20px;
+  border: 1px solid rgba(218, 220, 224, 0.6);
+  transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.2s ease;
+}
+.bento-card:hover {
+  box-shadow: var(--bento-shadow-hover);
+  border-color: rgba(218, 220, 224, 0.9);
+  transform: translateY(-1px);
+}
+
+/* Softer dashboard flow: keep cards/info, clean crisp boundaries */
+.dashboard-flow .bento-card {
+  --bento-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 4px 16px -6px rgba(26, 28, 30, 0.07),
+    0 1px 2px 0 rgba(26, 28, 30, 0.03);
+  --bento-shadow-hover:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 8px 22px -6px rgba(26, 28, 30, 0.10),
+    0 2px 4px 0 rgba(26, 28, 30, 0.05);
+  --bento-bg: #FFFFFF;
+  --bento-backdrop: blur(10px);
+  border-radius: 20px;
+  border: 1px solid var(--color-border, #DADCE0);
+}
+.dashboard-flow .bento-card:hover {
+  transform: translateY(-1px);
+}
+
+/* ── Score gauge SVG circle transition ───────────────────────── */
+.bento-gauge-ring {
+  transition: stroke-dashoffset 1.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Custom round checkbox ───────────────────────────────────── */
+.bento-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border, #DADCE0);
+  background: transparent;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.2s, background 0.2s;
+}
+.bento-checkbox:checked {
+  background: var(--color-accent, #E95858);
+  border-color: var(--color-accent, #E95858);
+}
+.bento-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 5px;
+  height: 9px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+/* ── Ambient background orbs ─────────────────────────────────── */
+@keyframes bento-orb-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(14px, -18px) scale(1.04); }
+  66%       { transform: translate(-10px, 12px) scale(0.97); }
+}
+.bento-orb {
+  animation: bento-orb-drift 18s ease-in-out infinite;
+}
+.bento-orb-2 {
+  animation: bento-orb-drift 24s ease-in-out infinite reverse;
+}
+
+/* ── Preset switcher button ──────────────────────────────────── */
+.bento-preset-btn {
+  font-size: 11px;
+  font-family: ui-monospace, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #FFFFFF;
+  box-shadow: 0 1px 3px rgba(26, 28, 30, 0.06);
+  color: var(--color-text-secondary, #767B81);
+  border: 1px solid var(--color-border, #DADCE0);
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s, border-color 0.18s;
+}
+.bento-preset-btn:hover {
+  background: var(--color-background, #F3F4F5);
+  color: var(--color-text-primary, #1A1C1E);
+}
+.bento-preset-btn.active {
+  background: var(--color-primary, #1A1C1E);
+  color: #FFFFFF;
+  border-color: var(--color-primary, #1A1C1E);
+  box-shadow: 0 2px 6px rgba(26, 28, 30, 0.2);
+}

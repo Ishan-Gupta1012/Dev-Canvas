@@ -2538,15 +2538,15 @@ export default function ResumeBuilderPage() {
         <div
           className={`group relative rounded-2xl border-2 transition-all p-4 sm:p-5 flex flex-col justify-between bg-surface-container-lowest ${
             selectedTemplate === 'blue-minimalist'
-              ? 'border-[#362419] shadow-lg ring-2 ring-[#362419]/10'
-              : 'border-outline-variant hover:border-[#362419]/60 hover:shadow-md'
+              ? 'border-primary shadow-lg ring-2 ring-primary/10'
+              : 'border-outline-variant hover:border-primary/60 hover:shadow-md'
           }`}
         >
           <div>
             {/* Header info */}
             <div className="flex items-start justify-between gap-3 mb-3">
               <div>
-                <span className="text-[10px] font-mono uppercase tracking-wider text-[#362419] font-bold bg-[#FAF6F0] px-2 py-0.5 rounded-full border border-[#D8CCC4]">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-primary font-bold bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">
                   Editorial Serif System
                 </span>
                 <h2 className="font-serif text-xl font-bold text-on-background mt-1.5">
@@ -2557,7 +2557,7 @@ export default function ResumeBuilderPage() {
                 </p>
               </div>
               {selectedTemplate === 'blue-minimalist' && (
-                <span className="shrink-0 inline-flex items-center gap-1 px-2.5 py-0.5 bg-[#362419] text-white rounded-full text-[10px] font-mono uppercase tracking-wider font-semibold shadow-2xs">
+                <span className="shrink-0 inline-flex items-center gap-1 px-2.5 py-0.5 bg-accent text-white rounded-full text-[10px] font-mono uppercase tracking-wider font-semibold shadow-2xs">
                   <Check size={11} /> Active
                 </span>
               )}
@@ -2573,7 +2573,7 @@ export default function ResumeBuilderPage() {
               ].map((badge) => (
                 <span
                   key={badge}
-                  className="px-2 py-0.5 bg-[#FAF6F0] text-[#362419] text-[10px] font-mono rounded border border-[#D8CCC4]"
+                  className="px-2 py-0.5 bg-surface-container text-on-surface text-[10px] font-mono rounded border border-outline-variant"
                 >
                   {badge}
                 </span>
@@ -2581,14 +2581,14 @@ export default function ResumeBuilderPage() {
             </div>
 
             {/* Large, Beautiful, Readable Document Preview */}
-            <div className="relative rounded-xl border border-[#D8CCC4] bg-[#FAF6F0]/50 p-2.5 sm:p-3 mb-4 shadow-inner overflow-hidden">
-              <div className="text-[10px] font-mono uppercase tracking-wider text-[#5C4A42] mb-1.5 flex items-center justify-between">
+            <div className="relative rounded-xl border border-outline-variant bg-surface-container-lowest/50 p-2.5 sm:p-3 mb-4 shadow-inner overflow-hidden">
+              <div className="text-[10px] font-mono uppercase tracking-wider text-on-surface-variant mb-1.5 flex items-center justify-between">
                 <span>Readable Document Preview</span>
-                <span className="text-[#362419] font-semibold">Standard A4 Layout</span>
+                <span className="text-on-surface font-semibold">Standard A4 Layout</span>
               </div>
 
               {/* Rendered Preview Sheet */}
-              <div className="rounded-lg overflow-hidden shadow-sm border border-[#D8CCC4] max-h-[380px] overflow-y-auto no-scrollbar transform-gpu transition-transform group-hover:scale-[1.005]">
+              <div className="rounded-lg overflow-hidden shadow-sm border border-outline-variant max-h-[380px] overflow-y-auto no-scrollbar transform-gpu transition-transform group-hover:scale-[1.005]">
                 {renderBrownMinimalistContent(sampleResumeData)}
               </div>
             </div>
@@ -2600,8 +2600,8 @@ export default function ResumeBuilderPage() {
             onClick={() => handleSelectTemplate('blue-minimalist')}
             className={`w-full py-2.5 px-4 rounded-xl font-mono text-xs uppercase tracking-wider font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs ${
               selectedTemplate === 'blue-minimalist'
-                ? 'bg-[#362419] hover:bg-[#261911] text-white shadow-[#362419]/25'
-                : 'bg-primary text-on-primary hover:opacity-95'
+                ? 'bg-primary text-on-primary hover:opacity-95'
+                : 'bg-surface-container-high text-on-surface hover:bg-surface-container-highest'
             }`}
           >
             <span>Use Brown Editorial Template</span>
@@ -2719,7 +2719,7 @@ export default function ResumeBuilderPage() {
               <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-semibold bg-surface-container-lowest border border-outline-variant/70">
                 <span
                   className={`w-2 h-2 rounded-full ${
-                    selectedTemplate === 'blue-minimalist' ? 'bg-[#49352F]' : 'bg-[#98796F]'
+                    selectedTemplate === 'blue-minimalist' ? 'bg-primary' : 'bg-primary/60'
                   }`}
                 />
                 {selectedTemplate === 'blue-minimalist'
@@ -2750,7 +2750,7 @@ export default function ResumeBuilderPage() {
                 onClick={() => setSelectedTemplate('blue-minimalist')}
                 className={`px-2 py-1 rounded text-[10.5px] font-mono uppercase tracking-wider font-semibold transition-all cursor-pointer ${
                   selectedTemplate === 'blue-minimalist'
-                    ? 'bg-[#49352F] text-white shadow-2xs'
+                    ? 'bg-primary text-on-primary shadow-2xs'
                     : 'text-on-background/60 hover:text-on-background'
                 }`}
               >
@@ -2761,7 +2761,7 @@ export default function ResumeBuilderPage() {
                 onClick={() => setSelectedTemplate('black-white-minimalist')}
                 className={`px-2 py-1 rounded text-[10.5px] font-mono uppercase tracking-wider font-semibold transition-all cursor-pointer ${
                   selectedTemplate === 'black-white-minimalist'
-                    ? 'bg-[#98796F] text-white shadow-2xs'
+                    ? 'bg-primary text-on-primary shadow-2xs'
                     : 'text-on-background/60 hover:text-on-background'
                 }`}
               >
@@ -2811,7 +2811,7 @@ export default function ResumeBuilderPage() {
               type="button"
               onClick={handleDownloadPDF}
               disabled={isDownloading}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#362419] hover:bg-[#261911] text-white text-xs font-mono uppercase tracking-wider font-semibold active:scale-95 transition-all cursor-pointer shadow-2xs disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-primary hover:opacity-90 text-on-primary text-xs font-mono uppercase tracking-wider font-semibold active:scale-95 transition-all cursor-pointer shadow-2xs disabled:opacity-50"
             >
               <Download size={13} className={isDownloading ? 'animate-bounce' : ''} />
               {isDownloading ? 'Exporting...' : 'Download PDF'}
@@ -2917,7 +2917,7 @@ export default function ResumeBuilderPage() {
                       type="button"
                       onClick={handleDownloadPDF}
                       disabled={isDownloading}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-lowest hover:border-[#362419] text-xs font-mono uppercase tracking-wider font-semibold text-on-background transition-all cursor-pointer shadow-2xs"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-lowest hover:border-primary text-xs font-mono uppercase tracking-wider font-semibold text-on-background transition-all cursor-pointer shadow-2xs"
                     >
                       <Download size={12} /> PDF
                     </button>
@@ -2975,7 +2975,7 @@ export default function ResumeBuilderPage() {
                       type="button"
                       onClick={handleDownloadPDF}
                       disabled={isDownloading}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-[#362419] hover:bg-[#261911] text-white text-[10px] font-mono uppercase tracking-wider font-bold transition-all cursor-pointer shadow-2xs disabled:opacity-50"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-primary hover:opacity-90 text-on-primary text-[10px] font-mono uppercase tracking-wider font-bold transition-all cursor-pointer shadow-2xs disabled:opacity-50"
                       title="Download PDF"
                     >
                       <Download size={11} />

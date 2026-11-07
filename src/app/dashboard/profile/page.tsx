@@ -196,7 +196,7 @@ export default function ProfilePage() {
             <StatCard icon={<FolderOpen size={20} />} value={portfoliosLoading ? '…' : portfolios.length} label="Portfolios" accent="bg-primary/10 text-primary" />
             <StatCard icon={<CheckCircle2 size={20} />} value={portfoliosLoading ? '…' : publishedCount} label="Published" accent="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" />
             <StatCard icon={<Clock size={20} />} value={portfoliosLoading ? '…' : draftCount} label="Drafts" accent="bg-amber-500/10 text-amber-600 dark:text-amber-400" />
-            <StatCard icon={<Zap size={20} />} value={`${creditsUsed}/${AI_CREDITS_TOTAL}`} label="AI credits used" accent="bg-[#A9743A]/10 text-primary" />
+            <StatCard icon={<Zap size={20} />} value={`${creditsUsed}/${AI_CREDITS_TOTAL}`} label="AI credits used" accent="bg-primary/10 text-primary" />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -335,7 +335,7 @@ export default function ProfilePage() {
 
               <SectionCard title="AI credits">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#A9743A]/10 text-primary flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                     <Cpu size={18} />
                   </div>
                   <div>

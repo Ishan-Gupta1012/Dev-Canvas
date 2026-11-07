@@ -38,7 +38,7 @@ export default function WorksPage() {
     : templates.filter(t => t.creatorKey === filter);
 
   return (
-    <div className="bg-background text-on-background min-h-screen flex flex-col custom-cursor font-sans">
+    <div className="bg-background text-on-background min-h-screen flex flex-col font-sans">
       <Navbar />
 
       <main className="flex-1 pt-24 md:pt-32">
