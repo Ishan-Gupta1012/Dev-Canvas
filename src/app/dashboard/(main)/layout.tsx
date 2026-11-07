@@ -78,9 +78,11 @@ const isActive = (item: NavItem) => {
           <Link href="/dashboard" className="flex items-center gap-2.5 group">
             <span
               aria-hidden="true"
-              className="w-5 h-5 rounded"
-              style={{ background: 'linear-gradient(140deg, #EBCF97, #B0803F)' }}
-            />
+              className="w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold text-white shadow-xs"
+              style={{ background: 'linear-gradient(140deg, #767B81, #1A1C1E)' }}
+            >
+              ✦
+            </span>
             <span className="text-[15px] font-bold tracking-tight text-on-background">DevCanvas</span>
           </Link>
 
@@ -98,13 +100,13 @@ const isActive = (item: NavItem) => {
                     <button
                       className={cn(
                         'relative px-3 py-1.5 rounded-sm flex items-center gap-1 font-mono text-xs uppercase tracking-widest whitespace-nowrap transition-colors duration-200',
-                        isActive(item) ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'
+                        isActive(item) ? 'text-accent font-bold' : 'text-on-surface-variant hover:text-primary'
                       )}
                     >
                       {isActive(item) && (
                         <motion.span
                           layoutId="dashboard-nav-active-pill"
-                          className="absolute inset-0 rounded-sm bg-primary/10 border border-primary/20 -z-10"
+                          className="absolute inset-0 rounded-sm bg-accent/10 border border-accent/20 -z-10"
                           transition={{ type: 'spring', stiffness: 380, damping: 32 }}
                         />
                       )}
@@ -142,13 +144,13 @@ const isActive = (item: NavItem) => {
                   href={item.href!}
                   className={cn(
                     'relative px-3 py-1.5 rounded-sm transition-colors duration-200 whitespace-nowrap',
-                    isActive(item) ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'
+                    isActive(item) ? 'text-accent font-bold' : 'text-on-surface-variant hover:text-primary'
                   )}
                 >
                   {isActive(item) && (
                     <motion.span
                       layoutId="dashboard-nav-active-pill"
-                      className="absolute inset-0 rounded-sm bg-primary/10 border border-primary/20 -z-10"
+                      className="absolute inset-0 rounded-sm bg-accent/10 border border-accent/20 -z-10"
                       transition={{ type: 'spring', stiffness: 380, damping: 32 }}
                     />
                   )}
@@ -240,7 +242,7 @@ const isActive = (item: NavItem) => {
                           key={d.name}
                           href={d.href}
                           onClick={() => setMobileMenuOpen(false)}
-                          className={cn('transition-colors', pathname.startsWith(d.href) ? 'text-primary font-semibold' : 'text-on-background/70')}
+                          className={cn('transition-colors', pathname.startsWith(d.href) ? 'text-accent font-semibold' : 'text-on-background/70')}
                         >
                           {d.name}
                         </Link>
@@ -254,7 +256,7 @@ const isActive = (item: NavItem) => {
                   key={item.name}
                   href={item.href!}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={cn('transition-colors', isActive(item) ? 'text-primary font-semibold' : 'text-on-background/70')}
+                  className={cn('transition-colors', isActive(item) ? 'text-accent font-semibold' : 'text-on-background/70')}
                 >
                   {item.name}
                 </Link>

@@ -26,40 +26,40 @@ const ACTIONS: Action[] = [
     desc: 'Add projects, skills & experience from scratch',
     href: '/dashboard/resume-builder',
     icon: FilePlus,
-    accent: '#C9875B',
-    glow: 'rgba(201,135,91,0.30)',
+    accent: '#1A1C1E',
+    glow: 'rgba(26,28,30,0.12)',
   },
   {
     label: 'AI Polish',
     desc: 'Let AI enhance & refine it',
     href: '/dashboard/ai-builder',
     icon: Sparkles,
-    accent: '#E3BE7C',
-    glow: 'rgba(227,190,124,0.30)',
+    accent: '#E95858',
+    glow: 'rgba(233,88,88,0.15)',
   },
   {
     label: 'Pick Template',
     desc: 'Choose your design',
     href: '/dashboard/templates',
     icon: LayoutTemplate,
-    accent: '#9DB8A3',
-    glow: 'rgba(157,184,163,0.28)',
+    accent: '#1A1C1E',
+    glow: 'rgba(26,28,30,0.12)',
   },
   {
     label: 'Upload Resume',
     desc: 'Parse an existing one',
     href: '/dashboard/resume',
     icon: FileText,
-    accent: '#D3A557',
-    glow: 'rgba(211,165,87,0.28)',
+    accent: '#767B81',
+    glow: 'rgba(118,123,129,0.15)',
   },
   {
     label: 'Analyze',
     desc: 'AI feedback on your resume',
     href: '/dashboard/resume-analyzer',
     icon: FileSearch,
-    accent: '#D6A27A',
-    glow: 'rgba(214,162,122,0.28)',
+    accent: '#E95858',
+    glow: 'rgba(233,88,88,0.15)',
   },
 ];
 
@@ -95,7 +95,7 @@ function MagneticCard({ action }: { action: Action }) {
         transform: `translate(${pos.x}px, ${pos.y}px)`,
         transition: 'transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1)',
       }}
-      className="group relative overflow-hidden rounded-2xl border border-outline/10 bg-background p-6 flex flex-col justify-between w-[260px] sm:w-[300px] h-[180px] shrink-0"
+      className="group relative overflow-hidden rounded-2xl border border-[#DADCE0] bg-[#FFFFFF] shadow-xs p-6 flex flex-col justify-between w-[260px] sm:w-[300px] h-[180px] shrink-0"
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300"

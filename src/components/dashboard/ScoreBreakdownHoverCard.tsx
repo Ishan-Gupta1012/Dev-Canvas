@@ -11,20 +11,20 @@ const STATUS_CONFIG: Record<
 > = {
   complete: {
     label: 'Complete',
-    color: '#4a7a43',
-    bg: 'rgba(74,122,67,0.12)',
+    color: '#1A1C1E',
+    bg: 'rgba(26,28,30,0.08)',
     Icon: CheckCircle2,
   },
   'in-progress': {
     label: 'In Progress',
-    color: '#8c6e52',
-    bg: 'rgba(140,110,82,0.12)',
+    color: '#767B81',
+    bg: 'rgba(118,123,129,0.12)',
     Icon: Clock,
   },
   'needs-improvement': {
     label: 'Needs Work',
-    color: '#b8583c',
-    bg: 'rgba(184,88,60,0.12)',
+    color: '#E95858',
+    bg: 'rgba(233,88,88,0.12)',
     Icon: AlertCircle,
   },
 };
@@ -32,14 +32,14 @@ const STATUS_CONFIG: Record<
 function MiniBar({ pct, status }: { pct: number; status: SectionStatus }) {
   const fill =
     status === 'complete'
-      ? '#5f7a58'
+      ? '#1A1C1E'
       : status === 'in-progress'
-      ? '#8c6e52'
-      : '#b8583c';
+      ? '#767B81'
+      : '#E95858';
   return (
     <div
       className="w-full h-1.5 rounded-full overflow-hidden"
-      style={{ background: 'rgba(237, 224, 208, 0.7)' }}
+      style={{ background: 'rgba(218, 220, 224, 0.7)' }}
     >
       <div
         className="h-full rounded-full transition-all duration-500 ease-out"
@@ -56,16 +56,16 @@ function SectionRow({ section }: { section: SectionBreakdown }) {
     <div
       className="rounded-2xl p-3.5 transition-all duration-200"
       style={{
-        background: 'rgba(255, 255, 255, 0.65)',
+        background: '#FFFFFF',
         backdropFilter: 'blur(8px)',
         WebkitBackdropFilter: 'blur(8px)',
-        border: '1px solid rgba(237, 224, 208, 0.85)',
+        border: '1px solid #DADCE0',
       }}
     >
       <div className="flex items-center justify-between gap-2 mb-1.5">
         <div className="flex items-center gap-1.5 min-w-0">
           <StatusIcon size={14} style={{ color: cfg.color, flexShrink: 0 }} />
-          <p className="text-xs font-semibold leading-tight truncate" style={{ color: '#372a22' }}>
+          <p className="text-xs font-semibold leading-tight truncate" style={{ color: '#1A1C1E' }}>
             {section.label}
           </p>
         </div>
@@ -81,12 +81,12 @@ function SectionRow({ section }: { section: SectionBreakdown }) {
         <div className="flex-1">
           <MiniBar pct={section.pct} status={section.status} />
         </div>
-        <span className="font-mono text-[10px] shrink-0 font-medium" style={{ color: '#7e6f64' }}>
+        <span className="font-mono text-[10px] shrink-0 font-medium" style={{ color: '#767B81' }}>
           {section.earned}/{section.max} pts
         </span>
       </div>
 
-      <p className="text-[11px] leading-snug mb-2" style={{ color: '#6f6156' }}>
+      <p className="text-[11px] leading-snug mb-2" style={{ color: '#767B81' }}>
         {section.explanation}
       </p>
 
@@ -94,7 +94,7 @@ function SectionRow({ section }: { section: SectionBreakdown }) {
         <Link
           href={section.href}
           className="inline-flex items-center gap-1 font-mono text-[9px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-md transition-opacity hover:opacity-85"
-          style={{ background: '#6e4324', color: '#fdf8f2' }}
+          style={{ background: '#1A1C1E', color: '#FFFFFF' }}
         >
           {section.actionLabel} <ArrowRight size={10} />
         </Link>
@@ -126,7 +126,7 @@ export default function ScoreBreakdownHoverCard({
 }: Props) {
   const panelRef = useRef<HTMLDivElement>(null);
   const scoreColor =
-    score >= 80 ? '#4a7a43' : score >= 50 ? '#8c6e52' : '#b8583c';
+    score >= 80 ? '#1A1C1E' : '#E95858';
 
   // Close on Escape key
   useEffect(() => {
@@ -141,7 +141,7 @@ export default function ScoreBreakdownHoverCard({
     <div
       className="fixed inset-0 z-[150] flex items-center justify-center p-4 sm:p-6 animate-fade-in pointer-events-none"
       style={{
-        background: 'rgba(44, 24, 10, 0.28)',
+        background: 'rgba(26, 28, 30, 0.35)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
       }}
@@ -152,22 +152,22 @@ export default function ScoreBreakdownHoverCard({
         onMouseLeave={onMouseLeave}
         className="relative w-full max-w-xl max-h-[85vh] flex flex-col rounded-3xl p-5 sm:p-6 overflow-hidden transition-all duration-300 pointer-events-auto"
         style={{
-          background: 'rgba(255, 252, 247, 0.90)',
+          background: 'rgba(255, 255, 255, 0.95)',
           backdropFilter: 'blur(24px) saturate(180%)',
           WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-          border: '1px solid rgba(255, 255, 255, 0.85)',
+          border: '1px solid #DADCE0',
           boxShadow:
-            '0 24px 64px -12px rgba(44, 24, 10, 0.28), 0 8px 24px rgba(44, 24, 10, 0.08), inset 0 1.5px 2px rgba(255, 255, 255, 0.95)',
+            '0 24px 64px -12px rgba(26, 28, 30, 0.20), 0 8px 24px rgba(26, 28, 30, 0.06), inset 0 1.5px 2px rgba(255, 255, 255, 0.95)',
         }}
       >
         {/* Header */}
-        <div className="pb-3.5 mb-3 border-b border-[#ede0d0]/80">
+        <div className="pb-3.5 mb-3 border-b border-[#DADCE0]">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="font-mono text-[10px] uppercase tracking-widest" style={{ color: '#b8583c' }}>
+              <p className="font-mono text-[10px] uppercase tracking-widest" style={{ color: '#E95858' }}>
                 Detailed Breakdown
               </p>
-              <h3 className="font-serif text-lg sm:text-xl font-bold leading-tight" style={{ color: '#372a22' }}>
+              <h3 className="font-serif text-lg sm:text-xl font-bold leading-tight" style={{ color: '#1A1C1E' }}>
                 {portfolioTitle || 'Portfolio Quality Score'}
               </h3>
             </div>
@@ -176,17 +176,17 @@ export default function ScoreBreakdownHoverCard({
                 <span className="font-serif text-2xl font-bold leading-none" style={{ color: scoreColor }}>
                   {score}
                 </span>
-                <span className="font-mono text-[10px] ml-0.5" style={{ color: '#7e6f64' }}>
+                <span className="font-mono text-[10px] ml-0.5" style={{ color: '#767B81' }}>
                   / 100
                 </span>
-                <p className="font-mono text-[9px] uppercase tracking-wider mt-0.5" style={{ color: '#7e6f64' }}>
+                <p className="font-mono text-[9px] uppercase tracking-wider mt-0.5" style={{ color: '#767B81' }}>
                   {completedSections}/{totalSections} done
                 </p>
               </div>
               <button
                 type="button"
                 onClick={onClose}
-                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-[#6e4324]/10 text-[#7e6f64] hover:text-[#372a22]"
+                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-black/5 text-[#767B81] hover:text-[#1A1C1E]"
                 aria-label="Close"
               >
                 <X size={16} />
@@ -195,12 +195,12 @@ export default function ScoreBreakdownHoverCard({
           </div>
 
           {/* Overall progress bar */}
-          <div className="mt-2.5 w-full h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(237, 224, 208, 0.7)' }}>
+          <div className="mt-2.5 w-full h-1.5 rounded-full overflow-hidden" style={{ background: '#DADCE0' }}>
             <div
               className="h-full rounded-full transition-all duration-700"
               style={{
                 width: `${score}%`,
-                background: `linear-gradient(90deg, #b8583c, ${scoreColor})`,
+                background: score >= 80 ? '#1A1C1E' : '#E95858',
               }}
             />
           </div>
@@ -214,14 +214,14 @@ export default function ScoreBreakdownHoverCard({
         </div>
 
         {/* Footer */}
-        <div className="pt-3.5 mt-3 border-t border-[#ede0d0]/80 flex items-center justify-between gap-2 text-xs flex-wrap">
-          <span className="text-[11px]" style={{ color: '#8a7b70' }}>
+        <div className="pt-3.5 mt-3 border-t border-[#DADCE0] flex items-center justify-between gap-2 text-xs flex-wrap">
+          <span className="text-[11px]" style={{ color: '#767B81' }}>
             Updates live as you edit your portfolio.
           </span>
           <Link
-            href="/dashboard/builder"
+            href="/dashboard/ai-builder"
             className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider font-semibold px-3 py-1.5 rounded-lg transition-opacity hover:opacity-85"
-            style={{ background: '#6e4324', color: '#fdf8f2' }}
+            style={{ background: '#1A1C1E', color: '#FFFFFF' }}
           >
             Open Builder <ArrowRight size={11} />
           </Link>

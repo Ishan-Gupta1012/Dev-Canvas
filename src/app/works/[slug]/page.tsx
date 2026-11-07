@@ -131,7 +131,7 @@ export default async function ProjectPage({ params }: PageProps) {
   }
 
   return (
-    <div className="bg-[#F7F4EF] text-[#111111] min-h-screen flex flex-col custom-cursor font-sans">
+    <div className="bg-[#F7F4EF] text-[#111111] min-h-screen flex flex-col font-sans">
       <Navbar />
 
       <main className="flex-1 pt-24 md:pt-32">

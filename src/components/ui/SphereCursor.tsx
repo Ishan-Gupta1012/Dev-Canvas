@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 
 /**
  * Additive sphere cursor.
@@ -54,6 +55,7 @@ function hasFinePointer() {
 }
 
 export default function SphereCursor() {
+  const pathname = usePathname();
   const rootRef = useRef<HTMLDivElement>(null);
   const auraWrapRef = useRef<HTMLDivElement>(null);
   const orbWrapRef = useRef<HTMLDivElement>(null);
@@ -61,6 +63,8 @@ export default function SphereCursor() {
   const rollRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
+    if (pathname !== "/") return;
+
     const root = rootRef.current;
     const auraWrap = auraWrapRef.current;
     const orbWrap = orbWrapRef.current;
@@ -198,7 +202,11 @@ export default function SphereCursor() {
       window.removeEventListener("blur", onBlur);
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, []);
+  }, [pathname]);
+
+  if (pathname !== "/") {
+    return null;
+  }
 
   return (
     <div ref={rootRef} className="sphere-cursor" aria-hidden="true">

@@ -175,19 +175,19 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
 
   if (isLoading && !hasSubmitted) {
     return (
-      <div className="relative min-h-screen bg-[#F7EFE2] flex items-center justify-center">
-        <Loader2 className="w-6 h-6 text-[#8A5A2B] animate-spin" aria-label="Checking session" />
+      <div className="relative min-h-screen bg-[#F3F4F5] flex items-center justify-center">
+        <Loader2 className="w-6 h-6 text-[#1A1C1E] animate-spin" aria-label="Checking session" />
       </div>
     );
   }
 
   return (
-    <div className="relative min-h-screen lg:h-screen w-full bg-[#F7EFE2] text-[#2E180E] font-sans flex flex-col overflow-x-hidden">
+    <div className="relative min-h-screen lg:h-screen w-full bg-[#F3F4F5] text-[#1A1C1E] font-sans flex flex-col overflow-x-hidden">
       <div
         className="flex flex-col flex-1 min-h-0 transition-opacity duration-500 ease-in-out motion-reduce:transition-none"
         style={{ opacity: isVisible && !isLeaving ? 1 : 0 }}
       >
-      {/* Full-bleed attractor with copper palette */}
+      {/* Full-bleed attractor with monochrome/charcoal palette */}
       <div
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
@@ -195,40 +195,40 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
           maskImage: `linear-gradient(to ${isSignUp ? 'left' : 'right'}, transparent 42%, #000 78%)`,
         }}
       >
-        <GenerativeAttractorCanvas mode="static" palette="copper" />
+        <GenerativeAttractorCanvas mode="static" palette="charcoal" />
       </div>
 
       <header className="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-10 pt-6 sm:pt-8 flex items-center justify-between gap-4">
         <button
           type="button"
           onClick={handleBack}
-          className="inline-flex items-center gap-2 min-h-[44px] font-mono text-[11px] uppercase tracking-[0.2em] text-[#5B341E] hover:text-[#A65A3A] transition-colors group cursor-pointer"
+          className="inline-flex items-center gap-2 min-h-[44px] font-mono text-[11px] uppercase tracking-[0.2em] text-[#767B81] hover:text-[#1A1C1E] transition-colors group cursor-pointer"
         >
           <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-1" aria-hidden="true" />
           Back
         </button>
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#8A5A2B] animate-pulse" aria-hidden="true" />
-          <span className="font-mono text-[12px] uppercase tracking-[0.22em] text-[#2E180E] font-bold">
+          <span className="w-2 h-2 rounded-full bg-[#E95858] animate-pulse" aria-hidden="true" />
+          <span className="font-mono text-[12px] uppercase tracking-[0.22em] text-[#1A1C1E] font-bold">
             DevCanvas // Access
           </span>
         </div>
       </header>
 
       <main className="relative z-10 flex-1 min-h-0 w-full max-w-[1440px] mx-auto px-5 sm:px-10 py-6 sm:py-8 lg:py-0 lg:px-14 flex items-center justify-start">
-        <div className="w-full max-w-[480px] border border-[#D6A15F]/40 bg-[#F7EFE2]/85 backdrop-blur-md px-6 sm:px-9 py-10 sm:py-12 lg:py-12 flex flex-col gap-6 lg:gap-7 shadow-[0_24px_60px_-30px_rgba(10,4,2,0.35)] rounded-[24px]">
+        <div className="w-full max-w-[480px] border border-[#DADCE0] bg-[#FFFFFF]/95 backdrop-blur-md px-6 sm:px-9 py-10 sm:py-12 lg:py-12 flex flex-col gap-6 lg:gap-7 shadow-[0_20px_50px_-20px_rgba(26,28,30,0.12)] rounded-[24px]">
           <h1 className="font-serif text-[36px] sm:text-[42px] lg:text-[40px] leading-[0.95] tracking-[-1.4px]">
             {isSignUp ? (
               <>
-                <span className="text-[#2E180E]">Open your</span>
+                <span className="text-[#1A1C1E]">Open your</span>
                 <br />
-                <span className="text-[#A65A3A]">workspace.</span>
+                <span className="text-[#E95858]">workspace.</span>
               </>
             ) : (
               <>
-                <span className="text-[#2E180E]">Welcome back.</span>
+                <span className="text-[#1A1C1E]">Welcome back.</span>
                 <br />
-                <span className="text-[#A65A3A]">Continue building.</span>
+                <span className="text-[#E95858]">Continue building.</span>
               </>
             )}
           </h1>
@@ -239,8 +239,8 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
             className={`border px-4 py-3 font-mono text-[12px] uppercase leading-[1.5] rounded-xl ${
               message
                 ? message.tone === 'sent'
-                  ? 'border-[#8A5A2B]/40 bg-[#8A5A2B]/10 text-[#5B341E] shadow-[0_0_20px_rgba(138,90,43,0.15)]'
-                  : 'border-[#D35724]/50 bg-[#D35724]/10 text-[#8A3A15] shadow-[0_0_20px_rgba(211,87,36,0.15)]'
+                  ? 'border-[#1A1C1E]/20 bg-[#1A1C1E]/5 text-[#1A1C1E]'
+                  : 'border-[#E95858]/50 bg-[#E95858]/10 text-[#E95858]'
                 : 'hidden'
             }`}
           >
@@ -250,7 +250,7 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
           <form onSubmit={handleSubmit} className="flex flex-col gap-6" noValidate>
             {isSignUp && (
               <div className="flex flex-col gap-2.5">
-                <label htmlFor="name" className="font-mono text-[11px] uppercase tracking-[0.15em] text-[#5B341E]">
+                <label htmlFor="name" className="font-mono text-[11px] uppercase tracking-[0.15em] text-[#767B81]">
                   Name
                 </label>
                 <input
@@ -261,18 +261,18 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
                   placeholder="Your name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="h-12 w-full px-4 bg-[#FFFFFF]/60 border border-[#D6A15F]/50 text-[#2E180E] placeholder:text-[#8A5A3A] font-mono text-[13px] outline-none transition-all duration-200 focus:border-[#8A5A2B] focus-visible:ring-2 focus-visible:ring-[#A65A3A]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7EFE2] rounded-xl"
+                  className="h-12 w-full px-4 bg-[#FFFFFF] border border-[#DADCE0] text-[#1A1C1E] placeholder:text-[#A3A6AC] font-mono text-[13px] outline-none transition-all duration-200 focus:border-[#1A1C1E] focus-visible:ring-2 focus-visible:ring-[#1A1C1E]/20 focus-visible:ring-offset-2 focus-visible:ring-offset-[#FFFFFF] rounded-xl"
                 />
               </div>
             )}
 
             <div className="flex flex-col gap-2.5">
-              <label htmlFor="email" className="font-mono text-[11px] uppercase tracking-[0.15em] text-[#5B341E]">
+              <label htmlFor="email" className="font-mono text-[11px] uppercase tracking-[0.15em] text-[#767B81]">
                 Email
               </label>
               <div className="relative">
                 <Mail
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8A5A2B] pointer-events-none"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#767B81] pointer-events-none"
                   aria-hidden="true"
                 />
                 <input
@@ -283,18 +283,18 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
                   placeholder="xyz@gmail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-12 w-full pl-11 pr-4 bg-[#FFFFFF]/60 border border-[#D6A15F]/50 text-[#2E180E] placeholder:text-[#8A5A3A] font-mono text-[13px] outline-none transition-all duration-200 focus:border-[#8A5A2B] focus-visible:ring-2 focus-visible:ring-[#A65A3A]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7EFE2] rounded-xl"
+                  className="h-12 w-full pl-11 pr-4 bg-[#FFFFFF] border border-[#DADCE0] text-[#1A1C1E] placeholder:text-[#A3A6AC] font-mono text-[13px] outline-none transition-all duration-200 focus:border-[#1A1C1E] focus-visible:ring-2 focus-visible:ring-[#1A1C1E]/20 focus-visible:ring-offset-2 focus-visible:ring-offset-[#FFFFFF] rounded-xl"
                 />
               </div>
             </div>
 
             <div className="flex flex-col gap-2.5">
-              <label htmlFor="password" className="font-mono text-[11px] uppercase tracking-[0.15em] text-[#5B341E]">
+              <label htmlFor="password" className="font-mono text-[11px] uppercase tracking-[0.15em] text-[#767B81]">
                 Password
               </label>
               <div className="relative">
                 <Lock
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8A5A2B] pointer-events-none"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#767B81] pointer-events-none"
                   aria-hidden="true"
                 />
                 <input
@@ -306,7 +306,7 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
                   minLength={8}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="h-12 w-full pl-11 pr-4 bg-[#FFFFFF]/60 border border-[#D6A15F]/50 text-[#2E180E] placeholder:text-[#8A5A3A] font-mono text-[13px] outline-none transition-all duration-200 focus:border-[#8A5A2B] focus-visible:ring-2 focus-visible:ring-[#A65A3A]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7EFE2] rounded-xl"
+                  className="h-12 w-full pl-11 pr-4 bg-[#FFFFFF] border border-[#DADCE0] text-[#1A1C1E] placeholder:text-[#A3A6AC] font-mono text-[13px] outline-none transition-all duration-200 focus:border-[#1A1C1E] focus-visible:ring-2 focus-visible:ring-[#1A1C1E]/20 focus-visible:ring-offset-2 focus-visible:ring-offset-[#FFFFFF] rounded-xl"
                 />
               </div>
             </div>
@@ -314,7 +314,7 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="h-12 w-full inline-flex items-center justify-center gap-2 bg-[#8A5A2B] hover:bg-[#A65A3A] disabled:bg-[#A65A3A]/40 text-[#FFFFFF] border border-[#5B341E]/40 font-mono text-[12px] uppercase tracking-[0.2em] transition-all duration-200 cursor-pointer disabled:cursor-not-allowed shadow-[0_0_25px_rgba(138,90,43,0.25)] hover:shadow-[0_0_35px_rgba(138,90,43,0.35)] rounded-xl"
+              className="h-12 w-full inline-flex items-center justify-center gap-2 bg-[#1A1C1E] hover:bg-[#1A1C1E]/90 disabled:bg-[#1A1C1E]/40 text-[#FFFFFF] border border-[#1A1C1E] font-mono text-[12px] uppercase tracking-[0.2em] transition-all duration-200 cursor-pointer disabled:cursor-not-allowed shadow-[0_4px_12px_rgba(26,28,30,0.15)] rounded-xl"
             >
               {isSubmitting ? (
                 <>
@@ -333,7 +333,7 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
                 type="button"
                 onClick={handleResendConfirmation}
                 disabled={isSubmitting}
-                className="h-12 w-full inline-flex items-center justify-center gap-2 bg-[#F7EFE2]/50 hover:bg-[#EDE1CF] disabled:bg-[#EDE1CF]/30 text-[#2E180E] border border-[#D6A15F]/40 font-mono text-[12px] uppercase tracking-[0.2em] transition-all duration-200 cursor-pointer disabled:cursor-not-allowed rounded-xl"
+                className="h-12 w-full inline-flex items-center justify-center gap-2 bg-[#F3F4F5] hover:bg-[#DADCE0] disabled:opacity-50 text-[#1A1C1E] border border-[#DADCE0] font-mono text-[12px] uppercase tracking-[0.2em] transition-all duration-200 cursor-pointer disabled:cursor-not-allowed rounded-xl"
               >
                 {isSubmitting ? (
                   <>
@@ -351,9 +351,9 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
           </form>
 
           <div className="flex items-center gap-4" aria-hidden="true">
-            <span className="h-px flex-1 bg-[#D6A15F]/30" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#8A5A3A]/60">or continue with</span>
-            <span className="h-px flex-1 bg-[#D6A15F]/30" />
+            <span className="h-px flex-1 bg-[#DADCE0]" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#767B81]">or continue with</span>
+            <span className="h-px flex-1 bg-[#DADCE0]" />
           </div>
 
           <div className="grid grid-cols-2 gap-3.5">
@@ -363,23 +363,23 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
                 type="button"
                 onClick={() => handleProvider(id)}
                 aria-label={`Continue with ${label}`}
-                className="group h-12 w-full flex items-center justify-center gap-2 px-3 border border-[#D6A15F]/40 bg-[#FFFFFF]/40 hover:border-[#8A5A2B] hover:bg-[#F7EFE2]/40 transition-all duration-200 cursor-pointer rounded-xl"
+                className="group h-12 w-full flex items-center justify-center gap-2 px-3 border border-[#DADCE0] bg-[#FFFFFF] hover:border-[#1A1C1E] hover:bg-[#F3F4F5] transition-all duration-200 cursor-pointer rounded-xl"
               >
                 {mark}
-                <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-[#2E180E]/90 group-hover:text-[#A65A3A] transition-colors">
+                <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-[#1A1C1E] group-hover:text-[#E95858] transition-colors">
                   {label}
                 </span>
               </button>
             ))}
           </div>
 
-          <div className="flex items-center justify-between gap-4 border-t border-[#D6A15F]/30 pt-6">
-            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-[#5B341E]/70">
+          <div className="flex items-center justify-between gap-4 border-t border-[#DADCE0] pt-6">
+            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-[#767B81]">
               {isSignUp ? 'Already have an account?' : 'No account yet?'}
             </p>
             <Link
               href={isSignUp ? '/signin' : '/signup'}
-              className="group inline-flex items-center gap-2 min-h-[44px] font-mono text-[11px] uppercase tracking-[0.2em] text-[#8A5A2B] hover:text-[#A65A3A] transition-colors cursor-pointer"
+              className="group inline-flex items-center gap-2 min-h-[44px] font-mono text-[11px] uppercase tracking-[0.2em] text-[#1A1C1E] hover:text-[#E95858] transition-colors cursor-pointer"
             >
               {isSignUp ? 'Sign in' : 'Create account'}
               <span className="transition-transform group-hover:translate-x-1" aria-hidden="true">
@@ -390,7 +390,7 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
         </div>
       </main>
 
-      <footer className="relative z-10 hidden lg:flex w-full max-w-[1440px] mx-auto px-5 sm:px-10 pb-5 flex items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-[0.15em] text-[#5B341E]/40">
+      <footer className="relative z-10 hidden lg:flex w-full max-w-[1440px] mx-auto px-5 sm:px-10 pb-5 flex items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-[0.15em] text-[#767B81]">
         <span>© 2026 DevCanvas</span>
         <span>Clearance required</span>
       </footer>

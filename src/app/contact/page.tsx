@@ -44,7 +44,7 @@ export default function ContactPage() {
 
 
   return (
-    <div className="bg-background text-on-background min-h-screen flex flex-col custom-cursor font-sans">
+    <div className="bg-background text-on-background min-h-screen flex flex-col font-sans">
       <Navbar />
 
       <main className="flex-1 pt-24 md:pt-32">
