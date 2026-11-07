@@ -12,11 +12,11 @@ import {
   skills,
 } from './identityData';
 
-const INK = '#241812';
-const HEADING = '#1F1410';
-const MUTED = '#6E625C';
-const FAINT = '#8A7E77';
-const ACCENT = '#A9762F';
+const INK = '#292C30';
+const HEADING = '#292C30';
+const MUTED = '#777C82';
+const FAINT = '#AEB3B9';
+const ACCENT = '#777C82';
 
 /* ─── GitHub mark (lucide dropped brand icons) ─── */
 export const GithubMark = ({ className = '' }: { className?: string }) => (
@@ -66,10 +66,10 @@ export default function ResumeDocument({
     <div
       className={`relative w-full max-w-[480px] rounded-2xl overflow-hidden ${className}`}
       style={{
-        background: 'linear-gradient(170deg, #FCF6EA 0%, #F4E9D7 100%)',
-        border: '1px solid rgba(226, 205, 172, 0.7)',
+        background: 'linear-gradient(170deg, #FAF9F6 0%, #F4F4F2 100%)',
+        border: '1px solid rgba(213, 214, 216, 0.85)',
         boxShadow:
-          '0 40px 90px rgba(0, 0, 0, 0.5), 0 0 60px rgba(201, 160, 95, 0.2), inset 0 1px 0 rgba(255, 253, 246, 0.85)',
+          '0 35px 80px rgba(41, 44, 48, 0.18), 0 0 50px rgba(184, 175, 199, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.95)',
         ...style,
       }}
     >
@@ -79,7 +79,7 @@ export default function ResumeDocument({
           <div className="flex items-center gap-3.5">
             <div
               className="w-12 h-12 rounded-full overflow-hidden shrink-0"
-              style={{ border: '2px solid rgba(255, 255, 255, 0.7)', boxShadow: '0 4px 14px rgba(0,0,0,0.16)' }}
+              style={{ border: '2px solid rgba(213, 214, 216, 0.8)', boxShadow: '0 4px 14px rgba(41,44,48,0.08)' }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={profile.avatar} alt={`${profile.name} avatar`} className="w-full h-full object-cover" />
@@ -96,21 +96,21 @@ export default function ResumeDocument({
 
           <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1 mt-3 text-[10.5px]" style={{ color: MUTED }}>
             <span className="flex items-center gap-1.5">
-              <Mail className="w-3 h-3" />
+              <Mail className="w-3 h-3 text-[#AEB3B9]" />
               Contact
             </span>
             <span className="flex items-center gap-1.5">
-              <GithubMark className="w-3 h-3" />
+              <GithubMark className="w-3 h-3 text-[#292C30]" />
               GitHub
             </span>
             <span className="flex items-center gap-1.5">
-              <MapPin className="w-3 h-3" />
+              <MapPin className="w-3 h-3 text-[#AEB3B9]" />
               {profile.location}
             </span>
           </div>
         </FillGroup>
 
-        <div className="h-px" style={{ background: 'rgba(36, 24, 18, 0.1)' }} />
+        <div className="h-px" style={{ background: 'rgba(41, 44, 48, 0.08)' }} />
 
         {/* Experience */}
         <FillGroup p={p} range={[0.12, 0.36]} reduce={reduce}>
@@ -164,7 +164,7 @@ export default function ResumeDocument({
               <span
                 key={skill}
                 className="px-2 py-0.5 rounded text-[11px] font-medium"
-                style={{ color: '#4A3B33', background: 'rgba(36, 24, 18, 0.06)', border: '1px solid rgba(36, 24, 18, 0.1)' }}
+                style={{ color: '#292C30', background: 'rgba(244, 244, 242, 0.9)', border: '1px solid rgba(213, 214, 216, 0.7)' }}
               >
                 {skill}
               </span>
@@ -187,7 +187,7 @@ export default function ResumeDocument({
                 className="rounded-lg px-2.5 py-1.5"
                 style={
                   project.id === 'linkops'
-                    ? { background: 'rgba(192, 139, 62, 0.1)', border: '1px solid rgba(176, 128, 63, 0.34)' }
+                    ? { background: 'rgba(184, 175, 199, 0.15)', border: '1px solid rgba(184, 175, 199, 0.4)' }
                     : undefined
                 }
               >
@@ -197,8 +197,8 @@ export default function ResumeDocument({
                   </p>
                   {project.id === 'linkops' && (
                     <span
-                      className="text-[8.5px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded text-[#FBF4E7]"
-                      style={{ background: ACCENT }}
+                      className="text-[8.5px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded text-[#F4F4F2]"
+                      style={{ background: '#292C30' }}
                     >
                       New
                     </span>

@@ -1,248 +1,299 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
-import {
-  motion,
-  useMotionValueEvent,
-  useReducedMotion,
-  useTransform,
-  type MotionValue,
-} from 'framer-motion';
-import { useSceneScroll } from '@/components/landing/useSceneScroll';
-import { Check, FileText, FolderGit2, Globe, Plus, Sparkles } from 'lucide-react';
-import IdentityDesktop from '@/components/identity/IdentityDesktop';
-import { baseProjects, newProject } from '@/components/identity/identityData';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
+import { ArrowUpRight, ArrowRight, Sparkles, Layers, Eye } from 'lucide-react';
 
-function Stepper({ active }: { active: number }) {
-  return (
-    <div className="flex items-center gap-2.5">
-      {[1, 2, 3, 4, 5, 6, 7].map((step) =>
-        step === active ? (
-          <div
-            key={step}
-            className="h-1.5 w-14 rounded-full bg-[#C08B3E] shadow-[0_0_12px_rgba(192,139,62,0.5)]"
-          />
-        ) : (
-          <div key={step} className="h-1.5 w-7 rounded-full bg-[rgba(122,88,48,0.16)]" />
-        )
-      )}
-    </div>
-  );
+interface PortfolioTemplate {
+  id: string;
+  tag: string;
+  year: string;
+  title: string;
+  subtitle: string;
+  tags: string[];
+  cta: string;
+  href: string;
+  img?: string;
+  coordinates: string;
+  isComingSoon?: boolean;
 }
 
-/* Mini preview strip showing the new project landing in resume/portfolio. */
-function UpdatedStrip({
-  kind,
-  updated,
+const TEMPLATES: PortfolioTemplate[] = [
+  {
+    id: 'modern-developer',
+    tag: 'Template 1264×506',
+    year: 'Website 2026',
+    title: 'Modern Developer',
+    subtitle: 'Vibrant, high-impact dark architecture designed for full-stack and systems engineers.',
+    tags: ['Full-stack', 'Interactive', 'Dark mode', 'Next.js 15'],
+    cta: 'Preview template',
+    href: '/dashboard/preview?template=modern-developer',
+    img: 'https://i.postimg.cc/HkdNLqsM/Screenshot-2026-07-03-at-12-44-13-AM-1.png',
+    coordinates: 'x 817  y 51',
+  },
+  {
+    id: 'developer-pro',
+    tag: 'Template 1276×510',
+    year: 'Website 2026',
+    title: 'Developer Pro',
+    subtitle: 'Clean typographic clarity engineered for staff engineers, architects, and technical leads.',
+    tags: ['Minimal', 'Typographic', 'Light mode', 'Executive'],
+    cta: 'Preview template',
+    href: '/dashboard/preview?template=software-engineer',
+    img: 'https://i.postimg.cc/cLBz4Hd5/Screenshot-2026-07-26-at-5-35-09-PM.png',
+    coordinates: 'x 1106  y 42',
+  },
+  {
+    id: 'creative-edge',
+    tag: 'In Pipeline 1280×520',
+    year: 'Website 2026',
+    title: 'Creative Edge',
+    subtitle: 'Ultra-fast 3D Canvas, dynamic editorial layouts, and high-frequency shader archetypes.',
+    tags: ['3D WebGL', 'Editorial', 'Custom Shaders', 'Coming Soon'],
+    cta: 'Explore archetype queue',
+    href: '/dashboard/templates',
+    coordinates: 'x 940  y 78',
+    isComingSoon: true,
+  },
+];
+
+function TemplateStackCard({
+  template,
+  index,
+  total,
 }: {
-  kind: 'resume' | 'portfolio';
-  updated: MotionValue<number>;
+  template: PortfolioTemplate;
+  index: number;
+  total: number;
 }) {
-  const isNew = useTransform(updated, [0.4, 1], [0, 1], { clamp: true });
-  const isResume = kind === 'resume';
+  const router = useRouter();
+  const { user } = useAuth();
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ['start end', 'start start'],
+  });
+
+  // Spring smoothing turns discrete external mouse wheel ticks into continuous momentum interpolation
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 110,
+    damping: 26,
+    mass: 0.5,
+    restDelta: 0.0005,
+  });
+
+  // Scale down slightly as subsequent cards stack on top
+  const scale = useTransform(smoothProgress, [0.5, 1], [1, 1 - (total - index - 1) * 0.032]);
+
+  const handleAction = () => {
+    router.push(user ? template.href : '/signin');
+  };
 
   return (
     <div
-      className="rounded-xl px-4 py-3.5 flex-1 min-w-0"
-      style={
-        isResume
-          ? {
-              background: 'linear-gradient(170deg, #FBF4E7, #F2E6D2)',
-              border: '1px solid rgba(163, 118, 56, 0.24)',
-              boxShadow: '0 14px 34px rgba(90, 62, 34, 0.12)',
-            }
-          : {
-              background: 'linear-gradient(160deg, #FCF7EC, #EEDCBE)',
-              border: '1px solid rgba(163, 118, 56, 0.3)',
-              boxShadow: '0 14px 34px rgba(90, 62, 34, 0.14)',
-            }
-      }
+      ref={cardRef}
+      className="sticky top-20 sm:top-24 mb-12 sm:mb-20 last:mb-0 w-full"
+      style={{
+        zIndex: 10 + index,
+      }}
     >
-      <p
-        className="flex items-center gap-1.5 text-[10.5px] font-semibold uppercase tracking-wider mb-2.5"
-        style={{ color: isResume ? '#A9762F' : '#A9762F' }}
+      <motion.div
+        style={{
+          scale,
+          transformOrigin: 'top center',
+        }}
+        className="relative w-full rounded-2xl sm:rounded-3xl bg-[#FAF9F6] border border-[#EF4444] shadow-[0_20px_50px_rgba(0,0,0,0.12)] overflow-hidden transition-shadow duration-300 select-none transform-gpu will-change-transform"
       >
-        {isResume ? <FileText className="w-3 h-3" /> : <Globe className="w-3 h-3" />}
-        {isResume ? 'Resume · Projects' : 'Portfolio · Featured'}
-        <span className="ml-auto inline-flex items-center gap-1 normal-case tracking-normal" style={{ color: '#93795B' }}>
-          <Check className="w-2.5 h-2.5" style={{ color: '#B07C33' }} /> synced
-        </span>
-      </p>
-      <div className="flex flex-wrap gap-1.5">
-        {baseProjects.map((project) => (
-          <span
-            key={project.id}
-            className="px-2 py-0.5 rounded text-[10.5px] font-medium"
-            style={{
-              color: '#4A3B33',
-              background: 'rgba(255, 249, 236, 0.7)',
-              border: '1px solid rgba(122, 88, 48, 0.16)',
-            }}
-          >
-            {project.title}
-          </span>
-        ))}
-        <motion.span
-          className="px-2 py-0.5 rounded text-[10.5px] font-semibold"
-          style={{
-            opacity: isNew,
-            color: '#3A2716',
-            background: 'linear-gradient(135deg, #F3DDB2, #D7A557)',
-            border: '1px solid rgba(176, 128, 63, 0.6)',
-          }}
-        >
-          {newProject.title} · New
-        </motion.span>
-      </div>
+        {/* ── Technical Red Bounding Tag & Corner Anchors (Exact Reference Style) ── */}
+        <div className="absolute top-0 left-0 bg-[#EF4444] text-white px-3 py-0.5 font-mono text-[9px] sm:text-[10px] font-medium tracking-wide flex items-center gap-2 z-30 rounded-br-sm shadow-xs select-none">
+          <span>{template.tag}</span>
+        </div>
+
+        {/* 4 Corner Anchor Handles */}
+        <div className="absolute -top-1 -left-1 w-2 h-2 bg-[#EF4444] z-30 pointer-events-none" />
+        <div className="absolute -top-1 -right-1 w-2 h-2 bg-[#EF4444] z-30 pointer-events-none" />
+        <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-[#EF4444] z-30 pointer-events-none" />
+        <div className="absolute -bottom-1 -right-1 w-2 h-2 bg-[#EF4444] z-30 pointer-events-none" />
+
+        {/* ── Two-Column Layout ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[460px] lg:min-h-[500px]">
+          {/* Left Column: Editorial Information */}
+          <div className="lg:col-span-5 p-7 sm:p-10 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[rgba(41,44,48,0.1)] bg-[#FAF9F6]">
+            {/* Top Year / Label */}
+            <div>
+              <p className="font-mono text-[11px] text-[#777C82] tracking-wider mb-6">
+                {template.year}
+              </p>
+
+              <h3
+                className="text-[30px] sm:text-[38px] lg:text-[42px] font-bold tracking-tight text-[#111315] leading-[1.08] mb-4"
+                style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
+              >
+                {template.title}
+              </h3>
+
+              <p className="text-[14px] sm:text-[15px] text-[#4A4E54] leading-relaxed max-w-sm mb-6">
+                {template.subtitle}
+              </p>
+            </div>
+
+            {/* Bottom: Tags & Action Button */}
+            <div className="pt-6 border-t border-[rgba(41,44,48,0.08)] space-y-5">
+              {/* Tags */}
+              <div className="flex flex-wrap gap-1.5">
+                {template.tags.map((t) => (
+                  <span
+                    key={t}
+                    className="px-2.5 py-1 rounded-full bg-white border border-[rgba(41,44,48,0.14)] text-[10.5px] font-medium text-[#292C30]"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+
+              {/* Action Button */}
+              <button
+                onClick={handleAction}
+                className="group inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-[#111315] text-[#FAF9F6] hover:bg-[#EF4444] transition-colors duration-200 cursor-pointer shadow-xs"
+              >
+                <span className="text-[12.5px] font-medium tracking-wide">{template.cta}</span>
+                <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:translate-x-0.5">
+                  <ArrowRight className="w-3 h-3 text-white" />
+                </span>
+              </button>
+            </div>
+          </div>
+
+          {/* Right Column: Visual Preview Area */}
+          <div className="lg:col-span-7 relative overflow-hidden bg-[#0D0F12] flex items-center justify-center min-h-[300px] lg:min-h-full">
+            {template.isComingSoon ? (
+              /* Coming Soon Archetype Visual */
+              <div className="relative w-full h-full p-8 sm:p-12 flex flex-col items-center justify-center text-center overflow-hidden bg-gradient-to-tr from-[#0D0F12] via-[#14171C] to-[#1A1D24]">
+                {/* Background Tech Blueprint Grid */}
+                <div
+                  className="absolute inset-0 opacity-25"
+                  style={{
+                    backgroundImage:
+                      'linear-gradient(to right, rgba(255,255,255,0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.12) 1px, transparent 1px)',
+                    backgroundSize: '32px 32px',
+                  }}
+                />
+
+                {/* Animated Glowing Waveform / Radar */}
+                <div className="relative z-10 w-44 h-44 rounded-full border border-white/10 flex items-center justify-center mb-6">
+                  <div className="absolute inset-0 rounded-full border border-dashed border-[#EF4444]/40 animate-[spin_20s_linear_infinite]" />
+                  <div className="w-28 h-28 rounded-full border border-white/15 bg-white/5 flex items-center justify-center backdrop-blur-sm">
+                    <Sparkles className="w-8 h-8 text-[#EF4444] animate-pulse" />
+                  </div>
+                </div>
+
+                <div className="relative z-10 space-y-2">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#EF4444]/40 bg-[#EF4444]/10 text-[#EF4444] font-mono text-[11px] font-semibold tracking-wider uppercase">
+                    <span className="w-2 h-2 rounded-full bg-[#EF4444] animate-ping" />
+                    <span>Coming Soon · 4 New Layouts</span>
+                  </div>
+                  <p className="font-mono text-[11px] text-[#8E939B] max-w-xs">
+                    Shaders · Interactive Canvas · Minimalist Monospaced
+                  </p>
+                </div>
+              </div>
+            ) : (
+              /* Real Template Screenshot with Technical Crosshair and Reticle */
+              <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+                {/* Template Screenshot */}
+                <img
+                  src={template.img}
+                  alt={template.title}
+                  className="w-full h-full object-cover object-top transition-transform duration-700 hover:scale-[1.02]"
+                />
+
+                {/* Red Technical Crosshair Grid Lines (Matching Screenshot) */}
+                <div className="absolute inset-x-0 top-[28%] h-px bg-[#EF4444]/40 pointer-events-none" />
+                <div className="absolute inset-y-0 left-[62%] w-px bg-[#EF4444]/40 pointer-events-none" />
+
+                {/* Circular Magnifying / Target Reticle */}
+                <div className="absolute top-[16%] left-[54%] pointer-events-none flex items-center gap-2">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-[#EF4444] flex items-center justify-center bg-[#EF4444]/5 backdrop-blur-[1px] shadow-sm">
+                    <div className="w-1 h-1 rounded-full bg-[#EF4444]" />
+                  </div>
+
+                  {/* Coordinate Chip */}
+                  <div className="px-2 py-0.5 rounded bg-white/95 border border-[rgba(41,44,48,0.2)] font-mono text-[9px] font-bold text-[#111315] shadow-xs">
+                    {template.coordinates}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 }
 
-/**
- * Scene 6 — the portfolio grows with you. A new project (and the skill it
- * brings) is dropped in once; the live desktop site, resume, and portfolio
- * all update together.
- */
 export default function GrowthScene() {
-  const reduce = useReducedMotion() ?? false;
-  const ref = useRef<HTMLElement>(null);
-  const p = useSceneScroll(ref, ['start 78%', 'end 55%']);
+  const router = useRouter();
+  const { user } = useAuth();
 
-  const copyOpacity = useTransform(p, [0, 0.1], [0, 1], { clamp: true });
-  const coreScale = useTransform(p, [0, 0.5], reduce ? [1, 1] : [0.97, 1], { clamp: true });
-
-  /* The incoming LinkOps card flies toward the live site. */
-  const cardOpacityIn = useTransform(p, [0.06, 0.18], [0, 1], { clamp: true });
-  const cardOpacityOut = useTransform(p, [0.46, 0.58], [1, 0], { clamp: true });
-  const cardX = useTransform(p, [0.1, 0.54], reduce ? [0, 0] : [-170, 150], { clamp: true });
-  const cardY = useTransform(p, [0.1, 0.54], reduce ? [0, 0] : [90, -10], { clamp: true });
-  const cardRotate = useTransform(p, [0.1, 0.54], reduce ? [0, 0] : [-8, 1.5], { clamp: true });
-
-  /* The moment the update lands. */
-  const updated = useTransform(p, [0.5, 0.9], [0, 1], { clamp: true });
-  const stripsOpacity = useTransform(p, [0.58, 0.72], [0, 1], { clamp: true });
-  const stripsY = useTransform(p, [0.58, 0.74], reduce ? [0, 0] : [22, 0], { clamp: true });
-
-  const [includeNew, setIncludeNew] = useState(false);
-  useMotionValueEvent(p, 'change', (v) => {
-    const landed = reduce || v > 0.52;
-    setIncludeNew((prev) => (prev === landed ? prev : landed));
-  });
+  const handleExploreAll = () => {
+    router.push(user ? '/dashboard/templates' : '/signin');
+  };
 
   return (
-    <section id="growth" ref={ref} className="relative py-24 lg:py-32 overflow-hidden">
+    <section id="growth" className="relative py-24 sm:py-32 lg:py-36 bg-[#F4F4F2] select-none">
+      {/* Background Subtle Tech Dot Matrix */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0 opacity-60"
         style={{
-          background:
-            'radial-gradient(ellipse 760px 500px at 50% 46%, rgba(212, 166, 92, 0.18) 0%, transparent 70%)',
+          backgroundImage: 'radial-gradient(rgba(41, 44, 48, 0.12) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
         }}
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
-        {/* Centered header — distinct from the split scenes */}
-        <motion.div className="max-w-3xl mx-auto text-center" style={{ opacity: copyOpacity }}>
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <span className="text-sm font-mono tracking-widest text-[#A9762F] font-semibold">06</span>
-            <span className="text-sm font-mono text-[#93795B]">/</span>
-            <span className="text-sm font-mono text-[#93795B]">07</span>
-          </div>
-          <h2
-            className="text-4xl sm:text-5xl lg:text-[46px] font-semibold tracking-tight text-[#35261E] leading-[1.14] mb-6"
-            style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
-          >
-            Keep Growing.
-            <br />Your Portfolio Grows With You.
-          </h2>
-          <p className="text-base sm:text-lg text-[#6B5138] leading-relaxed">
-            Ship a project or learn a skill — add it once and your live site,
-            resume, and portfolio update together. No rebuilding from scratch.
-          </p>
-        </motion.div>
-
-        {/* Stage: the live desktop site + the new entry dropping in */}
-        <div className="relative mt-12 lg:mt-16 flex flex-col items-center">
-          <motion.div
-            className="relative w-full flex justify-center origin-center"
-            style={{ scale: coreScale }}
-          >
-            <IdentityDesktop includeNewProject={includeNew} reduce={reduce} />
-
-            {/* Incoming LinkOps card */}
-            <motion.div
-              className="hidden motion-safe:block absolute left-[2%] sm:left-[4%] lg:left-[8%] top-[58%] z-20 origin-center scale-[0.78] sm:scale-90 lg:scale-100"
-              style={{ opacity: cardOpacityIn, x: cardX }}
+      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+        {/* ── Section Header (Longer, Thinner Editorial Layout matching WorkflowScene) ── */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 sm:mb-16">
+          <div>
+            <div className="inline-flex items-center gap-2 mb-4 font-mono text-[11px] tracking-[0.2em] uppercase text-[#777C82]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444]" />
+              <span>Production Archetypes</span>
+            </div>
+            <h2
+              className="text-[34px] sm:text-[48px] lg:text-[58px] font-medium sm:font-semibold tracking-[-0.03em] text-[#111315] leading-[1.08] max-w-3xl"
+              style={{ fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" }}
             >
-              <motion.div
-                style={reduce ? { opacity: cardOpacityOut } : { y: cardY, rotate: cardRotate, opacity: cardOpacityOut }}
-                className="rounded-xl overflow-hidden w-[240px] select-none"
-              >
-                <div
-                  className="rounded-xl overflow-hidden"
-                  style={{
-                    background: 'linear-gradient(160deg, #FCF7EC, #EBD7B5)',
-                    border: '1px solid rgba(176, 128, 63, 0.55)',
-                    boxShadow:
-                      '0 24px 60px rgba(90, 62, 34, 0.3), 0 0 34px rgba(192, 139, 62, 0.24)',
-                  }}
-                >
-                  <div className="flex items-center justify-between px-3 py-2" style={{ borderBottom: '1px solid rgba(122, 88, 48, 0.16)' }}>
-                    <span className="inline-flex items-center gap-1.5 text-[9px] font-semibold uppercase tracking-wider" style={{ color: '#A9762F' }}>
-                      <Plus className="w-3 h-3" /> Adding to portfolio
-                    </span>
-                    <span
-                      className="text-[8px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded"
-                      style={{ background: 'linear-gradient(135deg, #EBCF97, #C08B3E)', color: '#3A2716' }}
-                    >
-                      New
-                    </span>
-                  </div>
-                  <div className="h-20 overflow-hidden" style={{ borderBottom: '1px solid rgba(122, 88, 48, 0.14)' }}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={newProject.image}
-                      alt={`${newProject.title} preview`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="p-3">
-                    <div className="flex items-center gap-2">
-                      <FolderGit2 className="w-3.5 h-3.5" style={{ color: '#B07C33' }} />
-                      <p className="text-[12.5px] font-semibold" style={{ color: '#35261E' }}>{newProject.title}</p>
-                    </div>
-                    <p className="text-[10px] mt-0.5" style={{ color: '#6B5138' }}>{newProject.subtitle}</p>
-                    <div className="flex flex-wrap items-center gap-1.5 mt-2">
-                      <span
-                        className="inline-flex items-center gap-1 text-[9px] font-medium px-1.5 py-0.5 rounded"
-                        style={{
-                          color: '#5C4326',
-                          background: 'rgba(255, 249, 236, 0.8)',
-                          border: '1px solid rgba(163, 118, 56, 0.3)',
-                        }}
-                      >
-                        <Sparkles className="w-2.5 h-2.5" style={{ color: '#B07C33' }} /> Edge Functions
-                      </span>
-                      <span className="text-[9px]" style={{ color: '#93795B' }}>+1 skill</span>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          </motion.div>
+              Template showcase.
+              <br />
+              Engineered for your story.
+              <br />
+              From day one.
+            </h2>
+          </div>
 
-          {/* Updated resume + portfolio strips */}
-          <motion.div
-            className="w-full max-w-[760px] mt-10 flex flex-col sm:flex-row gap-4"
-            style={{ opacity: stripsOpacity, y: stripsY }}
+          {/* Right Action: All templates link */}
+          <button
+            onClick={handleExploreAll}
+            className="group inline-flex items-center gap-1.5 font-mono text-[12px] sm:text-[13px] font-semibold text-[#111315] hover:text-[#EF4444] transition-colors cursor-pointer self-start sm:self-auto mb-2"
           >
-            <UpdatedStrip kind="resume" updated={updated} />
-            <UpdatedStrip kind="portfolio" updated={updated} />
-          </motion.div>
+            <span>All templates</span>
+            <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </button>
+        </div>
 
-          {/* Stepper */}
-          <motion.div className="mt-12" style={{ opacity: stripsOpacity }}>
-            <Stepper active={6} />
-          </motion.div>
+        {/* ── Stacking Cards on Scroll (Smooth on Mouse Wheel & Trackpad) ── */}
+        <div className="relative w-full pb-16 sm:pb-24">
+          {TEMPLATES.map((tpl, idx) => (
+            <TemplateStackCard
+              key={tpl.id}
+              template={tpl}
+              index={idx}
+              total={TEMPLATES.length}
+            />
+          ))}
         </div>
       </div>
     </section>

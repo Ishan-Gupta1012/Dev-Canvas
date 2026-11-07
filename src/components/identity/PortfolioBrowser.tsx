@@ -8,13 +8,13 @@ import { profile, projectsFor, skills } from './identityData';
 
 const NAV_LINKS = ['Home', 'Work', 'About', 'Contact'] as const;
 
-/* Warm paper + amber ink palette shared with the Identity Core. */
-const INK = '#35261E';
-const BODY = '#6B5138';
-const MUTED = '#93795B';
-const GOLD = '#B07C33';
-const AMBER = '#C08B3E';
-const HAIRLINE = 'rgba(122, 88, 48, 0.14)';
+/* Porcelain, graphite, silver & subtle lavender palette. */
+const INK = '#292C30';
+const BODY = '#777C82';
+const MUTED = '#777C82';
+const SILVER = '#AEB3B9';
+const ACCENT = '#B8AFC7';
+const HAIRLINE = 'rgba(213, 214, 216, 0.7)';
 
 export interface PortfolioBrowserProps {
   /** 0 = window collapsing to a resume page, 1 = full portfolio site. */
@@ -46,10 +46,10 @@ export default function PortfolioBrowser({
       className={`relative w-full max-w-[920px] rounded-[18px] overflow-hidden ${className}`}
       style={{
         background:
-          'radial-gradient(120% 90% at 88% -10%, rgba(230, 194, 130, 0.4) 0%, transparent 60%), linear-gradient(160deg, #FCF7EC 0%, #F5E9D4 60%, #EEDCBE 100%)',
-        border: '1px solid rgba(122, 88, 48, 0.24)',
+          'radial-gradient(120% 90% at 88% -10%, rgba(184, 175, 199, 0.22) 0%, transparent 60%), linear-gradient(160deg, #FAF9F6 0%, #F4F4F2 60%, #E9EAEB 100%)',
+        border: '1px solid rgba(213, 214, 216, 0.85)',
         boxShadow:
-          '0 40px 90px rgba(90, 62, 34, 0.3), 0 0 70px rgba(201, 160, 95, 0.2), inset 0 1px 0 rgba(255, 253, 246, 0.85)',
+          '0 40px 90px rgba(41, 44, 48, 0.16), 0 0 50px rgba(184, 175, 199, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.95)',
         ...style,
       }}
     >
@@ -59,19 +59,19 @@ export default function PortfolioBrowser({
         style={{ borderBottom: `1px solid ${HAIRLINE}` }}
       >
         <div className="flex items-center gap-1.5 shrink-0">
-          <span className="w-2.5 h-2.5 rounded-full" style={{ background: 'rgba(150, 112, 63, 0.38)' }} />
-          <span className="w-2.5 h-2.5 rounded-full" style={{ background: 'rgba(150, 112, 63, 0.26)' }} />
-          <span className="w-2.5 h-2.5 rounded-full" style={{ background: 'rgba(150, 112, 63, 0.16)' }} />
+          <span className="w-2.5 h-2.5 rounded-full" style={{ background: 'rgba(41, 44, 48, 0.35)' }} />
+          <span className="w-2.5 h-2.5 rounded-full" style={{ background: 'rgba(174, 179, 185, 0.5)' }} />
+          <span className="w-2.5 h-2.5 rounded-full" style={{ background: 'rgba(213, 214, 216, 0.7)' }} />
         </div>
         <div
           className="flex-1 max-w-[320px] mx-auto flex items-center justify-center gap-1.5 px-3 py-1 rounded-md text-[10px] font-mono"
           style={{
             color: MUTED,
-            background: 'rgba(255, 250, 240, 0.7)',
+            background: 'rgba(255, 255, 255, 0.85)',
             border: `1px solid ${HAIRLINE}`,
           }}
         >
-          <span className="w-1.5 h-1.5 rounded-full" style={{ background: AMBER }} />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#B8AFC7] animate-pulse" />
           {profile.site}
         </div>
       </div>
@@ -83,9 +83,11 @@ export default function PortfolioBrowser({
       >
         <div className="flex items-center gap-2">
           <span
-            className="w-3.5 h-3.5 rounded"
-            style={{ background: 'linear-gradient(140deg, #EBCF97, #B0803F)' }}
-          />
+            className="w-3.5 h-3.5 rounded-md flex items-center justify-center text-[7px] font-bold text-white shadow-xs"
+            style={{ background: 'linear-gradient(140deg, #D5D6D8, #292C30)' }}
+          >
+            ✦
+          </span>
           <span className="text-[10.5px] font-semibold" style={{ color: INK }}>
             {profile.name}
           </span>
@@ -105,15 +107,15 @@ export default function PortfolioBrowser({
               <div
                 className="relative rounded-xl overflow-hidden min-h-[152px] sm:min-h-[210px] lg:min-h-[320px]"
                 style={{
-                  background: 'linear-gradient(140deg, #FBF1DD 0%, #F1E0C0 70%)',
-                  border: '1px solid rgba(163, 118, 56, 0.2)',
+                  background: 'linear-gradient(140deg, #F4F4F2 0%, #E9EAEB 70%)',
+                  border: '1px solid rgba(213, 214, 216, 0.7)',
                 }}
               >
                 <div
                   className="absolute right-0 top-0 bottom-0 w-[44%] flex items-end justify-center overflow-hidden"
                   style={{
                     background:
-                      'radial-gradient(ellipse at 50% 30%, rgba(224, 183, 112, 0.55) 0%, rgba(240, 219, 182, 0.55) 45%, rgba(250, 242, 228, 0.9) 100%)',
+                      'radial-gradient(ellipse at 50% 30%, rgba(184, 175, 199, 0.35) 0%, rgba(213, 214, 216, 0.35) 45%, rgba(244, 244, 242, 0.9) 100%)',
                     maskImage: 'linear-gradient(to right, transparent, black 35%)',
                     WebkitMaskImage: 'linear-gradient(to right, transparent, black 35%)',
                   }}
@@ -126,7 +128,7 @@ export default function PortfolioBrowser({
                   />
                 </div>
                 <div className="relative p-4 sm:p-5 max-w-[62%]">
-                  <p className="text-[9px] uppercase tracking-[0.18em] font-semibold mb-1.5" style={{ color: GOLD }}>
+                  <p className="text-[9px] uppercase tracking-[0.18em] font-semibold mb-1.5" style={{ color: SILVER }}>
                     Portfolio
                   </p>
                   <p className="text-[22px] min-[380px]:text-[26px] sm:text-[30px] font-bold leading-tight" style={{ color: INK }}>
@@ -142,9 +144,9 @@ export default function PortfolioBrowser({
                     <span
                       className="px-3 py-1.5 rounded-md text-[10.5px] font-semibold"
                       style={{
-                        color: '#3A2716',
-                        background: 'linear-gradient(140deg, #EBCF97, #C08B3E)',
-                        boxShadow: '0 6px 16px rgba(176, 128, 63, 0.3)',
+                        color: '#F4F4F2',
+                        background: 'linear-gradient(140deg, #292C30, #1E2023)',
+                        boxShadow: '0 4px 14px rgba(41, 44, 48, 0.2)',
                       }}
                     >
                       View Projects
@@ -152,9 +154,9 @@ export default function PortfolioBrowser({
                     <span
                       className="px-3 py-1.5 rounded-md text-[10.5px] font-medium"
                       style={{
-                        color: '#5C4326',
-                        border: '1px solid rgba(163, 118, 56, 0.3)',
-                        background: 'rgba(255, 249, 236, 0.6)',
+                        color: '#292C30',
+                        border: '1px solid #D5D6D8',
+                        background: 'rgba(255, 255, 255, 0.85)',
                       }}
                     >
                       Contact
@@ -179,16 +181,16 @@ export default function PortfolioBrowser({
                       key={project.id}
                       className="rounded-xl p-2.5"
                       style={{
-                        background: 'rgba(255, 249, 236, 0.7)',
+                        background: 'rgba(255, 255, 255, 0.85)',
                         border:
                           project.id === 'linkops'
-                            ? '1px solid rgba(176, 128, 63, 0.5)'
-                            : '1px solid rgba(122, 88, 48, 0.16)',
+                            ? '1px solid rgba(184, 175, 199, 0.7)'
+                            : '1px solid rgba(213, 214, 216, 0.7)',
                       }}
                     >
                       <div
                         className="relative h-16 sm:h-24 lg:h-28 rounded-lg overflow-hidden"
-                        style={{ border: '1px solid rgba(163, 118, 56, 0.24)' }}
+                        style={{ border: '1px solid rgba(213, 214, 216, 0.7)' }}
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
@@ -204,12 +206,12 @@ export default function PortfolioBrowser({
                         {project.id === 'linkops' ? (
                           <span
                             className="text-[8.5px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0"
-                            style={{ background: 'linear-gradient(135deg, #EBCF97, #C08B3E)', color: '#3A2716' }}
+                            style={{ background: 'linear-gradient(135deg, #B8AFC7, #777C82)', color: '#F4F4F2' }}
                           >
                             New
                           </span>
                         ) : (
-                          <ArrowUpRight className="w-3 h-3 shrink-0" style={{ color: GOLD }} />
+                          <ArrowUpRight className="w-3 h-3 shrink-0" style={{ color: SILVER }} />
                         )}
                       </div>
                       <p className="text-[10px] mt-0.5 leading-snug" style={{ color: MUTED }}>
@@ -225,12 +227,12 @@ export default function PortfolioBrowser({
               <div
                 className="mt-3 flex items-center justify-between gap-3 rounded-xl px-3.5 py-2.5"
                 style={{
-                  background: 'rgba(192, 139, 62, 0.12)',
-                  border: '1px solid rgba(176, 128, 63, 0.3)',
+                  background: 'rgba(244, 244, 242, 0.9)',
+                  border: '1px solid rgba(213, 214, 216, 0.7)',
                 }}
               >
-                <span className="flex items-center gap-2 text-[11px] font-medium" style={{ color: '#5C4326' }}>
-                  <Share2 className="w-3.5 h-3.5" style={{ color: GOLD }} />
+                <span className="flex items-center gap-2 text-[11px] font-medium" style={{ color: '#292C30' }}>
+                  <Share2 className="w-3.5 h-3.5" style={{ color: ACCENT }} />
                   Published · live
                 </span>
                 <span className="text-[10px] font-mono" style={{ color: MUTED }}>

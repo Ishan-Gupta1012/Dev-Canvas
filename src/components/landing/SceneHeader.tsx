@@ -26,17 +26,19 @@ export default function SceneHeader() {
         scrolled ? 'backdrop-blur-xl' : ''
       }`}
       style={{
-        background: scrolled ? 'rgba(247, 239, 226, 0.92)' : 'transparent',
-        borderBottom: `1px solid ${scrolled ? 'rgba(122, 88, 48, 0.16)' : 'transparent'}`,
+        background: scrolled ? 'rgba(233, 234, 235, 0.92)' : 'transparent',
+        borderBottom: `1px solid ${scrolled ? 'rgba(213, 214, 216, 0.8)' : 'transparent'}`,
       }}
     >
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 lg:px-20 h-16 lg:h-[72px]">
         <Link href="/" className="flex items-center gap-2.5 shrink-0">
           <span
-            className="w-5 h-5 rounded"
-            style={{ background: 'linear-gradient(140deg, #EBCF97, #B0803F)' }}
-          />
-          <span className="text-[15px] font-bold text-[#35261E] tracking-tight">DevCanvas</span>
+            className="w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold text-white shadow-xs"
+            style={{ background: 'linear-gradient(140deg, #D5D6D8, #292C30)' }}
+          >
+            ✦
+          </span>
+          <span className="text-[15px] font-bold text-[#292C30] tracking-tight">DevCanvas</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-7">
@@ -45,7 +47,7 @@ export default function SceneHeader() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-[13px] font-medium text-[#6B5138] hover:text-[#3A2716] transition-colors"
+                  className="text-[13px] font-medium text-[#777C82] hover:text-[#292C30] transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -53,7 +55,7 @@ export default function SceneHeader() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-[13px] font-medium text-[#6B5138] hover:text-[#3A2716] transition-colors"
+                  className="text-[13px] font-medium text-[#777C82] hover:text-[#292C30] transition-colors"
                 >
                   {link.label}
                 </a>
@@ -64,13 +66,13 @@ export default function SceneHeader() {
         <div className="flex items-center gap-3">
           <Link
             href="/signin"
-            className="hidden sm:inline-flex text-[13px] font-medium text-[#6B5138] hover:text-[#3A2716] transition-colors px-3 py-2"
+            className="hidden sm:inline-flex text-[13px] font-medium text-[#777C82] hover:text-[#292C30] transition-colors px-3 py-2"
           >
             Log In
           </Link>
           <Link
             href="/signup"
-            className="inline-flex items-center text-[13px] font-semibold text-[#3A2716] bg-[#E3BE7C] hover:bg-[#D3A557] transition-colors rounded-full px-4 py-2 shadow-[0_6px_18px_rgba(176,128,63,0.28)]"
+            className="inline-flex items-center text-[13px] font-semibold text-[#F4F4F2] bg-[#292C30] hover:bg-[#1A1B1D] transition-colors rounded-full px-4 py-2 shadow-[0_4px_16px_rgba(41,44,48,0.18)]"
           >
             Get Started
           </Link>

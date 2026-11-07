@@ -27,6 +27,7 @@ import {
 import { cn } from '@/components/dashboard/ui';
 import DownloadZipButton from '@/components/DownloadZipButton';
 import { PortfolioData } from '@/types/portfolio';
+import { getPortfolioPath, getPublicBaseUrl, isLocalOrigin } from '@/lib/siteUrl';
 
 interface Portfolio {
   id: string;
@@ -57,6 +58,13 @@ export default function PortfoliosPage() {
   const [deployModalPortfolioId, setDeployModalPortfolioId] = useState<string | null>(null);
   const [deploySlug, setDeploySlug] = useState('');
   const [isDeploying, setIsDeploying] = useState<string | null>(null);
+  /**
+   * Public origin for share links. Resolved per render rather than in an
+   * effect: `NEXT_PUBLIC_SITE_URL` is inlined at build time, so in deployments
+   * that set it (all of them) server and client agree. Only the deploy modal
+   * and the copy handler read it, and neither renders on hydration.
+   */
+  const publicBaseUrl = getPublicBaseUrl();
 
   const fetchPortfolios = async () => {
     try {
@@ -101,11 +109,41 @@ export default function PortfoliosPage() {
     }
   };
 
-  const handleCopyLink = (portfolioId: string) => {
-    const url = `${window.location.origin}/preview/${portfolioId}`;
-    navigator.clipboard.writeText(url);
-    setCopiedId(portfolioId);
+  const handleCopyLink = async (portfolio: Portfolio) => {
+    // Published portfolios share the real public URL. Drafts can only be seen
+    // through the preview route, which requires the owner's session.
+    const url =
+      portfolio.status === 'published' && portfolio.slug
+        ? `${publicBaseUrl}${getPortfolioPath(portfolio.slug)}`
+        : `${window.location.origin}/preview/${portfolio.id}`;
+
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      // Clipboard API needs a secure context; fall back to a prompt so the
+      // link is still copyable when the builder is opened over plain HTTP.
+      window.prompt('Copy your portfolio link', url);
+    }
+
+    setCopiedId(portfolio.id);
     setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  /**
+   * Where the "Live" button points. On a local/LAN origin a relative link would
+   * put `http://localhost:3000/<slug>` in the address bar, which is the exact
+   * URL people copy and then send to a device where it 404s. In that case jump
+   * to the canonical public origin instead.
+   */
+  const getLiveHref = (slug: string) => {
+    if (!slug) {
+      return '/';
+    }
+
+    const isLocal =
+      typeof window !== 'undefined' && isLocalOrigin(window.location.origin);
+
+    return isLocal ? `${publicBaseUrl}${getPortfolioPath(slug)}` : getPortfolioPath(slug);
   };
 
   const handleDeploy = async (portfolioId: string, slug: string) => {
@@ -504,7 +542,7 @@ export default function PortfoliosPage() {
                   {/* Quick Action Overlay (View & Share) */}
                   <div className="absolute bottom-3 left-3 right-3 flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-10">
                     <button
-                      onClick={() => handleCopyLink(portfolio.id)}
+                      onClick={() => handleCopyLink(portfolio)}
                       className="px-3 py-1.5 bg-background/95 backdrop-blur-md border border-outline/20 text-on-surface font-mono text-[10px] uppercase tracking-wider font-bold rounded-lg shadow-sm hover:text-primary hover:border-primary/30 transition-all flex items-center gap-1.5"
                       title="Copy Public Link"
                     >
@@ -577,7 +615,7 @@ export default function PortfoliosPage() {
 {portfolio.status === 'published' ? (
   <>
     <Link
-      href={`/${portfolio.slug}`}
+      href={getLiveHref(portfolio.slug || '')}
       target="_blank"
       rel="noopener noreferrer"
       className="flex-1 inline-flex items-center justify-center gap-2 py-2 px-3 bg-emerald-600 text-white border border-emerald-600/30 rounded-lg font-mono text-xs uppercase tracking-wider font-bold hover:bg-emerald-700 hover:blur-sm transition-all duration-200 shadow-sm shadow-emerald-600/20"
@@ -703,7 +741,7 @@ export default function PortfoliosPage() {
             </div>
             <p className="text-on-surface-variant text-sm mb-6 leading-relaxed">
               Enter a unique name for your portfolio. Your site will be live at{' '}
-              <span className="font-mono text-primary">{window.location.origin}/</span><span className="font-mono text-primary">your-unique-name</span>
+              <span className="font-mono text-primary">{publicBaseUrl || 'your-public-domain'}/</span><span className="font-mono text-primary">your-unique-name</span>
             </p>
             <div className="mb-6">
               <label className="block text-xs font-semibold text-on-surface mb-2 uppercase tracking-wider">
