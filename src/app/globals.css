@@ -1147,3 +1147,175 @@ body::-webkit-scrollbar,
 }
 
 
+
+/* ══════════════════════════════════════════════════════════════
+   Bento Grid Dashboard — shadow card system
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── CSS variable defaults (Preset 1: Soft Warm Ambient) ─────── */
+.bento-grid-root {
+  --bento-shadow:
+    0 2px 4px -1px rgba(90, 53, 27, 0.03),
+    0 8px 20px -3px rgba(90, 53, 27, 0.07),
+    0 20px 36px -8px rgba(90, 53, 27, 0.05),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
+  --bento-shadow-hover:
+    0 4px 8px -2px rgba(90, 53, 27, 0.05),
+    0 14px 28px -4px rgba(90, 53, 27, 0.10),
+    0 30px 48px -10px rgba(90, 53, 27, 0.08),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 1);
+  --bento-bg: rgba(255, 253, 249, 0.90);
+  --bento-backdrop: blur(14px);
+}
+
+/* Preset 2: Elevated Sculpted Depth */
+.bento-grid-root[data-shadow-preset="sculpted"] {
+  --bento-shadow:
+    0 1px 3px rgba(95, 50, 20, 0.05),
+    0 10px 24px -4px rgba(85, 45, 18, 0.11),
+    0 24px 44px -8px rgba(70, 35, 12, 0.08),
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.9);
+  --bento-shadow-hover:
+    0 2px 5px rgba(95, 50, 20, 0.08),
+    0 16px 36px -4px rgba(85, 45, 18, 0.15),
+    0 34px 54px -8px rgba(70, 35, 12, 0.12),
+    inset 0 1.5px 1.5px rgba(255, 255, 255, 1);
+  --bento-bg: #fffdf9;
+  --bento-backdrop: none;
+}
+
+/* Preset 3: Frosted Warm Glass */
+.bento-grid-root[data-shadow-preset="frosted"] {
+  --bento-shadow:
+    0 8px 32px 0 rgba(110, 67, 36, 0.09),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 2px 0 rgba(110, 67, 36, 0.03);
+  --bento-shadow-hover:
+    0 14px 42px 0 rgba(110, 67, 36, 0.14),
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 2px 0 rgba(110, 67, 36, 0.05);
+  --bento-bg: rgba(255, 252, 247, 0.65);
+  --bento-backdrop: blur(24px) saturate(180%);
+}
+
+/* Preset 4: Soft Dual Rim Light */
+.bento-grid-root[data-shadow-preset="rimlight"] {
+  --bento-shadow:
+    -4px -4px 14px rgba(255, 255, 255, 0.8),
+    5px 6px 18px rgba(112, 72, 38, 0.10),
+    inset 0 1px 1px rgba(255, 255, 255, 0.7);
+  --bento-shadow-hover:
+    -6px -6px 18px rgba(255, 255, 255, 0.9),
+    8px 10px 24px rgba(112, 72, 38, 0.14),
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.9);
+  --bento-bg: #fdfaf5;
+  --bento-backdrop: none;
+}
+
+/* ── The card itself ─────────────────────────────────────────── */
+.bento-card {
+  background: var(--bento-bg);
+  backdrop-filter: var(--bento-backdrop);
+  -webkit-backdrop-filter: var(--bento-backdrop);
+  box-shadow: var(--bento-shadow);
+  border-radius: 20px;
+  border: none;
+  transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.bento-card:hover {
+  box-shadow: var(--bento-shadow-hover);
+  transform: translateY(-1px);
+}
+
+/* Softer dashboard flow: keep cards/info, reduce rigid Bento boundaries */
+.dashboard-flow .bento-card {
+  --bento-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.75) inset,
+    0 8px 22px -18px rgba(90, 53, 27, 0.16),
+    0 1px 3px -1px rgba(90, 53, 27, 0.05);
+  --bento-shadow-hover:
+    0 1px 0 rgba(255, 255, 255, 0.85) inset,
+    0 12px 26px -18px rgba(90, 53, 27, 0.2),
+    0 2px 6px -2px rgba(90, 53, 27, 0.07);
+  --bento-bg: rgba(255, 252, 247, 0.72);
+  --bento-backdrop: blur(10px);
+  border-radius: 22px;
+}
+.dashboard-flow .bento-card:hover {
+  transform: translateY(0);
+}
+
+/* ── Score gauge SVG circle transition ───────────────────────── */
+.bento-gauge-ring {
+  transition: stroke-dashoffset 1.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Custom round checkbox ───────────────────────────────────── */
+.bento-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #c4a882;
+  background: transparent;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.2s, background 0.2s;
+}
+.bento-checkbox:checked {
+  background: #b8583c;
+  border-color: #b8583c;
+}
+.bento-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 5px;
+  height: 9px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+/* ── Ambient background orbs ─────────────────────────────────── */
+@keyframes bento-orb-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(14px, -18px) scale(1.04); }
+  66%       { transform: translate(-10px, 12px) scale(0.97); }
+}
+.bento-orb {
+  animation: bento-orb-drift 18s ease-in-out infinite;
+}
+.bento-orb-2 {
+  animation: bento-orb-drift 24s ease-in-out infinite reverse;
+}
+
+/* ── Preset switcher button ──────────────────────────────────── */
+.bento-preset-btn {
+  font-size: 11px;
+  font-family: ui-monospace, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(255, 253, 249, 0.70);
+  box-shadow: 0 1px 4px rgba(90, 53, 27, 0.10);
+  color: #7e6f64;
+  border: none;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+}
+.bento-preset-btn:hover {
+  background: rgba(255, 253, 249, 0.95);
+  color: #372a22;
+}
+.bento-preset-btn.active {
+  background: #6e4324;
+  color: #fdf8f2;
+  box-shadow: 0 2px 8px rgba(110, 67, 36, 0.28);
+}
