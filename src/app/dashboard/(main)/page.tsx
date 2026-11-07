@@ -502,7 +502,7 @@ export default function Dashboard() {
               {creditsUsed} / 50
             </p>
           </div>
-          <div className="w-[200px] sm:w-[300px] h-1.5 rounded-full overflow-hidden flex-shrink-0"
+          <div className="flex-1 h-1.5 rounded-full overflow-hidden"
             style={{ background: '#DADCE0' }}
           >
             <div
