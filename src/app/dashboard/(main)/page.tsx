@@ -10,12 +10,10 @@ import {
   Layers,
   BookOpen,
   Code2,
-  Cpu,
   Lightbulb,
   CheckCircle2,
   Sparkles,
 } from 'lucide-react';
-import QuickActions from '@/components/dashboard/QuickActions';
 import PortfolioSwitcherBar from '@/components/dashboard/PortfolioSwitcherBar';
 import ScoreBreakdownHoverCard from '@/components/dashboard/ScoreBreakdownHoverCard';
 import {
@@ -487,45 +485,35 @@ export default function Dashboard() {
                 label="Skills"
                 accent="#1A1C1E"
               />
-            {/* AI Credits tile */}
-            <div className="bento-card p-4 col-span-2 sm:col-span-1 flex flex-col justify-center min-w-0">
-              <div className="flex items-center gap-2 mb-1.5">
-                <Cpu size={14} style={{ color: '#767B81' }} />
-                <span
-                  className="font-mono text-[9px] uppercase tracking-widest font-semibold"
-                  style={{ color: '#767B81' }}
-                >
-                  AI Credits
-                </span>
-              </div>
-              <p
-                className="font-serif text-xl font-bold leading-none"
-                style={{ color: '#1A1C1E' }}
-              >
-                {creditsUsed}
-                <span
-                  className="font-mono text-[10px] font-normal ml-0.5"
-                  style={{ color: '#767B81' }}
-                >
-                  / 50
-                </span>
-              </p>
-              <div
-                className="mt-2 w-full h-1.5 rounded-full overflow-hidden"
-                style={{ background: '#DADCE0' }}
-              >
-                <div
-                  className="h-full rounded-full transition-all duration-500"
-                  style={{
-                    width: `${creditsPct}%`,
-                    background: creditsUsed >= 40 ? '#E95858' : '#1A1C1E',
-                  }}
-                />
-              </div>
             </div>
           </div>
         </div>
-      </div>
+
+        {/* AI Credits Bar */}
+        <div className="bento-card p-4 flex items-center justify-between gap-3 flex-wrap min-w-0">
+          <div className="min-w-0">
+            <p
+              className="font-mono text-[10px] uppercase tracking-widest"
+              style={{ color: '#767B81' }}
+            >
+              AI Credits
+            </p>
+            <p className="text-sm mt-0.5" style={{ color: '#1A1C1E' }}>
+              {creditsUsed} / 50
+            </p>
+          </div>
+          <div className="w-[200px] sm:w-[300px] h-1.5 rounded-full overflow-hidden flex-shrink-0"
+            style={{ background: '#DADCE0' }}
+          >
+            <div
+              className="h-full rounded-full transition-all duration-500"
+              style={{
+                width: `${creditsPct}%`,
+                background: creditsUsed >= 40 ? '#E95858' : '#1A1C1E',
+              }}
+            />
+          </div>
+        </div>
 
         {/* Checklist + AI Suggestions */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5 mb-5 lg:items-start">
@@ -661,7 +649,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <QuickActions />
       </div>
     </div>
   );
