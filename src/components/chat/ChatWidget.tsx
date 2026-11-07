@@ -83,8 +83,8 @@ export default function ChatWidget() {
     }
   };
 
-  // The landing page has its own closing scene; no floating chat there.
-  if (pathname === '/') return null;
+  // The landing and auth pages are self-contained; no floating chat there.
+  if (pathname === '/' || pathname === '/signin' || pathname === '/signup') return null;
 
   return (
     <div className="fixed bottom-6 right-6 z-[100]">

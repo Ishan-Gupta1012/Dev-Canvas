@@ -4,6 +4,7 @@
 // landing page that is reached again inside the same document reuses the same
 // document state instead of replaying the intro.
 const SKIP_KEY = 'devcanvas:skip-intro';
+const DONE_KEY = 'devcanvas:intro-done';
 
 let hasVisitedLanding = false;
 
@@ -23,4 +24,20 @@ export function shouldSkipIntro() {
   const isRepeatVisit = hasVisitedLanding;
   hasVisitedLanding = true;
   return isParked || isRepeatVisit;
+}
+
+/** Has the preloader + intro autoscroll already run this session? */
+export function isIntroDone() {
+  try {
+    return sessionStorage.getItem(DONE_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+/** Mark the preloader + intro autoscroll as done for the rest of this session. */
+export function markIntroDone() {
+  try {
+    sessionStorage.setItem(DONE_KEY, '1');
+  } catch {}
 }

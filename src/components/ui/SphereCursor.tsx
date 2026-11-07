@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 
 /**
  * Additive sphere cursor.
@@ -40,7 +41,7 @@ const TEXT_SELECTOR = [
 
 const FOLLOW_ORB = 0.24;
 const FOLLOW_AURA = 0.11;
-const ROLL_RADIUS = 13;
+const ROLL_RADIUS = 8;
 
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -54,6 +55,8 @@ function hasFinePointer() {
 }
 
 export default function SphereCursor() {
+  const pathname = usePathname();
+  const isAuth = pathname === "/signin" || pathname === "/signup";
   const rootRef = useRef<HTMLDivElement>(null);
   const auraWrapRef = useRef<HTMLDivElement>(null);
   const orbWrapRef = useRef<HTMLDivElement>(null);
@@ -61,6 +64,7 @@ export default function SphereCursor() {
   const rollRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
+    if (isAuth) return;
     const root = rootRef.current;
     const auraWrap = auraWrapRef.current;
     const orbWrap = orbWrapRef.current;
@@ -198,7 +202,9 @@ export default function SphereCursor() {
       window.removeEventListener("blur", onBlur);
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, []);
+  }, [isAuth]);
+
+  if (isAuth) return null;
 
   return (
     <div ref={rootRef} className="sphere-cursor" aria-hidden="true">

@@ -4,9 +4,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import GenerativeAttractorCanvas from '@/components/OpeningExperience/GenerativeAttractorCanvas';
 import { skipIntroOnNextLanding } from '@/lib/intro-entry';
-import { ArrowLeft, Loader2, Mail, Lock, RotateCcw } from 'lucide-react';
+import EtchedBackdrop from '@/components/auth/EtchedBackdrop';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Loader2,
+  Mail,
+  Lock,
+  RotateCcw,
+} from 'lucide-react';
 
 export type AuthMode = 'signin' | 'signup';
 
@@ -19,7 +26,7 @@ const PROVIDERS: { id: Provider; label: string; mark: React.ReactNode }[] = [
     id: 'google',
     label: 'Google',
     mark: (
-      <svg viewBox="0 0 24 24" className="w-[18px] h-[18px]" aria-hidden="true">
+      <svg viewBox="0 0 24 24" className="w-[17px] h-[17px]" aria-hidden="true">
         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
         <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
         <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
@@ -31,12 +38,15 @@ const PROVIDERS: { id: Provider; label: string; mark: React.ReactNode }[] = [
     id: 'github',
     label: 'GitHub',
     mark: (
-      <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] fill-current" aria-hidden="true">
+      <svg viewBox="0 0 24 24" className="w-[17px] h-[17px] fill-current" aria-hidden="true">
         <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.164 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
       </svg>
     ),
   },
 ];
+
+const FIELD_CLASS =
+  'h-[50px] w-full rounded-xl border border-[rgba(41,44,48,0.16)] bg-white px-4 font-mono text-[13px] text-[#111315] placeholder:text-[#9AA0A8] outline-none transition-all duration-200 focus:border-[#111315] focus:ring-4 focus:ring-[#EF4444]/10';
 
 export default function AuthGateway({ mode }: { mode: AuthMode }) {
   const { user, login, signInWithPassword, signUp, resendConfirmationEmail, isLoading } = useAuth();
@@ -120,9 +130,9 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
     } catch (error) {
       setIsSubmitting(false);
       const reason = error instanceof Error ? error.message : '';
-      
+
       console.error('AuthGateway caught error:', error, 'reason:', reason);
-      
+
       // Check for account already exists error
       if (reason.startsWith('ACCOUNT_EXISTS:')) {
         const userMessage = reason.split('ACCOUNT_EXISTS:')[1];
@@ -175,226 +185,260 @@ export default function AuthGateway({ mode }: { mode: AuthMode }) {
 
   if (isLoading && !hasSubmitted) {
     return (
-      <div className="relative min-h-screen bg-[#F7EFE2] flex items-center justify-center">
-        <Loader2 className="w-6 h-6 text-[#8A5A2B] animate-spin" aria-label="Checking session" />
+      <div className="relative min-h-screen bg-[#E9EAEB] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-5">
+          <span className="auth-mini-orb" aria-hidden="true" />
+          <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-[#777C82]">
+            Checking session
+          </span>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="relative min-h-screen lg:h-screen w-full bg-[#F7EFE2] text-[#2E180E] font-sans flex flex-col overflow-x-hidden">
+    <div className="relative min-h-screen w-full bg-[#E9EAEB] text-[#111315] font-sans flex flex-col overflow-x-hidden">
+      <EtchedBackdrop />
+
       <div
-        className="flex flex-col flex-1 min-h-0 transition-opacity duration-500 ease-in-out motion-reduce:transition-none"
+        className="relative z-10 flex flex-col flex-1 min-h-0 transition-opacity duration-500 ease-in-out motion-reduce:transition-none"
         style={{ opacity: isVisible && !isLeaving ? 1 : 0 }}
       >
-      {/* Full-bleed attractor with copper palette */}
-      <div
-        className="fixed inset-0 z-0 pointer-events-none"
-        style={{
-          WebkitMaskImage: `linear-gradient(to ${isSignUp ? 'left' : 'right'}, transparent 42%, #000 78%)`,
-          maskImage: `linear-gradient(to ${isSignUp ? 'left' : 'right'}, transparent 42%, #000 78%)`,
-        }}
-      >
-        <GenerativeAttractorCanvas mode="static" palette="copper" />
-      </div>
-
-      <header className="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-10 pt-6 sm:pt-8 flex items-center justify-between gap-4">
-        <button
-          type="button"
-          onClick={handleBack}
-          className="inline-flex items-center gap-2 min-h-[44px] font-mono text-[11px] uppercase tracking-[0.2em] text-[#5B341E] hover:text-[#A65A3A] transition-colors group cursor-pointer"
-        >
-          <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-1" aria-hidden="true" />
-          Back
-        </button>
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#8A5A2B] animate-pulse" aria-hidden="true" />
-          <span className="font-mono text-[12px] uppercase tracking-[0.22em] text-[#2E180E] font-bold">
-            DevCanvas // Access
-          </span>
-        </div>
-      </header>
-
-      <main className="relative z-10 flex-1 min-h-0 w-full max-w-[1440px] mx-auto px-5 sm:px-10 py-6 sm:py-8 lg:py-0 lg:px-14 flex items-center justify-start">
-        <div className="w-full max-w-[480px] border border-[#D6A15F]/40 bg-[#F7EFE2]/85 backdrop-blur-md px-6 sm:px-9 py-10 sm:py-12 lg:py-12 flex flex-col gap-6 lg:gap-7 shadow-[0_24px_60px_-30px_rgba(10,4,2,0.35)] rounded-[24px]">
-          <h1 className="font-serif text-[36px] sm:text-[42px] lg:text-[40px] leading-[0.95] tracking-[-1.4px]">
-            {isSignUp ? (
-              <>
-                <span className="text-[#2E180E]">Open your</span>
-                <br />
-                <span className="text-[#A65A3A]">workspace.</span>
-              </>
-            ) : (
-              <>
-                <span className="text-[#2E180E]">Welcome back.</span>
-                <br />
-                <span className="text-[#A65A3A]">Continue building.</span>
-              </>
-            )}
-          </h1>
-
-          <div
-            role="status"
-            aria-live="polite"
-            className={`border px-4 py-3 font-mono text-[12px] uppercase leading-[1.5] rounded-xl ${
-              message
-                ? message.tone === 'sent'
-                  ? 'border-[#8A5A2B]/40 bg-[#8A5A2B]/10 text-[#5B341E] shadow-[0_0_20px_rgba(138,90,43,0.15)]'
-                  : 'border-[#D35724]/50 bg-[#D35724]/10 text-[#8A3A15] shadow-[0_0_20px_rgba(211,87,36,0.15)]'
-                : 'hidden'
-            }`}
+        <header className="w-full max-w-[1440px] mx-auto px-5 sm:px-10 pt-6 sm:pt-8 flex items-center justify-between gap-4">
+          <button
+            type="button"
+            onClick={handleBack}
+            className="inline-flex items-center gap-2 min-h-[44px] font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#4A4E54] hover:text-[#EF4444] transition-colors group cursor-pointer"
           >
-            {message?.text}
-          </div>
+            <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-1" aria-hidden="true" />
+            Back to landing
+          </button>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-6" noValidate>
-            {isSignUp && (
-              <div className="flex flex-col gap-2.5">
-                <label htmlFor="name" className="font-mono text-[11px] uppercase tracking-[0.15em] text-[#5B341E]">
-                  Name
-                </label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  autoComplete="name"
-                  placeholder="Your name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="h-12 w-full px-4 bg-[#FFFFFF]/60 border border-[#D6A15F]/50 text-[#2E180E] placeholder:text-[#8A5A3A] font-mono text-[13px] outline-none transition-all duration-200 focus:border-[#8A5A2B] focus-visible:ring-2 focus-visible:ring-[#A65A3A]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7EFE2] rounded-xl"
-                />
-              </div>
-            )}
-
-            <div className="flex flex-col gap-2.5">
-              <label htmlFor="email" className="font-mono text-[11px] uppercase tracking-[0.15em] text-[#5B341E]">
-                Email
-              </label>
-              <div className="relative">
-                <Mail
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8A5A2B] pointer-events-none"
-                  aria-hidden="true"
-                />
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="xyz@gmail.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="h-12 w-full pl-11 pr-4 bg-[#FFFFFF]/60 border border-[#D6A15F]/50 text-[#2E180E] placeholder:text-[#8A5A3A] font-mono text-[13px] outline-none transition-all duration-200 focus:border-[#8A5A2B] focus-visible:ring-2 focus-visible:ring-[#A65A3A]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7EFE2] rounded-xl"
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2.5">
-              <label htmlFor="password" className="font-mono text-[11px] uppercase tracking-[0.15em] text-[#5B341E]">
-                Password
-              </label>
-              <div className="relative">
-                <Lock
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8A5A2B] pointer-events-none"
-                  aria-hidden="true"
-                />
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete={isSignUp ? 'new-password' : 'current-password'}
-                  placeholder={isSignUp ? 'At least 8 characters' : 'Your password'}
-                  minLength={8}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="h-12 w-full pl-11 pr-4 bg-[#FFFFFF]/60 border border-[#D6A15F]/50 text-[#2E180E] placeholder:text-[#8A5A3A] font-mono text-[13px] outline-none transition-all duration-200 focus:border-[#8A5A2B] focus-visible:ring-2 focus-visible:ring-[#A65A3A]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7EFE2] rounded-xl"
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="h-12 w-full inline-flex items-center justify-center gap-2 bg-[#8A5A2B] hover:bg-[#A65A3A] disabled:bg-[#A65A3A]/40 text-[#FFFFFF] border border-[#5B341E]/40 font-mono text-[12px] uppercase tracking-[0.2em] transition-all duration-200 cursor-pointer disabled:cursor-not-allowed shadow-[0_0_25px_rgba(138,90,43,0.25)] hover:shadow-[0_0_35px_rgba(138,90,43,0.35)] rounded-xl"
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
-                  Working
-                </>
-              ) : isSignUp ? (
-                'Sign up'
-              ) : (
-                'Sign in'
-              )}
-            </button>
-
-            {!isSignUp && emailNotConfirmed && (
-              <button
-                type="button"
-                onClick={handleResendConfirmation}
-                disabled={isSubmitting}
-                className="h-12 w-full inline-flex items-center justify-center gap-2 bg-[#F7EFE2]/50 hover:bg-[#EDE1CF] disabled:bg-[#EDE1CF]/30 text-[#2E180E] border border-[#D6A15F]/40 font-mono text-[12px] uppercase tracking-[0.2em] transition-all duration-200 cursor-pointer disabled:cursor-not-allowed rounded-xl"
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
-                    Sending
-                  </>
-                ) : (
-                  <>
-                    <RotateCcw className="w-4 h-4" aria-hidden="true" />
-                    Resend confirmation email
-                  </>
-                )}
-              </button>
-            )}
-          </form>
-
-          <div className="flex items-center gap-4" aria-hidden="true">
-            <span className="h-px flex-1 bg-[#D6A15F]/30" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#8A5A3A]/60">or continue with</span>
-            <span className="h-px flex-1 bg-[#D6A15F]/30" />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3.5">
-            {PROVIDERS.map(({ id, label, mark }) => (
-              <button
-                key={id}
-                type="button"
-                onClick={() => handleProvider(id)}
-                aria-label={`Continue with ${label}`}
-                className="group h-12 w-full flex items-center justify-center gap-2 px-3 border border-[#D6A15F]/40 bg-[#FFFFFF]/40 hover:border-[#8A5A2B] hover:bg-[#F7EFE2]/40 transition-all duration-200 cursor-pointer rounded-xl"
-              >
-                {mark}
-                <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-[#2E180E]/90 group-hover:text-[#A65A3A] transition-colors">
-                  {label}
-                </span>
-              </button>
-            ))}
-          </div>
-
-          <div className="flex items-center justify-between gap-4 border-t border-[#D6A15F]/30 pt-6">
-            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-[#5B341E]/70">
-              {isSignUp ? 'Already have an account?' : 'No account yet?'}
-            </p>
-            <Link
-              href={isSignUp ? '/signin' : '/signup'}
-              className="group inline-flex items-center gap-2 min-h-[44px] font-mono text-[11px] uppercase tracking-[0.2em] text-[#8A5A2B] hover:text-[#A65A3A] transition-colors cursor-pointer"
-            >
-              {isSignUp ? 'Sign in' : 'Create account'}
-              <span className="transition-transform group-hover:translate-x-1" aria-hidden="true">
-                →
+          <div className="flex items-center gap-2.5">
+            <span className="relative grid h-8 w-8 place-items-center rounded-[9px] bg-[#111315] font-mono text-[13px] font-bold text-[#F7F8F8]">
+              D
+              <span
+                className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-[#EF4444] ring-2 ring-[#E9EAEB]"
+                aria-hidden="true"
+              />
+            </span>
+            <span className="leading-none">
+              <span className="block font-mono text-[11px] font-bold tracking-[0.24em] text-[#111315]">
+                DEVCANVAS
               </span>
-            </Link>
+              <span className="mt-1 block font-mono text-[8px] uppercase tracking-[0.22em] text-[#EF4444]">
+                Access node
+              </span>
+            </span>
           </div>
-        </div>
-      </main>
+        </header>
 
-      <footer className="relative z-10 hidden lg:flex w-full max-w-[1440px] mx-auto px-5 sm:px-10 pb-5 flex items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-[0.15em] text-[#5B341E]/40">
-        <span>© 2026 DevCanvas</span>
-        <span>Clearance required</span>
-      </footer>
+        <main className="flex-1 w-full max-w-[1440px] mx-auto px-5 sm:px-10 lg:px-14 py-6 lg:py-8 grid lg:grid-cols-[minmax(0,480px)_minmax(0,1fr)] gap-10 lg:gap-14 items-center">
+          {/* ── Form ── */}
+          <section className="auth-rise w-full">
+            <div className="w-full rounded-[28px] border border-[rgba(41,44,48,0.14)] bg-white/90 backdrop-blur-xl px-6 sm:px-9 py-7 sm:py-9 shadow-[0_30px_80px_-40px_rgba(17,19,21,0.3)]">
+              <div className="flex flex-col gap-2">
+                <span className="inline-flex items-center gap-2 font-mono text-[9.5px] font-semibold uppercase tracking-[0.22em] text-[#777C82]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#EF4444] animate-pulse" aria-hidden="true" />
+                  {isSignUp ? 'New account // 02' : 'Secure access // 01'}
+                </span>
 
+                <h1
+                  className="text-[clamp(30px,3.1vw,40px)] font-bold leading-[1.03] tracking-[-0.04em]"
+                  style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}
+                >
+                  <span className="text-[#111315]">
+                    {isSignUp ? 'Open your' : 'Welcome back.'}
+                  </span>
+                  <br />
+                  <span className="bg-gradient-to-r from-[#DC2626] via-[#E04848] to-[#F87171] bg-clip-text text-transparent">
+                    {isSignUp ? 'workspace.' : 'Continue building.'}
+                  </span>
+                </h1>
+
+                <p className="max-w-[34ch] text-[13.5px] leading-relaxed text-[#4A4E54]">
+                  {isSignUp
+                    ? 'One account holds your resume, projects and a live portfolio site.'
+                    : 'Pick up where you left off — your resume, projects and portfolio are waiting.'}
+                </p>
+              </div>
+
+              <div
+                role="status"
+                aria-live="polite"
+                className={`mt-5 rounded-xl border px-4 py-3 font-mono text-[11px] uppercase leading-[1.6] tracking-[0.04em] ${
+                  message
+                    ? message.tone === 'sent'
+                      ? 'border-emerald-600/30 bg-emerald-50 text-emerald-800'
+                      : 'border-[#EF4444]/35 bg-[#EF4444]/[0.07] text-[#B91C1C]'
+                    : 'hidden'
+                }`}
+              >
+                {message?.text}
+              </div>
+
+              <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-4" noValidate>
+                {isSignUp && (
+                  <div className="flex flex-col gap-2">
+                    <label
+                      htmlFor="name"
+                      className="font-mono text-[9.5px] font-semibold uppercase tracking-[0.18em] text-[#4A4E54]"
+                    >
+                      Name
+                    </label>
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      autoComplete="name"
+                      placeholder="Your name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className={FIELD_CLASS}
+                    />
+                  </div>
+                )}
+
+                <div className="flex flex-col gap-2">
+                  <label
+                    htmlFor="email"
+                    className="font-mono text-[9.5px] font-semibold uppercase tracking-[0.18em] text-[#4A4E54]"
+                  >
+                    Email
+                  </label>
+                  <div className="relative">
+                    <Mail
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9AA0A8] pointer-events-none"
+                      aria-hidden="true"
+                    />
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className={`${FIELD_CLASS} pl-11`}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label
+                    htmlFor="password"
+                    className="font-mono text-[9.5px] font-semibold uppercase tracking-[0.18em] text-[#4A4E54]"
+                  >
+                    Password
+                  </label>
+                  <div className="relative">
+                    <Lock
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9AA0A8] pointer-events-none"
+                      aria-hidden="true"
+                    />
+                    <input
+                      id="password"
+                      name="password"
+                      type="password"
+                      autoComplete={isSignUp ? 'new-password' : 'current-password'}
+                      placeholder={isSignUp ? 'At least 8 characters' : 'Your password'}
+                      minLength={8}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className={`${FIELD_CLASS} pl-11`}
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="group mt-1 h-12 w-full inline-flex items-center justify-center gap-2.5 rounded-full bg-[#111315] font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-all duration-200 hover:bg-[#1E2125] hover:shadow-[0_18px_40px_-18px_rgba(17,19,21,0.7)] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
+                      Working
+                    </>
+                  ) : (
+                    <>
+                      {isSignUp ? 'Create account' : 'Sign in'}
+                      <ArrowRight
+                        className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
+                        aria-hidden="true"
+                      />
+                    </>
+                  )}
+                </button>
+
+                {!isSignUp && emailNotConfirmed && (
+                  <button
+                    type="button"
+                    onClick={handleResendConfirmation}
+                    disabled={isSubmitting}
+                    className="h-11 w-full inline-flex items-center justify-center gap-2 rounded-full border border-[rgba(41,44,48,0.16)] bg-white font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[#23262A] transition-all duration-200 hover:border-[#111315] hover:bg-[#F4F5F6] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
+                        Sending
+                      </>
+                    ) : (
+                      <>
+                        <RotateCcw className="w-4 h-4" aria-hidden="true" />
+                        Resend confirmation
+                      </>
+                    )}
+                  </button>
+                )}
+              </form>
+
+              <div className="mt-5 flex items-center gap-4" aria-hidden="true">
+                <span className="h-px flex-1 bg-[rgba(41,44,48,0.12)]" />
+                <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#9AA0A8]">
+                  or continue with
+                </span>
+                <span className="h-px flex-1 bg-[rgba(41,44,48,0.12)]" />
+              </div>
+
+              <div className="mt-4 grid grid-cols-2 gap-3">
+                {PROVIDERS.map(({ id, label, mark }) => (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => handleProvider(id)}
+                    aria-label={`Continue with ${label}`}
+                    className="group h-[46px] w-full flex items-center justify-center gap-2 rounded-full border border-[rgba(41,44,48,0.16)] bg-white px-3 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[#23262A] transition-all duration-200 hover:border-[#111315] hover:bg-[#F4F5F6] cursor-pointer"
+                  >
+                    {mark}
+                    <span className="transition-colors group-hover:text-[#111315]">{label}</span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="mt-5 flex items-center justify-between gap-4 border-t border-[rgba(41,44,48,0.12)] pt-4">
+                <p className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-[#777C82]">
+                  {isSignUp ? 'Already have an account?' : 'No account yet?'}
+                </p>
+                <Link
+                  href={isSignUp ? '/signin' : '/signup'}
+                  className="group inline-flex min-h-[44px] items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#111315] transition-colors hover:text-[#EF4444] cursor-pointer"
+                >
+                  {isSignUp ? 'Sign in' : 'Create account'}
+                  <ArrowRight
+                    className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1"
+                    aria-hidden="true"
+                  />
+                </Link>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <footer className="w-full max-w-[1440px] mx-auto px-5 sm:px-10 pb-5 flex items-center justify-between gap-4 font-mono text-[9px] uppercase tracking-[0.18em] text-[#9AA0A8]">
+          <span>© 2026 DevCanvas</span>
+          <span className="hidden sm:inline">Encrypted session · Access node 01</span>
+        </footer>
       </div>
     </div>
   );
