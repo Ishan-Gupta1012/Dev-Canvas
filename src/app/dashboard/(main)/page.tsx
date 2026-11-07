@@ -6,8 +6,6 @@ import { useAuth } from '@/context/AuthContext';
 import {
   ExternalLink,
   ArrowRight,
-  LayoutTemplate,
-  TrendingUp,
   Eye,
   Layers,
   BookOpen,
@@ -489,83 +487,45 @@ export default function Dashboard() {
                 label="Skills"
                 accent="#1A1C1E"
               />
-              {/* AI Credits tile */}
-              <div className="bento-card p-4 col-span-2 sm:col-span-1 flex flex-col justify-center min-w-0">
-                <div className="flex items-center gap-2 mb-1.5">
-                  <Cpu size={14} style={{ color: '#767B81' }} />
-                  <span
-                    className="font-mono text-[9px] uppercase tracking-widest font-semibold"
-                    style={{ color: '#767B81' }}
-                  >
-                    AI Credits
-                  </span>
-                </div>
-                <p
-                  className="font-serif text-xl font-bold leading-none"
-                  style={{ color: '#1A1C1E' }}
-                >
-                  {creditsUsed}
-                  <span
-                    className="font-mono text-[10px] font-normal ml-0.5"
-                    style={{ color: '#767B81' }}
-                  >
-                    / 50
-                  </span>
-                </p>
-                <div
-                  className="mt-2 w-full h-1.5 rounded-full overflow-hidden"
-                  style={{ background: '#DADCE0' }}
-                >
-                  <div
-                    className="h-full rounded-full transition-all duration-500"
-                    style={{
-                      width: `${creditsPct}%`,
-                      background: creditsUsed >= 40 ? '#E95858' : '#1A1C1E',
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Quick access bar */}
-            <div className="bento-card p-4 flex items-center justify-between gap-3 flex-wrap">
-              <div className="min-w-0">
-                <p
-                  className="font-mono text-[10px] uppercase tracking-widest"
+            {/* AI Credits tile */}
+            <div className="bento-card p-4 col-span-2 sm:col-span-1 flex flex-col justify-center min-w-0">
+              <div className="flex items-center gap-2 mb-1.5">
+                <Cpu size={14} style={{ color: '#767B81' }} />
+                <span
+                  className="font-mono text-[9px] uppercase tracking-widest font-semibold"
                   style={{ color: '#767B81' }}
                 >
-                  Quick access
-                </p>
-                <p className="text-sm mt-0.5" style={{ color: '#1A1C1E' }}>
-                  {selected
-                    ? `Editing context: ${selected.title || 'Untitled portfolio'}`
-                    : 'Manage templates, builder, and your portfolios.'}
-                </p>
+                  AI Credits
+                </span>
               </div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <Link
-                  href={builderHref}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-mono text-[10px] uppercase tracking-wider font-semibold border border-[#DADCE0] text-[#1A1C1E] hover:bg-[#1A1C1E]/5 transition-colors"
+              <p
+                className="font-serif text-xl font-bold leading-none"
+                style={{ color: '#1A1C1E' }}
+              >
+                {creditsUsed}
+                <span
+                  className="font-mono text-[10px] font-normal ml-0.5"
+                  style={{ color: '#767B81' }}
                 >
-                  Edit Builder
-                </Link>
-                <Link
-                  href="/dashboard/templates"
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-mono text-[10px] uppercase tracking-wider font-semibold border border-[#DADCE0] text-[#1A1C1E] hover:bg-[#1A1C1E]/5 transition-colors"
-                >
-                  <LayoutTemplate size={13} /> Templates
-                </Link>
-                <Link
-                  href="/dashboard/portfolios"
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-mono text-[10px] uppercase tracking-wider font-semibold transition-colors"
-                  style={{ background: '#1A1C1E', color: '#FFFFFF' }}
-                >
-                  <TrendingUp size={13} /> My Portfolios
-                </Link>
+                  / 50
+                </span>
+              </p>
+              <div
+                className="mt-2 w-full h-1.5 rounded-full overflow-hidden"
+                style={{ background: '#DADCE0' }}
+              >
+                <div
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{
+                    width: `${creditsPct}%`,
+                    background: creditsUsed >= 40 ? '#E95858' : '#1A1C1E',
+                  }}
+                />
               </div>
             </div>
           </div>
         </div>
+      </div>
 
         {/* Checklist + AI Suggestions */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5 mb-5 lg:items-start">
@@ -580,7 +540,7 @@ export default function Dashboard() {
                   Completion Checklist
                 </p>
                 <p className="text-xs mt-0.5" style={{ color: '#767B81' }}>
-                  Connected to the selected portfolio's actual data.
+                  Connected to the selected portfolio&apos;s actual data.
                 </p>
               </div>
               <span
