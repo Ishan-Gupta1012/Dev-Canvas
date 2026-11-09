@@ -70,7 +70,7 @@ function BentoScoreRing({ score }: { score: number }) {
   const offset = circ - (Math.max(0, Math.min(100, score)) / 100) * circ;
   return (
     <svg viewBox="0 0 120 120" className="w-full h-full -rotate-90" aria-hidden>
-      <circle cx="60" cy="60" r={r} fill="none" stroke="#DADCE0" strokeWidth="9" />
+      <circle cx="60" cy="60" r={r} fill="none" stroke="var(--dash-border)" strokeWidth="9" />
       <circle
         cx="60"
         cy="60"
@@ -92,7 +92,7 @@ function StatTile({
   icon: Icon,
   value,
   label,
-  accent = '#1A1C1E',
+  accent = 'var(--dash-text)',
 }: {
   icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }>;
   value: string | number;
@@ -103,20 +103,20 @@ function StatTile({
     <div className="bento-card p-4 flex items-center gap-3 min-w-0">
       <div
         className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-        style={{ background: 'rgba(26, 28, 30, 0.06)' }}
+        style={{ background: 'var(--dash-hover)' }}
       >
         <Icon size={17} style={{ color: accent }} />
       </div>
       <div className="min-w-0">
         <p
           className="font-serif text-2xl font-bold leading-none"
-          style={{ color: '#1A1C1E' }}
+          style={{ color: 'var(--dash-text)' }}
         >
           {value}
         </p>
         <p
           className="font-mono text-[10px] uppercase tracking-widest mt-0.5 truncate"
-          style={{ color: '#767B81' }}
+          style={{ color: 'var(--dash-text-secondary)' }}
         >
           {label}
         </p>
@@ -263,7 +263,7 @@ export default function Dashboard() {
   return (
     <div
       className="relative min-h-full bento-grid-root dashboard-flow"
-      style={{ background: '#F3F4F5' }}
+      style={{ background: 'var(--dash-page-bg)' }}
     >
       {/* Greeting */}
       <div className="max-w-7xl mx-auto px-4 sm:px-8 pt-5 md:pt-6 pb-2">
@@ -273,13 +273,13 @@ export default function Dashboard() {
               className="font-serif font-bold tracking-tight"
               style={{
                 fontSize: 'clamp(1.55rem, 1.25rem + 1.1vw, 2.1rem)',
-                color: '#1A1C1E',
+                color: 'var(--dash-text)',
                 lineHeight: 1.15,
               }}
             >
               {greeting}, {firstName}.
             </h1>
-            <p className="mt-0.5 text-sm" style={{ color: '#767B81' }}>
+            <p className="mt-0.5 text-sm" style={{ color: 'var(--dash-text-secondary)' }}>
               {!selected
                 ? 'Create a portfolio to start tracking your score and checklist.'
                 : score === 100
@@ -296,9 +296,9 @@ export default function Dashboard() {
                 style={
                   isPublished
                     ? {
-                        background: 'rgba(26,28,30,0.06)',
-                        color: '#1A1C1E',
-                        border: '1px solid rgba(26,28,30,0.14)',
+                        background: 'var(--dash-hover)',
+                        color: 'var(--dash-text)',
+                        border: '1px solid var(--dash-border)',
                       }
                     : {
                         background: 'rgba(233,88,88,0.10)',
@@ -319,9 +319,9 @@ export default function Dashboard() {
                 }
                 className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-full transition-colors"
                 style={{
-                  background: 'rgba(26,28,30,0.06)',
-                  color: '#1A1C1E',
-                  border: '1px solid #DADCE0',
+                  background: 'var(--dash-hover)',
+                  color: 'var(--dash-text)',
+                  border: '1px solid var(--dash-border)',
                 }}
               >
                 <ExternalLink size={11} /> Live
@@ -368,7 +368,7 @@ export default function Dashboard() {
                       className="font-serif font-bold leading-none"
                       style={{
                         fontSize: 'clamp(1.9rem, 1.5rem + 1vw, 2.5rem)',
-                        color: '#1A1C1E',
+                        color: 'var(--dash-text)',
                         fontVariantNumeric: 'tabular-nums',
                       }}
                     >
@@ -376,7 +376,7 @@ export default function Dashboard() {
                     </span>
                     <span
                       className="font-mono text-[9px] uppercase tracking-widest mt-0.5"
-                      style={{ color: '#767B81' }}
+                      style={{ color: 'var(--dash-text-secondary)' }}
                     >
                       / 100
                     </span>
@@ -393,13 +393,13 @@ export default function Dashboard() {
                   </p>
                   <p
                     className="font-serif text-xl md:text-2xl font-semibold leading-tight"
-                    style={{ color: '#1A1C1E' }}
+                    style={{ color: 'var(--dash-text)' }}
                   >
                     {selected
                       ? selected.title || 'Selected portfolio'
                       : 'No portfolio selected'}
                   </p>
-                  <p className="text-sm mt-1" style={{ color: '#767B81' }}>
+                  <p className="text-sm mt-1" style={{ color: 'var(--dash-text-secondary)' }}>
                     {selected
                       ? `${completedSections} of ${totalSections} sections complete`
                       : 'Your score will appear after you create a portfolio.'}
@@ -407,12 +407,12 @@ export default function Dashboard() {
                   <div className="mt-3 flex flex-wrap items-center gap-2">
                     <span
                       className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest"
-                      style={{ color: '#767B81' }}
+                      style={{ color: 'var(--dash-text-secondary)' }}
                     >
                       <span
                         className="w-1.5 h-1.5 rounded-full animate-pulse"
                         style={{
-                          background: score === 100 ? '#1A1C1E' : '#E95858',
+                          background: score === 100 ? 'var(--dash-text)' : '#E95858',
                         }}
                       />
                       {score === 100 ? 'Complete' : 'In progress'}
@@ -421,7 +421,7 @@ export default function Dashboard() {
                       <Link
                         href={builderHref}
                         className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-wider font-semibold transition-opacity hover:opacity-85"
-                        style={{ background: '#1A1C1E', color: '#FFFFFF' }}
+                        style={{ background: 'var(--dash-invert-bg)', color: 'var(--dash-invert-text)' }}
                       >
                         Fix next <ArrowRight size={12} />
                       </Link>
@@ -433,8 +433,8 @@ export default function Dashboard() {
               <p
                 className="mt-3 pt-3 text-[11px] leading-snug"
                 style={{
-                  color: '#767B81',
-                  borderTop: '1px solid #DADCE0',
+                  color: 'var(--dash-text-secondary)',
+                  borderTop: '1px solid var(--dash-border)',
                 }}
               >
                 {selected
@@ -469,58 +469,58 @@ export default function Dashboard() {
                 icon={Eye}
                 value={user?.sectionViews ?? 0}
                 label="Profile Views"
-                accent="#1A1C1E"
+                accent="var(--dash-text)"
               />
               <StatTile
                 icon={Layers}
                 value={stats.projects}
                 label="Projects"
-                accent="#1A1C1E"
+                accent="var(--dash-text)"
               />
               <StatTile
                 icon={BookOpen}
                 value={stats.roles}
                 label="Roles"
-                accent="#1A1C1E"
+                accent="var(--dash-text)"
               />
               <StatTile
                 icon={Code2}
                 value={stats.skills}
                 label="Skills"
-                accent="#1A1C1E"
+                accent="var(--dash-text)"
               />
               {/* AI Credits tile */}
               <div className="bento-card p-4 col-span-2 sm:col-span-1 flex flex-col justify-center min-w-0">
                 <div className="flex items-center gap-2 mb-1.5">
-                  <Cpu size={14} style={{ color: '#767B81' }} />
+                  <Cpu size={14} style={{ color: 'var(--dash-text-secondary)' }} />
                   <span
                     className="font-mono text-[9px] uppercase tracking-widest font-semibold"
-                    style={{ color: '#767B81' }}
+                    style={{ color: 'var(--dash-text-secondary)' }}
                   >
                     AI Credits
                   </span>
                 </div>
                 <p
                   className="font-serif text-xl font-bold leading-none"
-                  style={{ color: '#1A1C1E' }}
+                  style={{ color: 'var(--dash-text)' }}
                 >
                   {creditsUsed}
                   <span
                     className="font-mono text-[10px] font-normal ml-0.5"
-                    style={{ color: '#767B81' }}
+                    style={{ color: 'var(--dash-text-secondary)' }}
                   >
                     / 50
                   </span>
                 </p>
                 <div
                   className="mt-2 w-full h-1.5 rounded-full overflow-hidden"
-                  style={{ background: '#DADCE0' }}
+                  style={{ background: 'var(--dash-border)' }}
                 >
                   <div
                     className="h-full rounded-full transition-all duration-500"
                     style={{
                       width: `${creditsPct}%`,
-                      background: creditsUsed >= 40 ? '#E95858' : '#1A1C1E',
+                      background: creditsUsed >= 40 ? '#E95858' : 'var(--dash-text)',
                     }}
                   />
                 </div>
@@ -532,11 +532,11 @@ export default function Dashboard() {
               <div className="min-w-0">
                 <p
                   className="font-mono text-[10px] uppercase tracking-widest"
-                  style={{ color: '#767B81' }}
+                  style={{ color: 'var(--dash-text-secondary)' }}
                 >
                   Quick access
                 </p>
-                <p className="text-sm mt-0.5" style={{ color: '#1A1C1E' }}>
+                <p className="text-sm mt-0.5" style={{ color: 'var(--dash-text)' }}>
                   {selected
                     ? `Editing context: ${selected.title || 'Untitled portfolio'}`
                     : 'Manage templates, builder, and your portfolios.'}
@@ -545,20 +545,20 @@ export default function Dashboard() {
               <div className="flex items-center gap-2 flex-wrap">
                 <Link
                   href={builderHref}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-mono text-[10px] uppercase tracking-wider font-semibold border border-[#DADCE0] text-[#1A1C1E] hover:bg-[#1A1C1E]/5 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-mono text-[10px] uppercase tracking-wider font-semibold border border-[var(--dash-border)] text-[var(--dash-text)] hover:bg-[var(--dash-hover)] transition-colors"
                 >
                   Edit Builder
                 </Link>
                 <Link
                   href="/dashboard/templates"
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-mono text-[10px] uppercase tracking-wider font-semibold border border-[#DADCE0] text-[#1A1C1E] hover:bg-[#1A1C1E]/5 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-mono text-[10px] uppercase tracking-wider font-semibold border border-[var(--dash-border)] text-[var(--dash-text)] hover:bg-[var(--dash-hover)] transition-colors"
                 >
                   <LayoutTemplate size={13} /> Templates
                 </Link>
                 <Link
                   href="/dashboard/portfolios"
                   className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-mono text-[10px] uppercase tracking-wider font-semibold transition-colors"
-                  style={{ background: '#1A1C1E', color: '#FFFFFF' }}
+                  style={{ background: 'var(--dash-invert-bg)', color: 'var(--dash-invert-text)' }}
                 >
                   <TrendingUp size={13} /> My Portfolios
                 </Link>
@@ -575,17 +575,17 @@ export default function Dashboard() {
               <div>
                 <p
                   className="font-mono text-[11px] uppercase tracking-widest font-semibold"
-                  style={{ color: '#767B81' }}
+                  style={{ color: 'var(--dash-text-secondary)' }}
                 >
                   Completion Checklist
                 </p>
-                <p className="text-xs mt-0.5" style={{ color: '#767B81' }}>
-                  Connected to the selected portfolio's actual data.
+                <p className="text-xs mt-0.5" style={{ color: 'var(--dash-text-secondary)' }}>
+                  Connected to the selected portfolio&apos;s actual data.
                 </p>
               </div>
               <span
                 className="font-mono text-[11px] font-semibold"
-                style={{ color: '#1A1C1E' }}
+                style={{ color: 'var(--dash-text)' }}
               >
                 {completedSections}/{totalSections}
               </span>
@@ -599,18 +599,18 @@ export default function Dashboard() {
                       ? `${c.href}${c.href.includes('?') ? '&' : '?'}portfolio=${selected.id}`
                       : c.href
                   }
-                  className="flex items-center gap-2.5 py-2 px-1 rounded-lg transition-colors hover:bg-black/[0.04]"
-                  style={{ color: c.done ? '#A3A6AC' : '#1A1C1E' }}
+                  className="flex items-center gap-2.5 py-2 px-1 rounded-lg transition-colors hover:bg-[var(--dash-hover)]"
+                  style={{ color: c.done ? 'var(--dash-text-muted)' : 'var(--dash-text)' }}
                 >
                   {c.done ? (
                     <CheckCircle2
                       size={16}
-                      style={{ color: '#1A1C1E', flexShrink: 0 }}
+                      style={{ color: 'var(--dash-text)', flexShrink: 0 }}
                     />
                   ) : (
                     <span
                       className="w-4 h-4 rounded-full border-2 shrink-0"
-                      style={{ borderColor: '#DADCE0' }}
+                      style={{ borderColor: 'var(--dash-border)' }}
                       aria-hidden
                     />
                   )}
@@ -630,15 +630,15 @@ export default function Dashboard() {
             {!selected && !loadingPortfolios && (
               <div
                 className="mt-3 pt-3 flex items-center justify-between gap-3"
-                style={{ borderTop: '1px solid #DADCE0' }}
+                style={{ borderTop: '1px solid var(--dash-border)' }}
               >
-                <p className="text-sm" style={{ color: '#767B81' }}>
+                <p className="text-sm" style={{ color: 'var(--dash-text-secondary)' }}>
                   No portfolio data yet.
                 </p>
                 <Link
                   href="/dashboard/ai-builder"
                   className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-mono text-[10px] uppercase tracking-wider font-semibold"
-                  style={{ background: '#1A1C1E', color: '#FFFFFF' }}
+                  style={{ background: 'var(--dash-invert-bg)', color: 'var(--dash-invert-text)' }}
                 >
                   <Sparkles size={13} /> Auto Build
                 </Link>
@@ -658,11 +658,11 @@ export default function Dashboard() {
               <div>
                 <p
                   className="font-mono text-[11px] uppercase tracking-widest font-semibold"
-                  style={{ color: '#767B81' }}
+                  style={{ color: 'var(--dash-text-secondary)' }}
                 >
                   AI Suggestions
                 </p>
-                <p className="text-xs" style={{ color: '#767B81' }}>
+                <p className="text-xs" style={{ color: 'var(--dash-text-secondary)' }}>
                   Based on the selected portfolio
                 </p>
               </div>
@@ -671,19 +671,19 @@ export default function Dashboard() {
               {suggestions.map((s, i) => (
                 <div
                   key={`${s.title}-${i}`}
-                  className="rounded-xl border border-[#DADCE0] bg-[#FFFFFF] p-3 shadow-xs"
+                  className="rounded-xl border border-[var(--dash-border)] bg-[var(--dash-surface)] p-3 shadow-xs"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <p
                       className="text-sm font-semibold leading-snug"
-                      style={{ color: '#1A1C1E' }}
+                      style={{ color: 'var(--dash-text)' }}
                     >
                       {s.title}
                     </p>
                     {s.href && (
                       <Link
                         href={s.href.startsWith('/') ? s.href : '#'}
-                        className="shrink-0 font-mono text-[10px] uppercase tracking-wider text-[#767B81] hover:text-[#1A1C1E] transition-colors"
+                        className="shrink-0 font-mono text-[10px] uppercase tracking-wider text-[var(--dash-text-secondary)] hover:text-[var(--dash-text)] transition-colors"
                       >
                         Open
                       </Link>
@@ -691,7 +691,7 @@ export default function Dashboard() {
                   </div>
                   <p
                     className="text-[13px] leading-snug mt-1"
-                    style={{ color: '#767B81' }}
+                    style={{ color: 'var(--dash-text-secondary)' }}
                   >
                     {s.detail}
                   </p>

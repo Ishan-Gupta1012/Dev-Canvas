@@ -17,6 +17,7 @@ type Action = {
   href: string;
   icon: typeof FilePlus;
   accent: string;
+  tint: string;
   glow: string;
 };
 
@@ -26,8 +27,9 @@ const ACTIONS: Action[] = [
     desc: 'Add projects, skills & experience from scratch',
     href: '/dashboard/resume-builder',
     icon: FilePlus,
-    accent: '#1A1C1E',
-    glow: 'rgba(26,28,30,0.12)',
+    accent: 'var(--dash-text)',
+    tint: 'var(--dash-hover)',
+    glow: 'var(--dash-glow)',
   },
   {
     label: 'AI Polish',
@@ -35,6 +37,7 @@ const ACTIONS: Action[] = [
     href: '/dashboard/ai-builder',
     icon: Sparkles,
     accent: '#E95858',
+    tint: 'rgba(233,88,88,0.12)',
     glow: 'rgba(233,88,88,0.15)',
   },
   {
@@ -42,16 +45,18 @@ const ACTIONS: Action[] = [
     desc: 'Choose your design',
     href: '/dashboard/templates',
     icon: LayoutTemplate,
-    accent: '#1A1C1E',
-    glow: 'rgba(26,28,30,0.12)',
+    accent: 'var(--dash-text)',
+    tint: 'var(--dash-hover)',
+    glow: 'var(--dash-glow)',
   },
   {
     label: 'Upload Resume',
     desc: 'Parse an existing one',
     href: '/dashboard/resume',
     icon: FileText,
-    accent: '#767B81',
-    glow: 'rgba(118,123,129,0.15)',
+    accent: 'var(--dash-text-secondary)',
+    tint: 'var(--dash-hover)',
+    glow: 'var(--dash-glow)',
   },
   {
     label: 'Analyze',
@@ -59,6 +64,7 @@ const ACTIONS: Action[] = [
     href: '/dashboard/resume-analyzer',
     icon: FileSearch,
     accent: '#E95858',
+    tint: 'rgba(233,88,88,0.12)',
     glow: 'rgba(233,88,88,0.15)',
   },
 ];
@@ -95,7 +101,7 @@ function MagneticCard({ action }: { action: Action }) {
         transform: `translate(${pos.x}px, ${pos.y}px)`,
         transition: 'transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1)',
       }}
-      className="group relative overflow-hidden rounded-2xl border border-[#DADCE0] bg-[#FFFFFF] shadow-xs p-6 flex flex-col justify-between w-[260px] sm:w-[300px] h-[180px] shrink-0"
+      className="group relative overflow-hidden rounded-2xl border border-[var(--dash-border)] bg-[var(--dash-surface)] shadow-xs p-6 flex flex-col justify-between w-[260px] sm:w-[300px] h-[180px] shrink-0"
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300"
@@ -111,7 +117,7 @@ function MagneticCard({ action }: { action: Action }) {
       <div className="relative flex items-start justify-between">
         <div
           className="w-11 h-11 rounded-xl flex items-center justify-center"
-          style={{ backgroundColor: `${action.accent}1f` }}
+          style={{ backgroundColor: action.tint }}
         >
           <Icon size={22} style={{ color: action.accent }} />
         </div>

@@ -48,6 +48,34 @@
   --border: #DADCE0;
   --border-strong: #A3A6AC;
 
+  /* Dashboard content surfaces (theme-aware) */
+  --dash-page-bg: #F3F4F5;
+  --dash-text: #1A1C1E;
+  --dash-text-secondary: #767B81;
+  --dash-text-muted: #A3A6AC;
+  --dash-surface: #FFFFFF;
+  --dash-surface-glass: rgba(255, 255, 255, 0.95);
+  --dash-surface-translucent: rgba(255, 255, 255, 0.9);
+  --dash-border: #DADCE0;
+  --dash-hover: rgba(26, 28, 30, 0.06);
+  --dash-hover-strong: rgba(26, 28, 30, 0.1);
+  --dash-invert-bg: #1A1C1E;
+  --dash-invert-text: #FFFFFF;
+  --dash-glow: rgba(26, 28, 30, 0.12);
+  --dash-overlay: rgba(26, 28, 30, 0.35);
+  --dash-card-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 6px 20px -16px rgba(26, 28, 30, 0.1),
+    0 2px 6px -4px rgba(26, 28, 30, 0.05);
+  --dash-card-shadow-expanded:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 12px 30px -18px rgba(26, 28, 30, 0.12),
+    0 4px 12px -6px rgba(26, 28, 30, 0.06);
+  --dash-modal-shadow:
+    0 24px 64px -12px rgba(26, 28, 30, 0.2),
+    0 8px 24px rgba(26, 28, 30, 0.06),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.95);
+
   /* Background atmosphere matching landing page */
   --background-atmosphere:
     radial-gradient(
@@ -221,6 +249,31 @@
   --text-muted: #767B81;
   --border: #2C2F33;
   --border-strong: #767B81;
+
+  /* Dashboard content surfaces (theme-aware) */
+  --dash-page-bg: #111315;
+  --dash-text: #F3F4F5;
+  --dash-text-secondary: #A3A6AC;
+  --dash-text-muted: #767B81;
+  --dash-surface: #1A1C1E;
+  --dash-surface-glass: rgba(26, 28, 30, 0.96);
+  --dash-surface-translucent: rgba(26, 28, 30, 0.9);
+  --dash-border: #2C2F33;
+  --dash-hover: rgba(255, 255, 255, 0.06);
+  --dash-hover-strong: rgba(255, 255, 255, 0.1);
+  --dash-invert-bg: #F3F4F5;
+  --dash-invert-text: #111315;
+  --dash-glow: rgba(255, 255, 255, 0.12);
+  --dash-overlay: rgba(0, 0, 0, 0.6);
+  --dash-card-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 6px 20px -16px rgba(0, 0, 0, 0.55),
+    0 2px 6px -4px rgba(0, 0, 0, 0.4);
+  --dash-card-shadow-expanded:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 12px 30px -18px rgba(0, 0, 0, 0.65),
+    0 4px 12px -6px rgba(0, 0, 0, 0.45);
+  --dash-modal-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
 
   --th-primary: #F3F4F5;
   --th-primary-hover: #FFFFFF;
@@ -1285,6 +1338,32 @@ body::-webkit-scrollbar,
 }
 .dashboard-flow .bento-card:hover {
   transform: translateY(-1px);
+}
+
+/* Dark mode: the same cards, now on graphite instead of porcelain */
+.dark .dashboard-flow .bento-card {
+  --bento-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 4px 16px -6px rgba(0, 0, 0, 0.55),
+    0 1px 2px 0 rgba(0, 0, 0, 0.35);
+  --bento-shadow-hover:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 8px 22px -6px rgba(0, 0, 0, 0.65),
+    0 2px 4px 0 rgba(0, 0, 0, 0.45);
+  --bento-bg: #1A1C1E;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .dashboard-flow .bento-card:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.dark .bento-card {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .bento-card:hover {
+  border-color: rgba(255, 255, 255, 0.14);
 }
 
 /* ── Score gauge SVG circle transition ───────────────────────── */

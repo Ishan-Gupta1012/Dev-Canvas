@@ -11,14 +11,14 @@ const STATUS_CONFIG: Record<
 > = {
   complete: {
     label: 'Complete',
-    color: '#1A1C1E',
-    bg: 'rgba(26,28,30,0.08)',
+    color: 'var(--dash-text)',
+    bg: 'var(--dash-hover)',
     Icon: CheckCircle2,
   },
   'in-progress': {
     label: 'In Progress',
-    color: '#767B81',
-    bg: 'rgba(118,123,129,0.12)',
+    color: 'var(--dash-text-secondary)',
+    bg: 'var(--dash-hover)',
     Icon: Clock,
   },
   'needs-improvement': {
@@ -32,14 +32,14 @@ const STATUS_CONFIG: Record<
 function MiniBar({ pct, status }: { pct: number; status: SectionStatus }) {
   const fill =
     status === 'complete'
-      ? '#1A1C1E'
+      ? 'var(--dash-text)'
       : status === 'in-progress'
-      ? '#767B81'
+      ? 'var(--dash-text-secondary)'
       : '#E95858';
   return (
     <div
       className="w-full h-1.5 rounded-full overflow-hidden"
-      style={{ background: 'rgba(218, 220, 224, 0.7)' }}
+      style={{ background: 'var(--dash-border)' }}
     >
       <div
         className="h-full rounded-full transition-all duration-500 ease-out"
@@ -56,16 +56,16 @@ function SectionRow({ section }: { section: SectionBreakdown }) {
     <div
       className="rounded-2xl p-3.5 transition-all duration-200"
       style={{
-        background: '#FFFFFF',
+        background: 'var(--dash-surface)',
         backdropFilter: 'blur(8px)',
         WebkitBackdropFilter: 'blur(8px)',
-        border: '1px solid #DADCE0',
+        border: '1px solid var(--dash-border)',
       }}
     >
       <div className="flex items-center justify-between gap-2 mb-1.5">
         <div className="flex items-center gap-1.5 min-w-0">
           <StatusIcon size={14} style={{ color: cfg.color, flexShrink: 0 }} />
-          <p className="text-xs font-semibold leading-tight truncate" style={{ color: '#1A1C1E' }}>
+          <p className="text-xs font-semibold leading-tight truncate" style={{ color: 'var(--dash-text)' }}>
             {section.label}
           </p>
         </div>
@@ -81,12 +81,12 @@ function SectionRow({ section }: { section: SectionBreakdown }) {
         <div className="flex-1">
           <MiniBar pct={section.pct} status={section.status} />
         </div>
-        <span className="font-mono text-[10px] shrink-0 font-medium" style={{ color: '#767B81' }}>
+        <span className="font-mono text-[10px] shrink-0 font-medium" style={{ color: 'var(--dash-text-secondary)' }}>
           {section.earned}/{section.max} pts
         </span>
       </div>
 
-      <p className="text-[11px] leading-snug mb-2" style={{ color: '#767B81' }}>
+      <p className="text-[11px] leading-snug mb-2" style={{ color: 'var(--dash-text-secondary)' }}>
         {section.explanation}
       </p>
 
@@ -94,7 +94,7 @@ function SectionRow({ section }: { section: SectionBreakdown }) {
         <Link
           href={section.href}
           className="inline-flex items-center gap-1 font-mono text-[9px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-md transition-opacity hover:opacity-85"
-          style={{ background: '#1A1C1E', color: '#FFFFFF' }}
+          style={{ background: 'var(--dash-invert-bg)', color: 'var(--dash-invert-text)' }}
         >
           {section.actionLabel} <ArrowRight size={10} />
         </Link>
@@ -126,7 +126,7 @@ export default function ScoreBreakdownHoverCard({
 }: Props) {
   const panelRef = useRef<HTMLDivElement>(null);
   const scoreColor =
-    score >= 80 ? '#1A1C1E' : '#E95858';
+    score >= 80 ? 'var(--dash-text)' : '#E95858';
 
   // Close on Escape key
   useEffect(() => {
@@ -141,7 +141,7 @@ export default function ScoreBreakdownHoverCard({
     <div
       className="fixed inset-0 z-[150] flex items-center justify-center p-4 sm:p-6 animate-fade-in pointer-events-none"
       style={{
-        background: 'rgba(26, 28, 30, 0.35)',
+        background: 'var(--dash-overlay)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
       }}
@@ -152,22 +152,21 @@ export default function ScoreBreakdownHoverCard({
         onMouseLeave={onMouseLeave}
         className="relative w-full max-w-xl max-h-[85vh] flex flex-col rounded-3xl p-5 sm:p-6 overflow-hidden transition-all duration-300 pointer-events-auto"
         style={{
-          background: 'rgba(255, 255, 255, 0.95)',
+          background: 'var(--dash-surface-glass)',
           backdropFilter: 'blur(24px) saturate(180%)',
           WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-          border: '1px solid #DADCE0',
-          boxShadow:
-            '0 24px 64px -12px rgba(26, 28, 30, 0.20), 0 8px 24px rgba(26, 28, 30, 0.06), inset 0 1.5px 2px rgba(255, 255, 255, 0.95)',
+          border: '1px solid var(--dash-border)',
+          boxShadow: 'var(--dash-modal-shadow)',
         }}
       >
         {/* Header */}
-        <div className="pb-3.5 mb-3 border-b border-[#DADCE0]">
+        <div className="pb-3.5 mb-3 border-b border-[var(--dash-border)]">
           <div className="flex items-start justify-between gap-3">
             <div>
               <p className="font-mono text-[10px] uppercase tracking-widest" style={{ color: '#E95858' }}>
                 Detailed Breakdown
               </p>
-              <h3 className="font-serif text-lg sm:text-xl font-bold leading-tight" style={{ color: '#1A1C1E' }}>
+              <h3 className="font-serif text-lg sm:text-xl font-bold leading-tight" style={{ color: 'var(--dash-text)' }}>
                 {portfolioTitle || 'Portfolio Quality Score'}
               </h3>
             </div>
@@ -176,17 +175,17 @@ export default function ScoreBreakdownHoverCard({
                 <span className="font-serif text-2xl font-bold leading-none" style={{ color: scoreColor }}>
                   {score}
                 </span>
-                <span className="font-mono text-[10px] ml-0.5" style={{ color: '#767B81' }}>
+                <span className="font-mono text-[10px] ml-0.5" style={{ color: 'var(--dash-text-secondary)' }}>
                   / 100
                 </span>
-                <p className="font-mono text-[9px] uppercase tracking-wider mt-0.5" style={{ color: '#767B81' }}>
+                <p className="font-mono text-[9px] uppercase tracking-wider mt-0.5" style={{ color: 'var(--dash-text-secondary)' }}>
                   {completedSections}/{totalSections} done
                 </p>
               </div>
               <button
                 type="button"
                 onClick={onClose}
-                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-black/5 text-[#767B81] hover:text-[#1A1C1E]"
+                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-[var(--dash-hover)] text-[var(--dash-text-secondary)] hover:text-[var(--dash-text)]"
                 aria-label="Close"
               >
                 <X size={16} />
@@ -195,12 +194,12 @@ export default function ScoreBreakdownHoverCard({
           </div>
 
           {/* Overall progress bar */}
-          <div className="mt-2.5 w-full h-1.5 rounded-full overflow-hidden" style={{ background: '#DADCE0' }}>
+          <div className="mt-2.5 w-full h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--dash-border)' }}>
             <div
               className="h-full rounded-full transition-all duration-700"
               style={{
                 width: `${score}%`,
-                background: score >= 80 ? '#1A1C1E' : '#E95858',
+                background: score >= 80 ? 'var(--dash-text)' : '#E95858',
               }}
             />
           </div>
@@ -214,14 +213,14 @@ export default function ScoreBreakdownHoverCard({
         </div>
 
         {/* Footer */}
-        <div className="pt-3.5 mt-3 border-t border-[#DADCE0] flex items-center justify-between gap-2 text-xs flex-wrap">
-          <span className="text-[11px]" style={{ color: '#767B81' }}>
+        <div className="pt-3.5 mt-3 border-t border-[var(--dash-border)] flex items-center justify-between gap-2 text-xs flex-wrap">
+          <span className="text-[11px]" style={{ color: 'var(--dash-text-secondary)' }}>
             Updates live as you edit your portfolio.
           </span>
           <Link
             href="/dashboard/ai-builder"
             className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider font-semibold px-3 py-1.5 rounded-lg transition-opacity hover:opacity-85"
-            style={{ background: '#1A1C1E', color: '#FFFFFF' }}
+            style={{ background: 'var(--dash-invert-bg)', color: 'var(--dash-invert-text)' }}
           >
             Open Builder <ArrowRight size={11} />
           </Link>

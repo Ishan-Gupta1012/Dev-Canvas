@@ -59,13 +59,13 @@ export default function PortfolioSwitcherBar({ portfolios, selectedId, onSelect,
       >
         <section
           className={cn(
-            'rounded-[1.35rem] border border-[#DADCE0] bg-[#FFFFFF]/90 backdrop-blur-md transition-[padding,border-radius,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]',
+            'rounded-[1.35rem] border border-[var(--dash-border)] bg-[var(--dash-surface-translucent)] backdrop-blur-md transition-[padding,border-radius,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]',
             expanded ? 'rounded-[1.6rem]' : 'rounded-[1.35rem]'
           )}
           style={{
             boxShadow: expanded
-              ? '0 1px 0 rgba(255,255,255,0.9) inset, 0 12px 30px -18px rgba(26,28,30,0.12), 0 4px 12px -6px rgba(26,28,30,0.06)'
-              : '0 1px 0 rgba(255,255,255,0.9) inset, 0 6px 20px -16px rgba(26,28,30,0.10), 0 2px 6px -4px rgba(26,28,30,0.05)',
+              ? 'var(--dash-card-shadow-expanded)'
+              : 'var(--dash-card-shadow)',
           }}
         >
           <div
@@ -130,10 +130,10 @@ export default function PortfolioSwitcherBar({ portfolios, selectedId, onSelect,
                           <div className="h-1 flex-1 rounded-full bg-surface-container-high/80 overflow-hidden">
                             <div
                               className="h-full rounded-full transition-[width] duration-500"
-                              style={{ width: `${score}%`, background: active ? '#E95858' : '#767B81' }}
+                              style={{ width: `${score}%`, background: active ? '#E95858' : 'var(--dash-text-secondary)' }}
                             />
                           </div>
-                          <span className={cn('font-mono text-[9px] uppercase tracking-wider', p.status === 'published' ? 'text-[#1A1C1E]' : 'text-on-surface-variant/55')}>
+                          <span className={cn('font-mono text-[9px] uppercase tracking-wider', p.status === 'published' ? 'text-[var(--dash-text)]' : 'text-on-surface-variant/55')}>
                             {p.status === 'published' ? 'Live' : 'Draft'}
                           </span>
                           {p.updated_at && (
