@@ -124,9 +124,9 @@ export default function AuthGatewayCanvas({ focused = false, className = '' }: A
         tz *= 1 - spiral;
 
         // Y rotation
-        let rx = tx * cosY - tz * sinY;
-        let rz = tx * sinY + tz * cosY;
-        let ry = ty;
+        const rx = tx * cosY - tz * sinY;
+        const rz = tx * sinY + tz * cosY;
+        const ry = ty;
 
         // X rotation
         const ry2 = ry * cosX - rz * sinX;

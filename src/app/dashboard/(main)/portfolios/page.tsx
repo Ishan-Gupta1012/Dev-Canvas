@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { useAuth } from '@/context/AuthContext';
+import Image from 'next/image';
+import { PortfolioData } from '@/types/portfolio';
 import { 
   FolderOpen, 
-  Edit3, 
   Trash2, 
   Eye, 
   Plus, 
@@ -13,23 +13,19 @@ import {
   AlertCircle, 
   CheckCircle,
   Clock,
-  FileText,
   ExternalLink,
-  Copy,
   Sparkles,
   Layout,
   ArrowRight,
   Globe,
-  Layers,
   Code2,
   Share2,
   GripVertical
 } from 'lucide-react';
 import { cn } from '@/components/dashboard/ui';
 import DownloadZipButton from '@/components/DownloadZipButton';
-import PortfolioDustbin, { PortfolioDustbinHandle, TrashedPortfolioItem } from '@/components/dashboard/PortfolioDustbin';
+import PortfolioDustbin, { PortfolioDustbinHandle } from '@/components/dashboard/PortfolioDustbin';
 import CrumpledPaperAnimation, { CrumpledPaperAnimationHandle } from '@/components/dashboard/CrumpledPaperAnimation';
-import { PortfolioData } from '@/types/portfolio';
 import { getPortfolioPath, getPublicBaseUrl, isLocalOrigin } from '@/lib/siteUrl';
 
 interface Portfolio {
@@ -53,7 +49,6 @@ interface Portfolio {
 }
 
 export default function PortfoliosPage() {
-  const { user } = useAuth();
   const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
@@ -97,7 +92,8 @@ export default function PortfoliosPage() {
   };
 
   useEffect(() => {
-    fetchPortfolios();
+    // Load the user's portfolios once on mount.
+    setTimeout(fetchPortfolios, 0);
   }, []);
 
   // Soft Delete into Trash with Crumpled-Paper Animation
@@ -461,7 +457,7 @@ export default function PortfoliosPage() {
         alert(result.error || 'Failed to deploy portfolio');
         setIsDeploying(null);
       }
-    } catch (err) {
+    } catch {
       alert('Failed to deploy portfolio. Please try again.');
       setIsDeploying(null);
     }
@@ -484,7 +480,7 @@ export default function PortfoliosPage() {
         alert(result.error || 'Failed to unpublish portfolio');
         setIsDeploying(null);
       }
-    } catch (err) {
+    } catch {
       alert('Failed to unpublish portfolio. Please try again.');
       setIsDeploying(null);
     }
@@ -718,10 +714,12 @@ export default function PortfoliosPage() {
               {/* Template 1: Modern Developer */}
               <div className="group border border-outline/15 rounded-xl overflow-hidden bg-background hover:shadow-lg transition-all duration-300 flex flex-col sm:flex-row">
                 <div className="sm:w-48 aspect-video sm:aspect-auto bg-neutral-900 relative overflow-hidden flex-shrink-0">
-                  <img 
+                  <Image 
                     src="https://i.postimg.cc/HkdNLqsM/Screenshot-2026-07-03-at-12-44-13-AM-1.png"
                     alt="Modern Developer"
                     className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 </div>
@@ -755,10 +753,12 @@ export default function PortfoliosPage() {
               {/* Template 2: Developer Pro */}
               <div className="group border border-outline/15 rounded-xl overflow-hidden bg-background hover:shadow-lg transition-all duration-300 flex flex-col sm:flex-row">
                 <div className="sm:w-48 aspect-video sm:aspect-auto bg-neutral-900 relative overflow-hidden flex-shrink-0">
-                  <img 
+                  <Image 
                     src="https://i.postimg.cc/cLBz4Hd5/Screenshot-2026-07-26-at-5-35-09-PM.png"
                     alt="Developer Pro"
                     className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 </div>
@@ -813,7 +813,6 @@ export default function PortfoliosPage() {
         <div className="portfolios-grid-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredPortfolios.map((portfolio) => {
             const previewUrl = `/preview/${portfolio.id}`;
-            const editUrl = `/dashboard/builder?portfolio=${portfolio.id}`;
 
             return (
               <article 
@@ -829,10 +828,12 @@ export default function PortfoliosPage() {
                 {/* Visual Header / Cover */}
                 <div className="relative aspect-[16/10] bg-gradient-to-br from-primary/10 via-surface-container-low to-tertiary/10 overflow-hidden border-b border-outline/10">
                   {portfolio.data.hero?.avatarUrl ? (
-                    <img 
+                    <Image 
                       src={portfolio.data.hero.avatarUrl} 
                       alt={portfolio.data.hero.name || 'Portfolio avatar'}
                       className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-500 pointer-events-none"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
                     />
                   ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center pointer-events-none select-none">

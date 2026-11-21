@@ -4,7 +4,6 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import ChatWidget from "@/components/chat/ChatWidget";
-import SphereCursor from "@/components/ui/SphereCursor";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -53,7 +52,6 @@ export default function RootLayout({
           <AuthProvider>
             {children}
             <ChatWidget />
-            <SphereCursor />
           </AuthProvider>
         </ThemeProvider>
       </body>

@@ -7,7 +7,7 @@ import ModernDeveloperTemplate from '@/components/templates/ModernDeveloper';
 import DeveloperProTemplate from '@/components/templates/DeveloperPro';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Save, Plus, Trash2, User, Briefcase, Code, Mail, Edit3, X, Zap, GitBranch, Loader2, AlertCircle, CheckCircle, Download } from 'lucide-react';
+import { ArrowLeft, Save, Plus, Trash2, User, Briefcase, Code, Mail, Edit3, X, Zap, GitBranch, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 import DownloadZipButton from '@/components/DownloadZipButton';
 
 import { useAuth } from '@/context/AuthContext';
@@ -26,11 +26,11 @@ export default function BuilderPage() {
   const [selectedTemplate, setSelectedTemplate] = useState<string>('software-engineer');
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const [saveError, setSaveError] = useState<string | null>(null);
-  const [savedPortfolioId, setSavedPortfolioId] = useState<string | null>(null);
+  const [, setSaveError] = useState<string | null>(null);
   const [editingPortfolioId, setEditingPortfolioId] = useState<string | null>(null);
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const [lastAutoSaved, setLastAutoSaved] = useState<Date | null>(null);
+  const [, setSavedPortfolioId] = useState<string | null>(null);
+  const [, setHasUnsavedChanges] = useState(false);
+  const [, setLastAutoSaved] = useState<Date | null>(null);
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isInitializedRef = useRef(false);
 
@@ -99,51 +99,7 @@ export default function BuilderPage() {
     setLastAutoSaved(null);
   }, []);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const temp = params.get('template');
-      if (temp) {
-        setTimeout(() => setSelectedTemplate(temp), 0);
-      }
-
-      const portfolioId = params.get('portfolio');
-      if (portfolioId) {
-        setEditingPortfolioId(portfolioId);
-        loadExistingPortfolio(portfolioId);
-      } else if (!isInitializedRef.current) {
-        // Only load draft on initial load, not when navigating back
-        const draft = loadDraft();
-        if (draft) {
-          // Check if draft has meaningful content (not just initial empty data)
-          const hasContent = Object.keys(draft.data.hero || {}).some(k => draft.data.hero?.[k as keyof typeof draft.data.hero]) ||
-            (draft.data.achievements?.length ?? 0) > 0 ||
-            (draft.data.projects?.length ?? 0) > 0 ||
-            (draft.data.skills?.length ?? 0) > 0;
-
-          if (hasContent) {
-            // Automatically restore draft without prompting
-            setData(draft.data);
-            // Use template from URL param if provided, otherwise from draft
-            if (!temp && draft.template) {
-              setSelectedTemplate(draft.template);
-            }
-            setHasUnsavedChanges(true);
-          }
-        }
-        isInitializedRef.current = true;
-      }
-    }
-  }, [loadDraft]);
-
-  // Auto-save whenever data or template changes
-  useEffect(() => {
-    if (isInitializedRef.current) {
-      autoSave(data, selectedTemplate);
-    }
-  }, [data, selectedTemplate, autoSave]);
-
-  const loadExistingPortfolio = async (portfolioId: string) => {
+  const loadExistingPortfolio = useCallback(async (portfolioId: string) => {
     try {
       const response = await fetch(`/api/portfolio/save/${portfolioId}`);
       const result = await response.json();
@@ -160,7 +116,52 @@ export default function BuilderPage() {
     } catch (err) {
       console.error('Error loading portfolio:', err);
     }
-  };
+  }, [clearDraft]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const temp = params.get('template');
+      if (temp) {
+        setTimeout(() => setSelectedTemplate(temp), 0);
+      }
+
+      const portfolioId = params.get('portfolio');
+      if (portfolioId) {
+        setTimeout(() => setEditingPortfolioId(portfolioId), 0);
+        setTimeout(() => loadExistingPortfolio(portfolioId), 0);
+      } else if (!isInitializedRef.current) {
+        // Only load draft on initial load, not when navigating back
+        const draft = loadDraft();
+        if (draft) {
+          // Check if draft has meaningful content (not just initial empty data)
+          const hasContent = Object.keys(draft.data.hero || {}).some(k => draft.data.hero?.[k as keyof typeof draft.data.hero]) ||
+            (draft.data.achievements?.length ?? 0) > 0 ||
+            (draft.data.projects?.length ?? 0) > 0 ||
+            (draft.data.skills?.length ?? 0) > 0;
+
+          if (hasContent) {
+            // Automatically restore draft without prompting
+            setTimeout(() => {
+              setData(draft.data);
+              // Use template from URL param if provided, otherwise from draft
+              if (!temp && draft.template) {
+                setSelectedTemplate(draft.template);
+              }
+            }, 0);
+          }
+        }
+        isInitializedRef.current = true;
+      }
+    }
+  }, [loadDraft, loadExistingPortfolio]);
+
+  // Auto-save whenever data or template changes
+  useEffect(() => {
+    if (isInitializedRef.current) {
+      autoSave(data, selectedTemplate);
+    }
+  }, [data, selectedTemplate, autoSave]);
 
   const { user } = useAuth();
   const [isConnectingGithub, setIsConnectingGithub] = useState(false);

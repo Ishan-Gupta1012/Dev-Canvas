@@ -1,6 +1,6 @@
 import React from 'react';
 import { PortfolioData } from '@/types/portfolio';
-import { Code2, Hexagon, Database, Server, GitBranch, Paintbrush, Cloud, Sparkles, Terminal, Box, Cpu, Layout, Smartphone } from 'lucide-react';
+import { Code2, Hexagon, Database, Server, GitBranch, Paintbrush, Cloud, Sparkles, Terminal, Box, Layout, Smartphone } from 'lucide-react';
 
 const getSkillIcon = (name: string) => {
   const lower = name.toLowerCase();

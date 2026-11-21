@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Footer from '@/components/Footer';
-import { ArrowLeft, Globe, Link as LinkIcon } from 'lucide-react';
+import { Link as LinkIcon } from 'lucide-react';
 
 const reveal = {
   hidden: { opacity: 0, y: 30 },
@@ -95,6 +96,8 @@ export default function AboutPage() {
 
   const prefersReducedMotion =
     typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  void prefersReducedMotion;
 
   return (
     <div className="bg-[#F3F4F5] text-[#1A1C1E] min-h-screen flex flex-col font-sans overflow-x-clip">
@@ -360,10 +363,12 @@ export default function AboutPage() {
                   className="border border-[#DADCE0] p-8 rounded-[16px] bg-[#FFFFFF] shadow-xs transition-all duration-300 hover:border-[#1A1C1E] hover:shadow-md"
                 >
                   <div className="w-40 h-40 rounded-[16px] border border-[#DADCE0] overflow-hidden mb-6 bg-[#1A1C1E]/5 flex items-center justify-center relative group">
-                    <img
+                    <Image
                       src={member.photo}
                       alt={member.name}
                       className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 40vw"
                     />
                     <div className="absolute inset-0 bg-[#1A1C1E]/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <Link href={member.linkedin} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#1A1C1E] text-white flex items-center justify-center text-[12px] hover:bg-[#E95858] transition-colors border border-white/20">

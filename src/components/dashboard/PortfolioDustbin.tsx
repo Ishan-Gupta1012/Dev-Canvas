@@ -8,11 +8,7 @@ import {
   X,
   AlertCircle,
   Clock,
-  Sparkles,
-  CheckCircle2,
   FolderArchive,
-  ArrowRight,
-  ExternalLink,
 } from 'lucide-react';
 
 export interface TrashedPortfolioItem {

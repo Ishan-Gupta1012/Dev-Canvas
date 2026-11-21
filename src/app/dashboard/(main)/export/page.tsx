@@ -1,33 +1,71 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Download, FileArchive, Info, CheckCircle } from 'lucide-react';
+import React, { useMemo, useSyncExternalStore } from 'react';
+import Link from 'next/link';
+import { FileArchive, Info, CheckCircle } from 'lucide-react';
 import DownloadZipButton from '@/components/DownloadZipButton';
-import { PortfolioData, initialPortfolioData } from '@/types/portfolio';
+import { PortfolioData } from '@/types/portfolio';
 
 const STORAGE_KEY = 'portfolio_builder_draft';
 const STORAGE_KEY_TEMPLATE = 'portfolio_builder_template';
 
-export default function ExportPage() {
-  const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(null);
-  const [templateName, setTemplateName] = useState<string>('software-engineer');
-  const [hasDraft, setHasDraft] = useState(false);
+const subscribeToStorage = (onStoreChange: () => void) => {
+  window.addEventListener('storage', onStoreChange);
+  return () => window.removeEventListener('storage', onStoreChange);
+};
 
-  useEffect(() => {
+const getDraftSnapshot = () => {
+  try {
+    return localStorage.getItem(STORAGE_KEY) ?? '';
+  } catch {
+    return '';
+  }
+};
+
+const getTemplateSnapshot = () => {
+  try {
+    return localStorage.getItem(STORAGE_KEY_TEMPLATE) ?? '';
+  } catch {
+    return '';
+  }
+};
+
+const getServerSnapshot = () => '';
+
+export default function ExportPage() {
+  // Read the saved draft through an external store so the server snapshot ('')
+  // and the first client render agree during hydration.
+  const storedDraft = useSyncExternalStore(
+    subscribeToStorage,
+    getDraftSnapshot,
+    getServerSnapshot
+  );
+  const storedTemplate = useSyncExternalStore(
+    subscribeToStorage,
+    getTemplateSnapshot,
+    getServerSnapshot
+  );
+
+  const draft = useMemo(() => {
+    if (!storedDraft) return null;
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      const storedTemplate = localStorage.getItem(STORAGE_KEY_TEMPLATE);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        const data = parsed.data || parsed;
-        setPortfolioData(data);
-        setTemplateName(parsed.template || storedTemplate || 'software-engineer');
-        setHasDraft(true);
-      }
+      const parsed = JSON.parse(storedDraft) as {
+        data?: PortfolioData;
+        template?: string;
+      };
+      return {
+        data: parsed.data ?? (parsed as unknown as PortfolioData),
+        template: parsed.template || storedTemplate || 'software-engineer',
+      };
     } catch {
       // localStorage unavailable or malformed
+      return null;
     }
-  }, []);
+  }, [storedDraft, storedTemplate]);
+
+  const portfolioData = draft?.data ?? null;
+  const templateName = draft?.template ?? 'software-engineer';
+  const hasDraft = Boolean(draft);
 
   const templateDisplayName: Record<string, string> = {
     'software-engineer': 'Developer Pro',
@@ -73,12 +111,12 @@ export default function ExportPage() {
               <p className="text-sm text-on-surface-variant/80">
                 No portfolio draft found. Build your portfolio first, then come back to export it.
               </p>
-              <a
+              <Link
                 href="/dashboard/builder"
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary rounded-lg font-mono text-xs uppercase tracking-wider font-bold hover:bg-primary/90 transition-all"
               >
                 Open Portfolio Builder →
-              </a>
+              </Link>
             </div>
           )}
         </div>

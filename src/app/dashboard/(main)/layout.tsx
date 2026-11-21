@@ -1,8 +1,8 @@
 'use client';
 
-import type { ComponentType } from 'react';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
@@ -40,7 +40,7 @@ const navItems: NavItem[] = [
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { user, logout, clearNotifications } = useAuth();
+  const { user, logout } = useAuth();
   const pathname = usePathname();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -174,10 +174,12 @@ const isActive = (item: NavItem) => {
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="flex items-center gap-2 p-1 rounded-lg hover:bg-secondary-container transition-colors"
               >
-                <img
-                  className="w-7 h-7 rounded-sm border border-outline/20 object-cover"
+                <Image
                   src={user?.personalInfo?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=fallback'}
                   alt="Profile"
+                  width={28}
+                  height={28}
+                  className="w-7 h-7 rounded-sm border border-outline/20 object-cover"
                 />
                 <ChevronDown size={14}                 className={cn('text-on-surface transition-transform', isDropdownOpen && 'rotate-180')} />
               </button>

@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     };
 
     const htmlRows = Object.entries(allFields)
-      .filter(([_, val]) => val !== undefined && val !== null && val !== '')
+      .filter(([, val]) => val !== undefined && val !== null && val !== '')
       .map(([key, val]) => `
         <tr>
           <td style="padding: 12px 10px; font-weight: bold; width: 140px; border-bottom: 1px solid #eee; text-transform: capitalize; background-color: #fafafa; color: #555; font-size: 13px;">${key}:</td>
@@ -72,8 +72,10 @@ export async function POST(req: NextRequest) {
     await transporter.sendMail(mailOptions);
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Contact API error:', error);
-    return NextResponse.json({ error: error.message || 'Failed to send message.' }, { status: 500 });
+    const message =
+      error instanceof Error ? error.message : 'Failed to send message.';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

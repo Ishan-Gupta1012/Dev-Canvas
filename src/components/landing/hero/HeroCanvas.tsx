@@ -619,7 +619,7 @@ function Annotations({
   const size = useThree((state) => state.size);
   const point = useMemo(() => new THREE.Vector3(), []);
 
-  useFrame((state) => {
+  useFrame(() => {
     const group = composition.current;
     if (!group) return;
 

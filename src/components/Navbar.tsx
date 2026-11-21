@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useState } from 'react';
@@ -21,13 +22,6 @@ export default function Navbar() {
     { label: 'Home', path: '/' },
     { label: 'Works', path: '/works' },
     { label: 'Contact', path: '/contact' },
-  ];
-
-  const authLinks = user ? [
-    { label: 'My Portfolios', path: '/dashboard/portfolios' },
-    { label: 'Dashboard', path: '/dashboard' },
-  ] : [
-    { label: 'Sign in', path: '/signin' },
   ];
 
   return (
@@ -73,11 +67,12 @@ export default function Navbar() {
                 href="/dashboard"
                 className="transition-colors hover:text-primary flex items-center gap-2 border border-primary px-3 py-1 rounded-sm text-on-background"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 {user.personalInfo?.avatar ? (
-                  <img
+                  <Image
                     src={user.personalInfo.avatar}
                     alt={user.personalInfo.name ?? 'User'}
+                    width={16}
+                    height={16}
                     className="w-4 h-4 rounded-full object-cover border border-outline/20"
                   />
                 ) : (

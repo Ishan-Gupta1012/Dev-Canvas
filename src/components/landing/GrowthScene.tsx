@@ -3,8 +3,9 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
-import { ArrowUpRight, ArrowRight, Sparkles, Layers, Eye } from 'lucide-react';
+import { ArrowUpRight, ArrowRight, Sparkles } from 'lucide-react';
 
 interface PortfolioTemplate {
   id: string;
@@ -204,10 +205,12 @@ function TemplateStackCard({
               /* Real Template Screenshot with Technical Crosshair and Reticle */
               <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
                 {/* Template Screenshot */}
-                <img
-                  src={template.img}
+                <Image
+                  src={template.img || '/placeholder.svg'}
                   alt={template.title}
                   className="w-full h-full object-cover object-top transition-transform duration-700 hover:scale-[1.02]"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
 
                 {/* Red Technical Crosshair Grid Lines (Matching Screenshot) */}

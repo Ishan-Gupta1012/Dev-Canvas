@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { initialPortfolioData, PortfolioData } from '@/types/portfolio';
+import { PortfolioData } from '@/types/portfolio';
 import ModernDeveloperTemplate from '@/components/templates/ModernDeveloper';
 import DeveloperProTemplate from '@/components/templates/DeveloperPro';
 import { Loader2, AlertCircle } from 'lucide-react';
@@ -64,7 +64,7 @@ export default function PortfolioPreviewPage({ params }: { params: Promise<{ id:
         <div className="text-center p-8">
           <AlertCircle size={48} className="text-red-500 mx-auto mb-4" />
           <h1 className="font-serif text-2xl font-bold mb-2">Portfolio Not Found</h1>
-          <p className="text-on-surface-variant">This portfolio doesn't exist or has been removed.</p>
+          <p className="text-on-surface-variant">This portfolio doesn&apos;t exist or has been removed.</p>
         </div>
       </div>
     );

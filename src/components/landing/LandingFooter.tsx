@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 
 export default function LandingFooter() {
   const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });

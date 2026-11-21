@@ -14,8 +14,6 @@ import {
   FileText,
   Sparkles,
   CheckCircle2,
-  ExternalLink,
-  ShieldCheck,
   Zap,
 } from 'lucide-react';
 

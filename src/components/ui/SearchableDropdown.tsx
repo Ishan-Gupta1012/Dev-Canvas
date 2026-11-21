@@ -59,12 +59,8 @@ export function SearchableDropdown({
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
 
-  // Sync internal searchTerm with external value when dropdown is closed
-  useEffect(() => {
-    if (!isOpen) {
-      setSearchTerm(value || '');
-    }
-  }, [value, isOpen]);
+  // Note: the input renders `value` while closed and `searchTerm` while open,
+  // and each open path below seeds searchTerm from the current value.
 
   // Filter options with autocomplete logic:
   // 1. Starts with query (case-insensitive)
@@ -147,6 +143,7 @@ export function SearchableDropdown({
     if (!isOpen) {
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter') {
         e.preventDefault();
+        setSearchTerm(value || '');
         setIsOpen(true);
         setHighlightedIndex(0);
       }
@@ -295,6 +292,7 @@ export function SearchableDropdown({
             onClick={() => {
               if (disabled) return;
               if (!isOpen) {
+                setSearchTerm(value || '');
                 setIsOpen(true);
                 inputRef.current?.focus();
               } else {

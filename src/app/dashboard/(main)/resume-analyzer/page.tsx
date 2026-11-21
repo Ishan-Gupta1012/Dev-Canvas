@@ -27,6 +27,7 @@ import {
   Award
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 import { JobDetails, JobAnalysisResult } from '@/lib/resume/jobAnalyzer';
 import { SearchableDropdown } from '@/components/ui/SearchableDropdown';
 
@@ -1722,12 +1723,12 @@ export default function ResumeAnalyzerPage() {
                 >
                   Adjust Job Criteria
                 </button>
-                <a
+                <Link
                   href="/dashboard/resume-builder"
                   className="px-5 py-2.5 bg-primary text-on-primary rounded-xl font-semibold text-xs sm:text-sm shadow-sm hover:opacity-90 transition-transform active:scale-95 flex items-center gap-2 whitespace-nowrap"
                 >
                   Open Resume Builder <ArrowRight size={14} />
-                </a>
+                </Link>
               </div>
             </div>
           </motion.div>

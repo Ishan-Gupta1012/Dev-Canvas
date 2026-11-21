@@ -2,6 +2,7 @@
 import './story-landing.css';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 /* ─────────────────────────────────────────────
@@ -36,11 +37,16 @@ export default function StoryLandingPage() {
   }, []);
 
   useEffect(() => {
-    setViewH(window.innerHeight);
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReduced(mq.matches);
     const onMQ = (e: MediaQueryListEvent) => setPrefersReduced(e.matches);
     mq.addEventListener('change', onMQ);
+
+    // Read the initial viewport/motion values after paint so hydration stays
+    // server/client identical.
+    const raf = requestAnimationFrame(() => {
+      setViewH(window.innerHeight);
+      setPrefersReduced(mq.matches);
+    });
 
     const onResize = () => setViewH(window.innerHeight);
     window.addEventListener('resize', onResize, { passive: true });
@@ -59,6 +65,7 @@ export default function StoryLandingPage() {
     hero?.addEventListener('mousemove', handleMouseMove);
 
     return () => {
+      cancelAnimationFrame(raf);
       mq.removeEventListener('change', onMQ);
       window.removeEventListener('resize', onResize);
       window.removeEventListener('scroll', onScroll);
@@ -205,7 +212,7 @@ export default function StoryLandingPage() {
           <ChapterLabel n="01" label="The Problem" />
           <h2 className="story-chapter-h2">
             Your talent is real.<br />
-            <em>But it's invisible.</em>
+            <em>But it&apos;s invisible.</em>
           </h2>
           <p className="story-chapter-body">
             You have skills, projects, experiences, achievements.
@@ -242,7 +249,7 @@ export default function StoryLandingPage() {
           </h2>
           <p className="story-chapter-body">
             Simply upload your resume — PDF, Word, or paste it in.
-            That's all it takes. Your story is already there.
+            That&apos;s all it takes. Your story is already there.
             We just need to set it free.
           </p>
         </div>
@@ -385,9 +392,9 @@ export default function StoryLandingPage() {
         <footer className="story-footer">
           <span className="story-footer-brand">DevCanvas</span>
           <nav className="story-footer-nav" aria-label="Footer navigation">
-            <a href="/about" className="story-footer-link">About</a>
-            <a href="/templates" className="story-footer-link">Templates</a>
-            <a href="/contact" className="story-footer-link">Contact</a>
+            <Link href="/about" className="story-footer-link">About</Link>
+            <Link href="/templates" className="story-footer-link">Templates</Link>
+            <Link href="/contact" className="story-footer-link">Contact</Link>
           </nav>
           <span className="story-footer-copy">© {new Date().getFullYear()}</span>
         </footer>
@@ -568,7 +575,7 @@ function AINodeAnimation({ p, prefersReduced }: { p: number; prefersReduced: boo
         <circle
           cx={AI_NODES[0].x * 3}
           cy={AI_NODES[0].y * 2.2}
-          r={prefersReduced ? 35 : lerp(22, 40, (Math.sin(Date.now() / 1000) + 1) / 2)}
+          r={prefersReduced ? 35 : lerp(22, 40, (Math.sin(p * Math.PI * 2) + 1) / 2)}
           fill="none"
           stroke="rgba(192,180,215,0.15)"
           strokeWidth="1"

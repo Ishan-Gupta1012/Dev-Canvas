@@ -1,14 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { processResumePipeline } from '@/lib/resume/pipeline';
 import { enrichPortfolioData } from '@/lib/resume/enricher';
-
-// Dynamic import for mammoth (DOCX parsing)
-let mammoth: any;
-try {
-  mammoth = require('mammoth');
-} catch (e) {
-  console.warn('mammoth not available for DOCX parsing');
-}
+import { loadMammoth } from '@/lib/resume/mammoth';
+import type { ResumeData } from '@/lib/resume/pipeline/types';
 
 export async function POST(req: NextRequest) {
   const startTime = performance.now();
@@ -39,14 +33,19 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(arrayBuffer);
 
     let rawText = '';
-    let portfolio: any = {};
+    let portfolio: Partial<ResumeData> = {};
 
     if (isPdf) {
       console.log('[2/4] Executing 8-Stage Deterministic Pipeline (PDF)');
       const result = await processResumePipeline(buffer);
       rawText = result.rawText;
       portfolio = result.portfolio;
-    } else if (isDocx && mammoth) {
+    } else if (isDocx) {
+      const mammoth = await loadMammoth();
+      if (!mammoth) {
+        return NextResponse.json({ error: 'DOCX parsing not available. Please use PDF.' }, { status: 400 });
+      }
+
       console.log('[2/4] Parsing DOCX with mammoth');
       const result = await mammoth.extractRawText({ buffer });
       rawText = result.value;

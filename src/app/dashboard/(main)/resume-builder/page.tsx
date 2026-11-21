@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import NextImage from 'next/image';
 import {
   User,
   Briefcase,
@@ -12,18 +13,14 @@ import {
   Eye,
   Download,
   ExternalLink,
-  Palette,
   Check,
+  CheckCircle2,
   Sparkles,
   Award,
   FolderPlus,
   ArrowRight,
   ArrowLeft,
   RotateCcw,
-  Layers,
-  FileText,
-  CheckCircle2,
-  SlidersHorizontal,
   Camera,
   Upload,
   Phone,
@@ -383,6 +380,8 @@ export default function ResumeBuilderPage() {
 
     if (!hasData) return;
 
+    // Reflect the pending save immediately; the write itself is debounced below.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSaveStatus('saving');
     const timer = setTimeout(() => {
       try {
@@ -411,6 +410,8 @@ export default function ResumeBuilderPage() {
       const stored = localStorage.getItem('devcanvas_resume_draft');
       if (stored) {
         const parsed = JSON.parse(stored);
+        // One-time restore of the locally saved draft on mount.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (parsed.personal) setPersonal(parsed.personal);
         if (parsed.experience) setExperience(parsed.experience);
         if (parsed.education) setEducation(parsed.education);
@@ -428,7 +429,7 @@ export default function ResumeBuilderPage() {
     setExperience(sampleResumeData.experience);
     setEducation(sampleResumeData.education);
     setSkills(sampleResumeData.skills);
-    setCustomSections(sampleResumeData.customSections as any);
+    setCustomSections(sampleResumeData.customSections);
     setLinks(sampleResumeData.links);
   };
 
@@ -469,7 +470,7 @@ export default function ResumeBuilderPage() {
       location: user.personalInfo?.location || personal.location || '',
       title: user.personalInfo?.title || personal.title || '',
       summary: user.bio || personal.summary || '',
-      photo: (user as any)?.personalInfo?.avatar || (user as any)?.avatar || personal.photo || '',
+      photo: user.personalInfo?.avatar || personal.photo || '',
     });
 
     if (user.experience && user.experience.length > 0) {
@@ -587,6 +588,8 @@ export default function ResumeBuilderPage() {
         const headerStartY = y;
         const textStartX = margin + photoDiameter + photoGap;
         const textWidth = contentWidth - (photoDiameter + photoGap);
+
+        void textWidth;
 
         if (hasPhoto && personal.photo) {
           try {
@@ -1569,10 +1572,12 @@ export default function ResumeBuilderPage() {
       <div className="border-b-2 border-[#362419] pb-3 mb-3">
         <div className="flex flex-row items-center gap-4 sm:gap-5">
           {data.personal.photo && (
-            <img
+                <NextImage
               src={data.personal.photo}
               alt={data.personal.name || 'Profile photo'}
               className="w-16 h-16 sm:w-18 sm:h-18 rounded-full object-cover aspect-square border-2 border-[#362419]/30 shadow-xs shrink-0"
+              width={64}
+              height={64}
             />
           )}
           <div className="flex-1 min-w-0">
@@ -1757,7 +1762,6 @@ export default function ResumeBuilderPage() {
   const renderBrownMinimalistContent = renderBrownEditorialTemplate;
   const renderBlackWhiteMinimalistContent = renderCanvaResumeTemplate;
   const renderBlueMinimalistContent = renderBrownEditorialTemplate;
-  const renderPurpleMinimalistContent = renderCanvaResumeTemplate;
 
   // ==========================================
   // SECTION FORMS FOR RESUME EDITOR
@@ -1812,10 +1816,12 @@ export default function ResumeBuilderPage() {
           <div className="relative shrink-0">
             {personal.photo ? (
               <div className="relative">
-                <img
+            <NextImage
                   src={personal.photo}
                   alt="Profile preview"
                   className="w-13 h-13 sm:w-14 sm:h-14 rounded-full object-cover aspect-square border-2 border-[#362419] shadow-2xs"
+                  width={52}
+                  height={52}
                 />
                 <span className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-[#362419] rounded-full border border-white flex items-center justify-center text-white text-[9px]">
                   <Check size={9} />
@@ -2852,7 +2858,7 @@ export default function ResumeBuilderPage() {
                 <button
                   key={sec.id}
                   type="button"
-                  onClick={() => setActiveSection(sec.id as any)}
+                  onClick={() => setActiveSection(sec.id)}
                   className={`flex items-center justify-center sm:justify-start gap-1.5 py-1.5 px-2 rounded-lg text-left border transition-all cursor-pointer ${
                     isActive
                       ? 'bg-primary text-on-primary border-primary shadow-2xs'
@@ -2905,7 +2911,7 @@ export default function ResumeBuilderPage() {
                   {prevSection ? (
                     <button
                       type="button"
-                      onClick={() => setActiveSection(prevSection.id as any)}
+                      onClick={() => setActiveSection(prevSection.id)}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-lowest hover:bg-surface-container text-xs font-mono uppercase tracking-wider font-semibold transition-all cursor-pointer"
                     >
                       <ArrowLeft size={12} /> {prevSection.label.split(' ')[0]}
@@ -2924,7 +2930,7 @@ export default function ResumeBuilderPage() {
                     {nextSection && (
                       <button
                         type="button"
-                        onClick={() => setActiveSection(nextSection.id as any)}
+                        onClick={() => setActiveSection(nextSection.id)}
                         className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-mono uppercase tracking-wider font-semibold hover:opacity-90 transition-all cursor-pointer shadow-2xs"
                       >
                         Next: {nextSection.label.split(' ')[0]} <ArrowRight size={12} />

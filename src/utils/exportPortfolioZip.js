@@ -571,15 +571,6 @@ function generateModernDeveloperHTML(data, images, year) {
   const achievementsList = (data.achievements || []).filter(a => a.type === 'achievement');
 
   // Avatar
-  let avatarHtml = '';
-  if (images.avatar) {
-    const src = images.avatar.useFallback
-      ? esc(images.avatar.fallbackSrc)
-      : esc(images.avatar.filename);
-    avatarHtml = `<img src="${src}" alt="${name}" class="profile-img" />`;
-  } else {
-    avatarHtml = `<span style="font-size:5rem;font-weight:900;color:#6b7280;">${esc(logoChar)}</span>`;
-  }
 
   // Projects
   const projectsHtml = (data.projects?.length > 0)

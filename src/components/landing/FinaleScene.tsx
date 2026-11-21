@@ -7,15 +7,11 @@ import { motion } from 'framer-motion';
 import {
   ArrowRight,
   ArrowUpRight,
-  CheckCircle2,
   FileText,
   Globe,
-  Sparkles,
   Zap,
   Check,
   Copy,
-  ShieldCheck,
-  Cpu,
 } from 'lucide-react';
 
 export default function FinaleScene() {

@@ -1,18 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { processResumePipeline } from '@/lib/resume/pipeline';
+import { loadMammoth } from '@/lib/resume/mammoth';
+import type { ResumeData } from '@/lib/resume/pipeline/types';
+import { buildFinalJson } from '@/lib/resume/pipeline/8-builder';
 import {
   analyzeResumeAgainstJob,
   extractJobDetailsFromText,
   JobDetails
 } from '@/lib/resume/jobAnalyzer';
-
-// Dynamic import for mammoth (DOCX parsing)
-let mammoth: any;
-try {
-  mammoth = require('mammoth');
-} catch (e) {
-  console.warn('mammoth not available for DOCX parsing');
-}
 
 export async function POST(req: NextRequest) {
   try {
@@ -70,7 +65,7 @@ export async function POST(req: NextRequest) {
     }
 
     let rawText = (formData.get('resumeText') as string) || '';
-    let portfolio: any = {};
+    let portfolio: Partial<ResumeData> = {};
 
     if (file) {
       const MAX_SIZE = 10 * 1024 * 1024;
@@ -102,7 +97,7 @@ export async function POST(req: NextRequest) {
         } catch (pdfErr) {
           console.warn('[Analyze API] PDF pipeline failed, attempting pdf-parse fallback:', pdfErr);
           try {
-            const pdfParse = require('pdf-parse');
+            const { default: pdfParse } = await import('pdf-parse');
             const parsed = await pdfParse(buffer);
             rawText = parsed.text;
             const { detectSectionsFromText } = await import('@/lib/resume/pipeline/5-sections');
@@ -123,7 +118,15 @@ export async function POST(req: NextRequest) {
         const { normalizeData } = await import('@/lib/resume/pipeline/7-normalizer');
         const sections = detectSectionsFromText(rawText);
         portfolio = normalizeData(extractStructuredInfo(sections, []));
-      } else if (isDocx && mammoth) {
+      } else if (isDocx) {
+        const mammoth = await loadMammoth();
+        if (!mammoth) {
+          return NextResponse.json(
+            { error: 'DOCX parsing is not available. Please upload a PDF instead.' },
+            { status: 400 }
+          );
+        }
+
         const result = await mammoth.extractRawText({ buffer });
         rawText = result.value;
 
@@ -149,7 +152,7 @@ export async function POST(req: NextRequest) {
 
     const analysisResult = await analyzeResumeAgainstJob(
       rawText,
-      portfolio,
+      buildFinalJson(portfolio as ResumeData),
       jobData,
       fileNameStr,
       fileSizeStr
@@ -161,10 +164,15 @@ export async function POST(req: NextRequest) {
       resumeData: portfolio,
       extractedResumeText: rawText.slice(0, 2000), // preview
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Job-Specific Resume Analyzer error:', error);
     return NextResponse.json(
-      { error: error?.message || 'An unexpected error occurred during resume analysis.' },
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : 'An unexpected error occurred during resume analysis.',
+      },
       { status: 500 }
     );
   }

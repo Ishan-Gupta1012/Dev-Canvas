@@ -5,29 +5,30 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { PortfolioData, Project, Achievement } from '@/types/portfolio';
 import { 
-  Terminal, 
   ArrowRight, 
   FileText, 
   Component, 
   Cpu, 
   Activity, 
-  Server, 
-  Hexagon, 
-  Check, 
   ScanLine, 
   Network, 
   Trash2, 
-  UploadCloud, 
-
-  FileUp, 
-  ShieldCheck, 
   Zap, 
   SlidersHorizontal,
-  ChevronRight,
-  ArrowLeft
+  ArrowLeft,
+  Check
 } from 'lucide-react';
 
 const generateId = () => Date.now().toString() + Math.random().toString(36).substring(2, 6);
+
+function getResumeName(resumeData?: Record<string, unknown>): string {
+  const personal = resumeData?.personal;
+  if (personal && typeof personal === 'object') {
+    const name = (personal as { name?: unknown }).name;
+    if (typeof name === 'string' && name.trim()) return name;
+  }
+  return 'Resume Document';
+}
 
 export default function AIBuilderPage() {
   const { user, updateProfile } = useAuth();
@@ -377,9 +378,8 @@ export default function AIBuilderPage() {
                           <FileText className="text-primary" size={24} />
                         </div>
                         <div>
-                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                           <h3 className="font-serif text-lg font-bold text-on-surface">
-                            {(user?.resumeData as any)?.personal?.name ? String((user.resumeData as any).personal.name) : 'Resume Document'}
+                            {getResumeName(user?.resumeData)}
                           </h3>
                           <div className="flex items-center gap-2 mt-0.5">
                             <span className="inline-flex items-center gap-1 text-[11px] font-mono uppercase tracking-wider text-emerald-600 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
@@ -650,7 +650,7 @@ export default function AIBuilderPage() {
                     Choose Content Strategy
                   </h2>
                   <p className="text-on-surface-variant/70 text-sm max-w-md mb-8 leading-relaxed">
-                    Decide how you'd like your resume content prepared for your live portfolio website.
+                    Decide how you&apos;d like your resume content prepared for your live portfolio website.
                   </p>
                   
                   {/* Two Strategy Options */}

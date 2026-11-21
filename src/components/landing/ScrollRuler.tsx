@@ -79,13 +79,6 @@ export default function ScrollRuler() {
     });
   };
 
-  const handleSectionClick = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <aside
       aria-label="Scroll navigation ruler"

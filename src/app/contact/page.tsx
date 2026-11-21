@@ -34,7 +34,7 @@ export default function ContactPage() {
       } else {
         setError(data.error || 'Failed to send request. Please try again.');
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
       setError('An error occurred. Please try again.');
     } finally {
