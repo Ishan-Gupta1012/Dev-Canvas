@@ -6,14 +6,11 @@ import { useAuth } from '@/context/AuthContext';
 import {
   ExternalLink,
   ArrowRight,
-  LayoutTemplate,
-  TrendingUp,
   Eye,
   Layers,
   BookOpen,
   Code2,
   Cpu,
-  Lightbulb,
   CheckCircle2,
   Sparkles,
 } from 'lucide-react';
@@ -22,7 +19,6 @@ import PortfolioSwitcherBar from '@/components/dashboard/PortfolioSwitcherBar';
 import ScoreBreakdownHoverCard from '@/components/dashboard/ScoreBreakdownHoverCard';
 import {
   getPortfolioCompletion,
-  buildSuggestions,
   type PortfolioLike,
 } from '@/lib/portfolioScore';
 
@@ -229,10 +225,6 @@ export default function Dashboard() {
     () => getPortfolioCompletion(selected),
     [selected],
   );
-  const suggestions = useMemo(
-    () => buildSuggestions(selected),
-    [selected],
-  );
 
   const { score, checks, breakdown, stats, completedSections, totalSections, isPublished } =
     completion;
@@ -340,18 +332,80 @@ export default function Dashboard() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-8 pt-4 pb-6 md:pb-8">
+        {/* ── Stat Tiles ── */}
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 lg:gap-4 mb-5">
+          <StatTile
+            icon={Eye}
+            value={user?.sectionViews ?? 0}
+            label="Profile Views"
+            accent="var(--dash-text)"
+          />
+          <StatTile
+            icon={Layers}
+            value={stats.projects}
+            label="Projects"
+            accent="var(--dash-text)"
+          />
+          <StatTile
+            icon={BookOpen}
+            value={stats.roles}
+            label="Roles"
+            accent="var(--dash-text)"
+          />
+          <StatTile
+            icon={Code2}
+            value={stats.skills}
+            label="Skills"
+            accent="var(--dash-text)"
+          />
+          {/* AI Credits tile */}
+          <div className="bento-card p-4 col-span-2 sm:col-span-1 flex flex-col justify-center min-w-0">
+            <div className="flex items-center gap-2 mb-1.5">
+              <Cpu size={14} style={{ color: 'var(--dash-text-secondary)' }} />
+              <span
+                className="font-mono text-[9px] uppercase tracking-widest font-semibold"
+                style={{ color: 'var(--dash-text-secondary)' }}
+              >
+                AI Credits
+              </span>
+            </div>
+            <p
+              className="font-serif text-xl font-bold leading-none"
+              style={{ color: 'var(--dash-text)' }}
+            >
+              {creditsUsed}
+              <span
+                className="font-mono text-[10px] font-normal ml-0.5"
+                style={{ color: 'var(--dash-text-secondary)' }}
+              >
+                / 50
+              </span>
+            </p>
+            <div
+              className="mt-2 w-full h-1.5 rounded-full overflow-hidden"
+              style={{ background: 'var(--dash-border)' }}
+            >
+              <div
+                className="h-full rounded-full transition-all duration-500"
+                style={{
+                  width: `${creditsPct}%`,
+                  background: creditsUsed >= 40 ? '#E95858' : 'var(--dash-text)',
+                }}
+              />
+            </div>
+          </div>
+        </div>
 
-        {/* Score + Stats */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5 mb-5 lg:items-start">
-
-          {/* ── Score Card with Hover Breakdown ── */}
+        {/* ── Score Card + Completion Checklist ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5 mb-5 lg:items-stretch">
+          {/* Score Card with Hover Breakdown */}
           <div
-            className="lg:col-span-5 relative"
+            className="lg:col-span-5 relative flex flex-col"
             onMouseEnter={handleMouseEnterScore}
             onMouseLeave={handleMouseLeaveScore}
           >
             <div
-              className="bento-card p-5 md:p-6 text-left w-full transition-all duration-200"
+              className="bento-card p-5 md:p-6 text-left w-full h-full flex flex-col justify-between transition-all duration-200"
               style={{
                 boxShadow: scoreHovered
                   ? 'var(--bento-shadow-hover)'
@@ -431,7 +485,7 @@ export default function Dashboard() {
               </div>
 
               <p
-                className="mt-3 pt-3 text-[11px] leading-snug"
+                className="mt-4 pt-3 text-[11px] leading-snug"
                 style={{
                   color: 'var(--dash-text-secondary)',
                   borderTop: '1px solid var(--dash-border)',
@@ -462,170 +516,65 @@ export default function Dashboard() {
             )}
           </div>
 
-          {/* ── Stats column ── */}
-          <div className="lg:col-span-7 flex flex-col gap-4 lg:gap-5">
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 lg:gap-4">
-              <StatTile
-                icon={Eye}
-                value={user?.sectionViews ?? 0}
-                label="Profile Views"
-                accent="var(--dash-text)"
-              />
-              <StatTile
-                icon={Layers}
-                value={stats.projects}
-                label="Projects"
-                accent="var(--dash-text)"
-              />
-              <StatTile
-                icon={BookOpen}
-                value={stats.roles}
-                label="Roles"
-                accent="var(--dash-text)"
-              />
-              <StatTile
-                icon={Code2}
-                value={stats.skills}
-                label="Skills"
-                accent="var(--dash-text)"
-              />
-              {/* AI Credits tile */}
-              <div className="bento-card p-4 col-span-2 sm:col-span-1 flex flex-col justify-center min-w-0">
-                <div className="flex items-center gap-2 mb-1.5">
-                  <Cpu size={14} style={{ color: 'var(--dash-text-secondary)' }} />
-                  <span
-                    className="font-mono text-[9px] uppercase tracking-widest font-semibold"
+          {/* Completion Checklist */}
+          <div className="lg:col-span-7 bento-card p-5 md:p-6 h-full flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between gap-3 mb-3">
+                <div>
+                  <p
+                    className="font-mono text-[11px] uppercase tracking-widest font-semibold"
                     style={{ color: 'var(--dash-text-secondary)' }}
                   >
-                    AI Credits
-                  </span>
+                    Completion Checklist
+                  </p>
+                  <p className="text-xs mt-0.5" style={{ color: 'var(--dash-text-secondary)' }}>
+                    Connected to the selected portfolio&apos;s actual data.
+                  </p>
                 </div>
-                <p
-                  className="font-serif text-xl font-bold leading-none"
+                <span
+                  className="font-mono text-[11px] font-semibold"
                   style={{ color: 'var(--dash-text)' }}
                 >
-                  {creditsUsed}
-                  <span
-                    className="font-mono text-[10px] font-normal ml-0.5"
-                    style={{ color: 'var(--dash-text-secondary)' }}
-                  >
-                    / 50
-                  </span>
-                </p>
-                <div
-                  className="mt-2 w-full h-1.5 rounded-full overflow-hidden"
-                  style={{ background: 'var(--dash-border)' }}
-                >
-                  <div
-                    className="h-full rounded-full transition-all duration-500"
-                    style={{
-                      width: `${creditsPct}%`,
-                      background: creditsUsed >= 40 ? '#E95858' : 'var(--dash-text)',
-                    }}
-                  />
-                </div>
+                  {completedSections}/{totalSections}
+                </span>
               </div>
-            </div>
-
-            {/* Quick access bar */}
-            <div className="bento-card p-4 flex items-center justify-between gap-3 flex-wrap">
-              <div className="min-w-0">
-                <p
-                  className="font-mono text-[10px] uppercase tracking-widest"
-                  style={{ color: 'var(--dash-text-secondary)' }}
-                >
-                  Quick access
-                </p>
-                <p className="text-sm mt-0.5" style={{ color: 'var(--dash-text)' }}>
-                  {selected
-                    ? `Editing context: ${selected.title || 'Untitled portfolio'}`
-                    : 'Manage templates, builder, and your portfolios.'}
-                </p>
-              </div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <Link
-                  href={builderHref}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-mono text-[10px] uppercase tracking-wider font-semibold border border-[var(--dash-border)] text-[var(--dash-text)] hover:bg-[var(--dash-hover)] transition-colors"
-                >
-                  Edit Builder
-                </Link>
-                <Link
-                  href="/dashboard/templates"
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-mono text-[10px] uppercase tracking-wider font-semibold border border-[var(--dash-border)] text-[var(--dash-text)] hover:bg-[var(--dash-hover)] transition-colors"
-                >
-                  <LayoutTemplate size={13} /> Templates
-                </Link>
-                <Link
-                  href="/dashboard/portfolios"
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-mono text-[10px] uppercase tracking-wider font-semibold transition-colors"
-                  style={{ background: 'var(--dash-invert-bg)', color: 'var(--dash-invert-text)' }}
-                >
-                  <TrendingUp size={13} /> My Portfolios
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Checklist + AI Suggestions */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5 mb-5 lg:items-start">
-          {/* Checklist */}
-          <div className="lg:col-span-7 bento-card p-5 md:p-6">
-            <div className="flex items-center justify-between gap-3 mb-3">
-              <div>
-                <p
-                  className="font-mono text-[11px] uppercase tracking-widest font-semibold"
-                  style={{ color: 'var(--dash-text-secondary)' }}
-                >
-                  Completion Checklist
-                </p>
-                <p className="text-xs mt-0.5" style={{ color: 'var(--dash-text-secondary)' }}>
-                  Connected to the selected portfolio&apos;s actual data.
-                </p>
-              </div>
-              <span
-                className="font-mono text-[11px] font-semibold"
-                style={{ color: 'var(--dash-text)' }}
-              >
-                {completedSections}/{totalSections}
-              </span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-0.5">
-              {checks.map((c) => (
-                <Link
-                  key={c.key}
-                  href={
-                    selected?.id
-                      ? `${c.href}${c.href.includes('?') ? '&' : '?'}portfolio=${selected.id}`
-                      : c.href
-                  }
-                  className="flex items-center gap-2.5 py-2 px-1 rounded-lg transition-colors hover:bg-[var(--dash-hover)]"
-                  style={{ color: c.done ? 'var(--dash-text-muted)' : 'var(--dash-text)' }}
-                >
-                  {c.done ? (
-                    <CheckCircle2
-                      size={16}
-                      style={{ color: 'var(--dash-text)', flexShrink: 0 }}
-                    />
-                  ) : (
-                    <span
-                      className="w-4 h-4 rounded-full border-2 shrink-0"
-                      style={{ borderColor: 'var(--dash-border)' }}
-                      aria-hidden
-                    />
-                  )}
-                  <span
-                    className="text-sm leading-snug"
-                    style={
-                      c.done
-                        ? { textDecoration: 'line-through', opacity: 0.7 }
-                        : { fontWeight: 500 }
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-0.5">
+                {checks.map((c) => (
+                  <Link
+                    key={c.key}
+                    href={
+                      selected?.id
+                        ? `${c.href}${c.href.includes('?') ? '&' : '?'}portfolio=${selected.id}`
+                        : c.href
                     }
+                    className="flex items-center gap-2.5 py-2 px-1 rounded-lg transition-colors hover:bg-[var(--dash-hover)]"
+                    style={{ color: c.done ? 'var(--dash-text-muted)' : 'var(--dash-text)' }}
                   >
-                    {c.label}
-                  </span>
-                </Link>
-              ))}
+                    {c.done ? (
+                      <CheckCircle2
+                        size={16}
+                        style={{ color: 'var(--dash-text)', flexShrink: 0 }}
+                      />
+                    ) : (
+                      <span
+                        className="w-4 h-4 rounded-full border-2 shrink-0"
+                        style={{ borderColor: 'var(--dash-border)' }}
+                        aria-hidden
+                      />
+                    )}
+                    <span
+                      className="text-sm leading-snug"
+                      style={
+                        c.done
+                          ? { textDecoration: 'line-through', opacity: 0.7 }
+                          : { fontWeight: 500 }
+                      }
+                    >
+                      {c.label}
+                    </span>
+                  </Link>
+                ))}
+              </div>
             </div>
             {!selected && !loadingPortfolios && (
               <div
@@ -644,60 +593,6 @@ export default function Dashboard() {
                 </Link>
               </div>
             )}
-          </div>
-
-          {/* AI Suggestions */}
-          <div className="lg:col-span-5 bento-card p-5 md:p-6">
-            <div className="flex items-center gap-2 mb-3">
-              <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center"
-                style={{ background: 'rgba(233,88,88,0.10)' }}
-              >
-                <Lightbulb size={15} style={{ color: '#E95858' }} />
-              </div>
-              <div>
-                <p
-                  className="font-mono text-[11px] uppercase tracking-widest font-semibold"
-                  style={{ color: 'var(--dash-text-secondary)' }}
-                >
-                  AI Suggestions
-                </p>
-                <p className="text-xs" style={{ color: 'var(--dash-text-secondary)' }}>
-                  Based on the selected portfolio
-                </p>
-              </div>
-            </div>
-            <div className="space-y-2.5">
-              {suggestions.map((s, i) => (
-                <div
-                  key={`${s.title}-${i}`}
-                  className="rounded-xl border border-[var(--dash-border)] bg-[var(--dash-surface)] p-3 shadow-xs"
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <p
-                      className="text-sm font-semibold leading-snug"
-                      style={{ color: 'var(--dash-text)' }}
-                    >
-                      {s.title}
-                    </p>
-                    {s.href && (
-                      <Link
-                        href={s.href.startsWith('/') ? s.href : '#'}
-                        className="shrink-0 font-mono text-[10px] uppercase tracking-wider text-[var(--dash-text-secondary)] hover:text-[var(--dash-text)] transition-colors"
-                      >
-                        Open
-                      </Link>
-                    )}
-                  </div>
-                  <p
-                    className="text-[13px] leading-snug mt-1"
-                    style={{ color: 'var(--dash-text-secondary)' }}
-                  >
-                    {s.detail}
-                  </p>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
 
